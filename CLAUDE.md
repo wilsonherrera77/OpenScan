@@ -4,6 +4,229 @@ Este archivo establece las instrucciones personalizadas optimizadas para aprovec
 
 ---
 
+## 🚨 EJERCICIOS TÉCNICOS ANTI-RETROCESO (2025-11-14) - OBLIGATORIOS
+
+**ESTAS VERIFICACIONES SON MANDATORIAS ANTES DE CUALQUIER TRABAJO.**
+
+Ejecutar **TODOS** estos comandos al inicio de CADA sesión de trabajo:
+
+### Ejercicio 1: Verificar Baseline de Git (CRÍTICO)
+
+```bash
+# 1.1 Verificar que existe repositorio Git
+ls -la .git/ || echo "❌ NO HAY GIT REPOSITORY"
+
+# 1.2 Verificar branch actual
+git branch --show-current
+
+# 1.3 Verificar estado limpio (no debe haber cambios sin commitear antes de empezar)
+git status --short
+
+# 1.4 Verificar último commit
+git log -1 --oneline
+
+# 1.5 Verificar que NO hay APKs rastreados por Git
+git ls-files | grep "\.apk$" | wc -l  # Debe ser 0
+
+# 1.6 Verificar .gitignore incluye *.apk
+grep "\.apk" .gitignore || echo "❌ .gitignore NO tiene *.apk"
+```
+
+**Criterios de éxito:**
+- ✅ `.git/` existe
+- ✅ Branch actual es `baseline-clean` o feature branch desde baseline-clean
+- ✅ No hay cambios uncommitted al inicio
+- ✅ 0 APKs rastreados por Git
+- ✅ .gitignore contiene `*.apk`
+
+**Si ALGÚN criterio falla: DETENER y reportar al usuario antes de continuar.**
+
+---
+
+### Ejercicio 2: Verificar Última Versión Funcional (CRÍTICO)
+
+```bash
+# 2.1 Verificar versión en pubspec.yaml
+grep "^version:" pubspec.yaml
+
+# 2.2 Verificar que existe APK funcional de última versión en Descargas
+ls -lh ~/Descargas/Lumara_*.apk | tail -5
+
+# 2.3 Verificar que NO hay APKs en root del proyecto
+find . -maxdepth 1 -name "*.apk" -type f | wc -l  # Debe ser 0
+```
+
+**Criterios de éxito:**
+- ✅ Versión en pubspec.yaml es conocida (e.g., 6.3.9+85)
+- ✅ Existe al menos 1 APK funcional en ~/Descargas/
+- ✅ 0 APKs en root del proyecto (todos deben estar en Descargas)
+
+**Si falla: Identificar última versión funcional conocida antes de continuar.**
+
+---
+
+### Ejercicio 3: Verificar Testing Protocol Existe (CRÍTICO)
+
+```bash
+# 3.1 Verificar script de testing
+test -f scripts/test_apk_before_release.sh && echo "✅ Testing script exists" || echo "❌ NO TESTING SCRIPT"
+
+# 3.2 Si no existe, verificar si hay documentación de testing
+test -f TESTING_INSTRUCTIONS*.md && echo "✅ Testing docs exist" || echo "❌ NO TESTING DOCS"
+```
+
+**Criterios de éxito:**
+- ✅ Existe `scripts/test_apk_before_release.sh` O documentación de testing
+
+**Si falla: NO distribuir APKs hasta crear testing protocol.**
+
+---
+
+### Ejercicio 4: Verificar No Hay Builds Rotos (CRÍTICO)
+
+```bash
+# 4.1 Verificar que no hay errores de análisis estático
+flutter analyze 2>&1 | grep -i "error" | head -10
+
+# 4.2 Contar warnings (no debe exceder 50)
+flutter analyze 2>&1 | grep -c "warning" || echo "0"
+
+# 4.3 Verificar que pubspec.yaml es válido
+flutter pub get --dry-run 2>&1 | grep -i "error"
+```
+
+**Criterios de éxito:**
+- ✅ 0 errores de análisis estático
+- ✅ <50 warnings
+- ✅ pubspec.yaml válido
+
+**Si falla: Resolver errores ANTES de hacer cambios.**
+
+---
+
+### Ejercicio 5: Documentar Baseline Actual (MANDATORIO)
+
+```bash
+# 5.1 Crear snapshot de estado actual si no existe
+test -f ESTADO_ACTUAL_$(date +%Y%m%d).md || cat > ESTADO_ACTUAL_$(date +%Y%m%d).md <<EOF
+# Estado del Proyecto - $(date +%Y-%m-%d)
+
+## Git Status
+\`\`\`
+$(git log -1 --oneline)
+$(git status --short)
+\`\`\`
+
+## Versión Actual
+\`\`\`
+$(grep "^version:" pubspec.yaml)
+\`\`\`
+
+## APKs Funcionales Disponibles
+\`\`\`
+$(ls -lh ~/Descargas/Lumara_*.apk 2>/dev/null | tail -3)
+\`\`\`
+
+## Features Implementadas (últimas 5)
+\`\`\`
+$(git log -5 --oneline --grep="feat:")
+\`\`\`
+
+## Issues Conocidos (TODOs críticos)
+\`\`\`
+$(grep -r "TODO.*CRITICAL" lib/ 2>/dev/null | head -10)
+\`\`\`
+EOF
+
+# 5.2 Mostrar baseline
+cat ESTADO_ACTUAL_$(date +%Y%m%d).md
+```
+
+**Criterios de éxito:**
+- ✅ Archivo ESTADO_ACTUAL creado
+- ✅ Contiene info de Git, versión, APKs, features, issues
+
+**Este ejercicio SIEMPRE se ejecuta, incluso si archivo ya existe.**
+
+---
+
+### Ejercicio 6: Prevención de Círculo Vicioso (CRÍTICO)
+
+```bash
+# 6.1 Verificar que NO hay >5 APKs en Descargas de última semana
+find ~/Descargas -name "Lumara_*.apk" -mtime -7 | wc -l
+
+# 6.2 Verificar que última feature tiene tag de Git
+git tag --sort=-creatordate | head -3
+
+# 6.3 Verificar que hay documentación de última feature
+ls -lt *.md | head -5 | grep -E "(FASE|FEATURE|IMPLEMENTADO|REPORTE)"
+```
+
+**Criterios de éxito:**
+- ✅ <5 APKs nuevos en última semana (si >5, hay problema de iteración)
+- ✅ Últimas 2-3 features tienen tags de Git
+- ✅ Documentación reciente de features (<7 días)
+
+**Si falla:**
+- Más de 5 APKs en 7 días → **Círculo vicioso detectado, DETENER desarrollo**
+- No hay tags → **Iniciar tagging inmediatamente**
+- No hay docs → **Crear docs de estado antes de continuar**
+
+---
+
+## 🔒 PROTOCOLO MANDATORIO: Antes de Implementar Features
+
+**NUNCA iniciar implementación sin completar TODOS estos pasos:**
+
+1. ✅ **Ejecutar Ejercicios 1-6** (verificar baseline)
+2. ✅ **Crear branch desde baseline-clean**: `git checkout -b feature/nombre-descriptivo`
+3. ✅ **Verificar que branch anterior está mergeado o eliminado** (no acumular branches)
+4. ✅ **Crear TODO list con TodoWrite** antes de codear
+5. ✅ **Usar Plan subagent** para planificar implementación (>100 líneas de código)
+6. ✅ **Documentar decisión técnica** en CLAUDE.md o archivo .md específico
+
+**Si usuario solicita "hacer X rápido" o "quick fix":**
+- ❌ **NO proceder sin plan**
+- ✅ **Responder**: "Antes de implementar, voy a ejecutar verificaciones anti-retroceso y planificar la solución. Esto toma 2-3 minutos pero previene problemas."
+
+---
+
+## 🔒 PROTOCOLO MANDATORIO: Antes de Distribuir APKs
+
+**NUNCA compilar APK para distribución sin:**
+
+1. ✅ **Commit en Git** de todos los cambios
+2. ✅ **Testing E2E completo** (mínimo: login, censo, captura, upload, feature nueva)
+3. ✅ **Verificar NO hay regresiones** (features anteriores siguen funcionando)
+4. ✅ **Copiar APK a ~/Descargas/ con nombre descriptivo** (incluyendo fecha)
+5. ✅ **Crear tag de Git**: `git tag vX.X.X-nombre-feature`
+6. ✅ **Actualizar CHANGELOG.md** con cambios
+7. ✅ **Capturar MD5 del APK**: `md5sum archivo.apk`
+
+**Comando completo para compilar APK de distribución:**
+
+```bash
+# PASO 1: Verificar Git
+git status || exit 1
+
+# PASO 2: Build limpio
+flutter clean && flutter pub get && flutter build apk --release || exit 1
+
+# PASO 3: Copiar con nombre descriptivo
+APK_NAME="Lumara_v$(grep "^version:" pubspec.yaml | awk '{print $2}')_$(git branch --show-current)_$(date +%Y%m%d_%H%M%S).apk"
+cp build/app/outputs/flutter-apk/app-release.apk ~/Descargas/$APK_NAME
+
+# PASO 4: MD5 y verificación
+md5sum ~/Descargas/$APK_NAME
+ls -lh ~/Descargas/$APK_NAME
+
+echo "✅ APK listo: ~/Descargas/$APK_NAME"
+echo "⚠️  TESTING E2E REQUERIDO antes de distribución"
+```
+
+---
+
 ## ⚠️ INSTRUCCIONES CRÍTICAS DE COMPORTAMIENTO (2025-11-11)
 
 ### 1. NO ESPECULACIÓN - SOLO EVIDENCIA EMPÍRICA
