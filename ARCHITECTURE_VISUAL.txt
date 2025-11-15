@@ -1,0 +1,324 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    LUMARA FRONTEND ARCHITECTURE                            ║
+║                  Flutter 3.x Clean Architecture Pattern                    ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          APPLICATION FLOW (Main.dart)                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+    ┌──────────────────────────────┐
+    │    InitialRouteSelector      │
+    │                              │
+    │ Check: Onboarding complete? │
+    │ Check: User authenticated?   │
+    └──────────────────────────────┘
+                 │
+        ┌────────┴────────┐
+        │                 │
+        ↓                 ↓
+    ┌─────────┐      ┌──────────┐
+    │Onboarding│      │  Login   │
+    └─────────┘      └──────────┘
+        │                 │
+        └────────┬────────┘
+                 ↓
+        ┌──────────────────┐
+        │PersonSelection   │
+        │(Census lookup)   │
+        └──────────────────┘
+                 │
+        ┌────────┴────────┐
+        │                 │
+        ↓                 ↓
+    ┌──────────┐    ┌──────────┐
+    │RoleCheck │ → │Dashboard │
+    │(4 roles) │    │(4 types) │
+    └──────────┘    └──────────┘
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        PRESENTATION LAYER (17 Screens)                     ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Screens Organization                                                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Auth & Onboarding:              Census & Documents:                      │
+│  ├─ OnboardingScreen              ├─ PersonSelectionScreen                │
+│  ├─ LoginScreen                   ├─ DocumentMetadataScreen               │
+│  └─ ServerConfigScreen            ├─ UploadScreen ⭐ (anti-duplicate)   │
+│                                   └─ DocumentPreviewScreen                │
+│  Role-Based Dashboards:           Reporting & Analytics:                  │
+│  ├─ AdminDashboardScreen          ├─ DashboardScreen                      │
+│  ├─ DigitizerDashboardScreen      ├─ FamilyReportScreen                   │
+│  ├─ ReviewerDashboardScreen       ├─ ExportReportScreen                   │
+│  ├─ ViewerDashboardScreen         ├─ GapAnalysisScreen                    │
+│  └─ AssignmentListScreen          └─ AdminPanelScreen                     │
+│                                                                             │
+│  3 PROVIDERS (State Management):                                           │
+│  ├─ AuthProvider (JWT, auth state)                                        │
+│  ├─ CensusProvider (persons, search, selection)                           │
+│  └─ AssignmentProvider (assignments, roles, productivity, sessions)       │
+│                                                                             │
+│  1 Navigator:                                                              │
+│  └─ RoleBasedNavigator (route by user role)                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        DATA FLOW: UPLOAD (Key Feature)                     ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+    PersonSelectionScreen
+            │
+            ↓
+    DocumentMetadataScreen (Select type + number)
+            │
+            ↓
+    DocumentMetadata stored in CensusProvider
+            │
+            ├─→ UploadScreen
+            │    │
+            │    ├─→ DocumentRepository.checkDocumentExists()
+            │    │    │
+            │    │    └─→ Backend: POST /api/documents/check/
+            │    │        ├─ Exists + HIGH quality → "Skip"
+            │    │        ├─ Exists + LOW quality → "Replace?"
+            │    │        └─ Not exists → "Proceed"
+            │    │
+            │    ├─→ [Camera Capture]
+            │    │    └─→ DocumentPreviewScreen
+            │    │        ├─ ImageQualityChecker (brightness, contrast, sharpness)
+            │    │        │
+            │    │        ├─ HybridOcrService
+            │    │        │  ├─ LocalOcrService (Google ML Kit) [70% confidence]
+            │    │        │  └─ OpenAI Vision (fallback if needed)
+            │    │        │
+            │    │        ├─ [Approve or Re-take]
+            │    │        └─ (Optional: Crop/Rotate)
+            │    │
+            │    └─→ [Upload Flow]
+            │        ├─ ImageOptimizer (Phase 2: compress 60-80%)
+            │        ├─ DocumentRepository.uploadDocumentForPerson()
+            │        │   └─ PaperlessApiClient.uploadDocument()
+            │        │       └─ HTTP POST /api/documents/
+            │        │
+            │        ├─ Online → Direct upload
+            │        ├─ Offline → Queue to SQLite
+            │        │
+            │        └─ UploadService
+            │            ├─ Retry logic (max 3 attempts)
+            │            ├─ Exponential backoff
+            │            └─ Sync status stream
+            │
+            └─→ BackgroundSyncService
+                 ├─ Foreground task (Android SDK 36+)
+                 ├─ Periodic sync every 15 minutes
+                 └─ NetworkMonitor (connectivity check)
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        DATA LAYER (4 Repositories)                         ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  AuthRepository                  DocumentRepository                        │
+│  ├─ login()                       ├─ uploadDocumentForPerson()             │
+│  ├─ logout()                      ├─ uploadGenericDocument()               │
+│  ├─ isAuthenticated()             ├─ checkDocumentExists() ⭐             │
+│  └─ updateBaseUrl()               └─ getDocumentHistory()                  │
+│                                                                             │
+│  CensusRepository                 AssignmentRepository                     │
+│  ├─ getAllPersons()               ├─ getMyProfile()                        │
+│  ├─ searchPersons()               ├─ getMyAssignments()                    │
+│  ├─ selectPerson()                ├─ getAllAssignments()                   │
+│  ├─ getStatistics()               ├─ createBulkAssignments()               │
+│  └─ getPersonsByFamily()          ├─ approveAssignment() ⭐               │
+│                                   ├─ rejectAssignment() ⭐                │
+│                                   ├─ getProductivity()                     │
+│                                   ├─ getTeamStatistics()                   │
+│                                   └─ exportAssignmentsCSV() ⭐             │
+│                                                                             │
+│  Data Sources:                                                              │
+│  ├─ PaperlessApiClient (Dio HTTP) → Backend API                           │
+│  ├─ CensusDataSource (CSV/API)    → Census data                           │
+│  └─ AppDatabase (SQLite/Drift)    → Local storage                         │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                        SERVICES LAYER (12+ Services)                       ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Upload & Sync:                     Image Processing:                       │
+│ ├─ UploadService ⭐                ├─ ImageOptimizer (Phase 2)             │
+│ ├─ BackgroundSyncService ⭐        ├─ DocumentScannerService               │
+│ └─ FileDeletionService             └─ ImageQualityChecker                  │
+│                                                                             │
+│ OCR & Detection:                   Analytics & Reporting:                  │
+│ ├─ HybridOcrService ⭐             ├─ ReportingService                     │
+│ ├─ LocalOcrService (ML Kit)        ├─ GapAnalysisService                   │
+│ ├─ DocumentTypeDetector            └─ CSVExportService (Phase 2)           │
+│ └─ FieldExtractor                                                          │
+│                                    System Services:                         │
+│                                    ├─ ConnectivityService                  │
+│                                    ├─ NetworkMonitor                       │
+│                                    └─ WorkflowEngine                       │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    STATE MANAGEMENT (Provider Pattern)                     ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+    ┌──────────────────────────────────────────────┐
+    │         MultiProvider (main.dart)            │
+    │                                              │
+    │  ├─ ChangeNotifierProvider<AuthProvider>    │
+    │  ├─ ChangeNotifierProvider<CensusProvider>  │
+    │  ├─ ChangeNotifierProvider<AssignmentProvider>
+    │  │                                          │
+    │  └─ Provider.value<Repositories>            │
+    │     ├─ AuthRepository                       │
+    │     ├─ CensusRepository                     │
+    │     ├─ DocumentRepository                   │
+    │     └─ AssignmentRepository                 │
+    │                                              │
+    └──────────────────────────────────────────────┘
+                       │
+        ┌──────────────┼──────────────┐
+        │              │              │
+        ↓              ↓              ↓
+    ┌─────────┐  ┌──────────┐  ┌──────────────┐
+    │Consumer │  │Provider. │  │context.read  │
+    │         │  │of()      │  │              │
+    └─────────┘  └──────────┘  └──────────────┘
+        │              │              │
+        └──────────────┴──────────────┘
+                       │
+                       ↓
+    Secondary Storage (not in Provider):
+    ├─ SharedPreferences (onboarding, person selection)
+    ├─ FlutterSecureStorage (JWT tokens)
+    └─ SQLite/Drift (upload queue, history)
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    ROLE-BASED ROUTING (4 User Types)                       ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+    After Login → Load UserProfile → Check Role
+    │
+    ├─→ ADMIN ────────→ AdminDashboardScreen
+    │                  ├─ Team statistics
+    │                  ├─ Create assignments
+    │                  ├─ System configuration
+    │                  └─ Workflows
+    │
+    ├─→ DIGITALIZADOR ─→ DigitizerDashboardScreen
+    │                  ├─ My assignments
+    │                  ├─ Start digitizing
+    │                  ├─ Productivity metrics
+    │                  └─ (Person selection → Upload flow)
+    │
+    ├─→ REVISOR ───────→ ReviewerDashboardScreen
+    │                  ├─ Review queue
+    │                  ├─ Approve/Reject
+    │                  ├─ Quality metrics
+    │                  └─ (Approve, Reject, Request re-capture)
+    │
+    └─→ VIEWER ────────→ ViewerDashboardScreen
+                       ├─ Read-only analytics
+                       ├─ Reports (CSV/PDF)
+                       ├─ Gap analysis
+                       └─ Progress tracking
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    ENTITY RELATIONSHIP MODEL                               ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+    User (JWT Auth)
+    ├─ AuthToken
+    └─ UserProfile (role: ADMIN/DIGITALIZADOR/REVISOR/VIEWER)
+        │
+        ├─→ DigitizationSession (Phase 2)
+        │   └─ Tracks: start_time, end_time, documents_count
+        │
+        └─→ PersonAssignment (multi-user workflow)
+            ├─ digitizer: User
+            ├─ person: Person (from census)
+            ├─ status: PENDING → IN_PROGRESS → COMPLETED → REVIEWED
+            ├─ required_documents: int
+            ├─ digitized_documents: int
+            └─ DocumentReview (Phase 2: approval/rejection)
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    OFFLINE SUPPORT ARCHITECTURE                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+    Device goes OFFLINE
+            │
+            ↓
+    UploadService detects offline
+            │
+            ├─→ Queue upload to SQLite
+            ├─→ Store: file_path, person_id, metadata
+            └─→ Status: PENDING
+                │
+                └─→ Show: "Saved offline, will sync when connected"
+                          │
+                          └─→ Device goes ONLINE
+                              │
+                              ↓
+                          BackgroundSyncService triggers
+                              │
+                              ├─→ Foreground task started
+                              ├─→ Retry all pending uploads
+                              ├─→ Exponential backoff (if failure)
+                              ├─→ Max 3 attempts
+                              │
+                              ├─→ Success → Mark as UPLOADED, delete queue
+                              └─→ Failure → Keep in queue, retry next sync
+
+    Periodic Sync: Every 15 minutes (even if online)
+    ├─ Check for pending uploads
+    ├─ Re-sync failed uploads
+    └─ Update statistics
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    CORE FEATURES MATRIX                                    ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Feature                │ Backend │ Frontend │ Status                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ Authentication (JWT)   │   ✅   │   ✅    │ Complete                      │
+│ Rate Limiting          │   ✅   │   ✅    │ Complete (5 attempts)         │
+│ RBAC (4 roles)         │   ✅   │   ✅    │ Complete                      │
+│ Document Upload        │   ✅   │   ✅    │ Complete                      │
+│ Anti-Duplicate Check   │   ✅   │   ✅    │ Complete ⭐                  │
+│ Document Replacement   │   ✅   │   ✅    │ Complete                      │
+│ Quality Validation     │   ✅   │   ✅    │ Complete                      │
+│ Hybrid OCR             │   ✅   │   ✅    │ Complete                      │
+│ Image Optimization     │   ✅   │   ✅    │ Phase 2 ✅                    │
+│ Assignment Management  │   ✅   │   ✅    │ Complete                      │
+│ Review Workflow        │   ✅   │   ✅    │ Phase 2 ✅                    │
+│ Session Tracking       │   ✅   │   ✅    │ Phase 2 ✅                    │
+│ CSV Export             │   ✅   │   ✅    │ Phase 2 ✅                    │
+│ Reporting & Analytics  │   ✅   │   ✅    │ Phase 2 ✅                    │
+│ Gap Analysis           │   ✅   │   ✅    │ Complete                      │
+│ Offline-First Sync     │   ✅   │   ✅    │ Complete                      │
+│ Background Sync        │   ✅   │   ✅    │ Complete                      │
+│ Push Notifications     │   ⚠️   │   ❌    │ Planned Phase 3               │
+│ Full-text Search       │   ⚠️   │   ❌    │ Planned Phase 3               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+Legend: ✅ Complete | ⚠️ Partial | ❌ Not started | ⭐ Key feature
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Document Generated: November 1, 2025
+Lumara Version: 5.6.1 (Phase 2)
+Status: Production Ready with Phase 2 Features
+
+═══════════════════════════════════════════════════════════════════════════════

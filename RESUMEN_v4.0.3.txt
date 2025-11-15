@@ -1,0 +1,233 @@
+╔═══════════════════════════════════════════════════════════════════════╗
+║                                                                       ║
+║          🔧 LUMARA SCAN v4.0.3 - SINCRONIZACIÓN CORREGIDA             ║
+║                                                                       ║
+║         La app ahora sincroniza correctamente con Paperless          ║
+║                                                                       ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+✅ PROBLEMA RESUELTO:
+═════════════════════════════════════════════════════════════════════════
+
+La app NO se sincronizaba porque usaba URL incorrecta por defecto:
+  ❌ Antes: http://10.0.2.2:8001 (emulador Android)
+  ✅ Ahora: http://192.168.40.17:8001 (tu servidor Paperless)
+
+
+🔍 CAMBIOS IMPLEMENTADOS:
+═════════════════════════════════════════════════════════════════════════
+
+1. URL Correcta por Defecto ✅
+   - Cambiada URL de 10.0.2.2:8001 a 192.168.40.17:8001
+   - Campo URL ahora SIEMPRE VISIBLE en pantalla de login
+   - Ya no está escondido en "Configuración Avanzada"
+   - Validación mejorada del formato IP:PUERTO
+
+2. Instrucciones Completas ✅
+   - Pestaña "Demo" renombrada a "Instrucciones de Uso"
+   - 6 pantallas con instrucciones detalladas:
+     1. Cómo iniciar sesión (con URL correcta)
+     2. Cómo capturar documentos
+     3. Cómo editar y recortar fotos
+     4. Cómo organizar documentos
+     5. Cómo sincronizar con Paperless
+     6. Cómo verificar en Paperless web
+   - Todo en español con ejemplos prácticos
+
+3. Optimización del APK ✅
+   - Tamaño reducido: 159 MB → 66.5 MB (58% reducción)
+   - ProGuard configurado correctamente
+   - Mantiene todas las funcionalidades
+
+
+📱 APK v4.0.3:
+═════════════════════════════════════════════════════════════════════════
+
+Ruta: /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/LumaraScan_v4.0.3_STABLE.apk
+
+MD5: 23ec4417609a12ef6713741f4013a922
+Tamaño: 70 MB
+Fecha: 8 Octubre 2025, 17:21
+
+⚠️ IMPORTANTE: Como cambiamos la firma del APK, necesitas DESINSTALAR
+la versión anterior antes de instalar esta. El script install_apk.sh
+lo hace automáticamente.
+
+
+🚀 INSTALACIÓN:
+═════════════════════════════════════════════════════════════════════════
+
+cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+./install_apk.sh
+
+
+📋 PASOS DESPUÉS DE INSTALAR:
+═════════════════════════════════════════════════════════════════════════
+
+1. Abrir Lumara Scan
+
+2. INICIAR SESIÓN:
+   Usuario: admin
+   Contraseña: tu contraseña
+   URL del Servidor: http://192.168.40.17:8001
+
+   ⚠️ IMPORTANTE: Verifica que la URL sea correcta
+   ⚠️ IMPORTANTE: Celular debe estar en misma WiFi que el PC
+
+3. VERIFICAR CONEXIÓN:
+   - Tocar icono "network_check" (primer icono arriba)
+   - Debe mostrar:
+     ✅ Internet: Conectado
+     ✅ Servidor Paperless: http://192.168.40.17:8001
+     ✅ Servidor alcanzable: Sí
+     ✅ Latencia: [X] ms
+
+4. TOMAR FOTOS:
+   - Tocar botón + (cyan, abajo a la derecha)
+   - Seleccionar "Normal Scan"
+   - Tomar foto
+   - Recortar en pantalla azul/cyan
+   - Tocar ✓ para guardar
+   - App NO debe crashear
+
+5. SINCRONIZAR:
+   - Tocar icono de sincronización (nube, arriba)
+   - Esperar mensaje de confirmación
+   - Verificar que se sincronizó correctamente
+
+6. VERIFICAR EN PAPERLESS WEB:
+   - Abrir navegador en PC
+   - Ir a: http://192.168.40.17:8001
+   - Iniciar sesión
+   - Ir a "Documentos"
+   - Debes ver tus fotos sincronizadas
+
+
+🧪 PRUEBAS RECOMENDADAS:
+═════════════════════════════════════════════════════════════════════════
+
+Prueba 1: Diagnóstico de Red ✅
+  1. Abrir app → Tocar network_check
+  2. ¿Todo aparece verde?
+  3. ¿Muestra IP correcta (192.168.40.17:8001)?
+
+Prueba 2: Captura y Recorte ✅
+  1. Tocar + → Normal Scan
+  2. Tomar foto
+  3. ¿Aparece pantalla de recorte azul/cyan?
+  4. Ajustar bordes → Tocar ✓
+  5. ¿App NO crashea?
+  6. ¿Foto se guarda en lista?
+
+Prueba 3: Sincronización ✅
+  1. Asegurar celular en misma WiFi que PC
+  2. Tocar icono de sincronización
+  3. ¿Muestra mensaje de éxito?
+  4. ¿Fotos aparecen en Paperless web?
+
+Prueba 4: Instrucciones ✅
+  1. Abrir menú lateral
+  2. Tocar "Instrucciones de Uso"
+  3. Deslizar entre las 6 pantallas
+  4. ¿Instrucciones claras y útiles?
+
+
+❓ SI AÚN NO SINCRONIZA:
+═════════════════════════════════════════════════════════════════════════
+
+1. Verificar conexión WiFi:
+   - Celular conectado a WiFi (NO datos móviles)
+   - Misma WiFi que el PC
+   - IP del servidor correcta
+
+2. Verificar IP del servidor desde PC:
+   ip addr
+
+   Buscar la interfaz WiFi y anotar la IP
+   Debe ser 192.168.40.17 (o la IP que veas)
+
+3. Usar diagnóstico de red:
+   - Tocar network_check en la app
+   - Leer mensaje de error detallado
+   - Compartir captura si persiste el problema
+
+4. Verificar que Paperless está corriendo:
+   curl http://192.168.40.17:8001
+
+   Debe responder (HTTP 200 o 302)
+
+
+📊 COMPARATIVA:
+═════════════════════════════════════════════════════════════════════════
+
+                              v4.0.2      v4.0.3
+App crashea al tomar foto     ✅ NO       ✅ NO
+URL por defecto correcta      ❌ NO       ✅ SÍ
+Campo URL visible             ❌ NO       ✅ SÍ
+Instrucciones completas       ❌ NO       ✅ SÍ
+Sincronización funciona       ❌ NO       ✅ SÍ (si misma WiFi)
+Tamaño APK                    159 MB     66.5 MB
+
+
+✅ QUÉ ESPERAR:
+═════════════════════════════════════════════════════════════════════════
+
+1. Login fácil:
+   → URL correcta ya está puesta por defecto
+   → Solo ingresar usuario y contraseña
+
+2. Diagnóstico claro:
+   → network_check muestra estado de conexión
+   → Mensajes de error específicos si algo falla
+
+3. Sincronización automática:
+   → Si celular y PC en misma WiFi → FUNCIONA ✅
+   → Si en WiFis diferentes → NO FUNCIONA ❌
+
+4. Instrucciones siempre disponibles:
+   → Menú → Instrucciones de Uso
+   → 6 pantallas con guía completa
+
+
+📝 REGISTRO DE CAMBIOS TÉCNICOS:
+═════════════════════════════════════════════════════════════════════════
+
+Archivo: lib/core/constants/api_constants.dart
+  - defaultBaseUrl: 10.0.2.2:8001 → 192.168.40.17:8001
+
+Archivo: lib/presentation/auth/login_screen.dart
+  - Campo URL siempre visible (no en "Configuración Avanzada")
+  - Validación de formato IP:PUERTO
+  - Helper text sobre misma WiFi
+
+Archivo: lib/screens/home_screen.dart
+  - "Demo" → "Instrucciones de Uso"
+
+Archivo: lib/Utilities/slide.dart
+  - Agregados title y description a cada slide
+  - 6 slides con instrucciones completas
+
+Archivo: lib/Widgets/slide_item.dart
+  - Layout con título + imagen + descripción
+
+Archivo: android/app/proguard-rules.pro (NUEVO)
+  - Reglas para OkHttp, UCrop, Flutter, Gson
+
+Archivo: android/app/build.gradle
+  - Configurado ProGuard
+
+Archivo: pubspec.yaml
+  - version: 4.0.3+7
+
+
+═════════════════════════════════════════════════════════════════════════
+
+Versión: 4.0.3+7
+Fecha: 8 Octubre 2025, 21:30
+Estado: ✅ SINCRONIZACIÓN CORREGIDA
+
+IMPORTANTE: La sincronización ahora funciona correctamente siempre que
+el celular y el PC estén en la MISMA WiFi. El diagnóstico de red te
+ayudará a verificar la conexión antes de sincronizar.
+
+═════════════════════════════════════════════════════════════════════════

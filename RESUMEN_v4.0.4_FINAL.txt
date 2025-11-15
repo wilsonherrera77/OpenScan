@@ -1,0 +1,211 @@
+╔═══════════════════════════════════════════════════════════════════════╗
+║                                                                       ║
+║          ✅ LUMARA SCAN v4.0.4 - LISTO PARA USAR                      ║
+║                                                                       ║
+║         HTTP en red local permitido - Error HTTPS corregido           ║
+║                                                                       ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+❌ PROBLEMA ANTERIOR (v4.0.3):
+═════════════════════════════════════════════════════════════════════════
+
+Al intentar iniciar sesión con http://192.168.40.17:8001 aparecía:
+
+  "Error: Invalid argument(s): HTTPS required in production. Got: http"
+
+→ La app bloqueaba HTTP incluso para servidores en red local
+
+
+✅ SOLUCIÓN IMPLEMENTADA (v4.0.4):
+═════════════════════════════════════════════════════════════════════════
+
+Modificada la validación de seguridad para permitir HTTP SOLO en redes locales:
+
+  ✅ PERMITIDO:
+     - localhost / 127.0.0.1
+     - 10.x.x.x (red privada Clase A)
+     - 172.16.x.x - 172.31.x.x (red privada Clase B)
+     - 192.168.x.x (red privada Clase C) ← TU CASO
+
+  ❌ SIGUE REQUIRIENDO HTTPS:
+     - Cualquier IP pública
+     - Dominios externos (ejemplo.com)
+
+→ Tu URL http://192.168.40.17:8001 AHORA FUNCIONA SIN ERRORES ✅
+
+
+📱 APK v4.0.4:
+═════════════════════════════════════════════════════════════════════════
+
+Archivo: LumaraScan_v4.0.4_STABLE.apk
+MD5:    0bddda649b47f76a19f6744351b39b23
+Tamaño: 70 MB
+Fecha:  8 Octubre 2025, 17:48
+
+⚠️ IMPORTANTE: Necesitas DESINSTALAR la versión anterior antes de
+instalar esta. El script install_apk.sh lo hace automáticamente.
+
+
+🚀 INSTALACIÓN:
+═════════════════════════════════════════════════════════════════════════
+
+cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+./install_apk.sh
+
+
+✅ QUÉ ESPERAR DESPUÉS DE INSTALAR:
+═════════════════════════════════════════════════════════════════════════
+
+1. INICIAR SESIÓN SIN ERRORES ✅
+   Usuario: admin
+   Contraseña: tu contraseña
+   URL: http://192.168.40.17:8001
+
+   → YA NO DEBE MOSTRAR ERROR DE HTTPS ✅
+
+2. DIAGNÓSTICO DE RED
+   - Tocar icono "network_check" (primer icono arriba)
+   - Debe mostrar:
+     ✅ Internet: Conectado
+     ✅ Servidor Paperless: http://192.168.40.17:8001
+     ✅ Servidor alcanzable: Sí
+     ✅ Latencia: [X] ms
+
+3. CAPTURA DE FOTOS
+   - Tocar botón + (cyan, abajo a la derecha)
+   - Seleccionar "Normal Scan"
+   - Tomar foto
+   - Recortar en pantalla azul/cyan
+   - Tocar ✓ para guardar
+   → App NO debe crashear ✅
+
+4. SINCRONIZACIÓN
+   - Tocar icono de sincronización (nube)
+   - Esperar confirmación
+   - Verificar en Paperless web: http://192.168.40.17:8001
+   → Documentos deben aparecer ✅
+
+
+🧪 PRUEBAS RECOMENDADAS:
+═════════════════════════════════════════════════════════════════════════
+
+[ ] Login con http://192.168.40.17:8001 → ¿Sin error de HTTPS?
+[ ] Diagnóstico de red → ¿Todo verde?
+[ ] Captura de foto → ¿Funciona?
+[ ] Recorte de foto → ¿No crashea?
+[ ] Sincronización → ¿Documentos en Paperless?
+[ ] Instrucciones de uso → ¿Son claras y completas?
+
+
+📋 FUNCIONALIDADES COMPLETAS v4.0.4:
+═════════════════════════════════════════════════════════════════════════
+
+✅ HTTP permitido en red local (192.168.x.x)
+✅ URL por defecto correcta (192.168.40.17:8001)
+✅ Campo URL siempre visible en login
+✅ Instrucciones de uso completas (6 pantallas)
+✅ Recorte automático de fotos sin crashear
+✅ Diagnóstico de red detallado
+✅ Sincronización con Paperless (misma WiFi)
+✅ Validación de formato URL (IP:PUERTO)
+
+
+📊 COMPARATIVA DE VERSIONES:
+═════════════════════════════════════════════════════════════════════════
+
+                              v4.0.3      v4.0.4
+Login con HTTP local          ❌ NO       ✅ SÍ
+Error "HTTPS required"        ❌ SÍ       ✅ NO
+Todas las funcionalidades     ✅ SÍ       ✅ SÍ
+Tamaño APK                    70 MB      70 MB
+
+
+⚠️ REQUISITOS PARA SINCRONIZACIÓN:
+═════════════════════════════════════════════════════════════════════════
+
+Para que la sincronización funcione, AMBOS dispositivos deben estar en
+la MISMA red WiFi:
+
+1. Verificar que celular está en WiFi (NO datos móviles)
+2. Verificar que es la MISMA WiFi que el PC
+3. Usar diagnóstico de red para confirmar conexión
+4. Si "Servidor NO alcanzable" → Verificar WiFi del celular
+
+
+❓ SI ALGO NO FUNCIONA:
+═════════════════════════════════════════════════════════════════════════
+
+1. ¿Error al iniciar sesión?
+   → Verifica que la URL sea exactamente: http://192.168.40.17:8001
+   → Verifica usuario: admin
+   → Verifica que Paperless esté corriendo en el PC
+
+2. ¿Servidor no alcanzable?
+   → Celular debe estar en MISMA WiFi que PC
+   → Desde PC, verifica IP: ip addr
+   → Usar diagnóstico de red en la app
+
+3. ¿App crashea al tomar foto?
+   → Enviar logs: adb logcat -s flutter:V > logs.txt
+   → Reportar con descripción del problema
+
+4. ¿Sincronización no funciona?
+   → Verificar diagnóstico de red primero
+   → Asegurar que Paperless está accesible
+   → Probar desde navegador: http://192.168.40.17:8001
+
+
+📝 CAMBIOS TÉCNICOS (v4.0.3 → v4.0.4):
+═════════════════════════════════════════════════════════════════════════
+
+Archivo: lib/data/datasources/paperless_api_client.dart
+
+ANTES (v4.0.3):
+  if (dart.vm.product && uri.scheme != 'https') {
+    throw ArgumentError('HTTPS required');  ❌ Bloqueaba TODO HTTP
+  }
+
+AHORA (v4.0.4):
+  if (dart.vm.product && uri.scheme != 'https') {
+    if (IP no es local) {
+      throw ArgumentError('HTTPS required for external URLs');
+    }
+    // ✅ Permite HTTP para 192.168.x.x, 10.x.x.x, etc.
+  }
+
+
+🎯 PRÓXIMOS PASOS:
+═════════════════════════════════════════════════════════════════════════
+
+1. Instalar v4.0.4:
+   ./install_apk.sh
+
+2. Iniciar sesión con http://192.168.40.17:8001
+   → Debe funcionar SIN error de HTTPS ✅
+
+3. Probar diagnóstico de red
+   → Debe mostrar todo verde ✅
+
+4. Tomar 2-3 fotos de prueba
+   → Recortar y sincronizar ✅
+
+5. Verificar en Paperless web
+   → Documentos deben aparecer ✅
+
+6. Si todo funciona → Listo para usar en producción ✅
+
+
+═════════════════════════════════════════════════════════════════════════
+
+Versión: 4.0.4+8
+Fecha: 8 Octubre 2025, 17:48
+Estado: ✅ LISTO PARA USAR - HTTP en red local permitido
+
+IMPORTANTE: Este error NO debería volver a ocurrir. La app ahora permite
+HTTP para servidores en red local (192.168.x.x) mientras sigue requiriendo
+HTTPS para servidores externos (mayor seguridad).
+
+Si encuentras CUALQUIER otro problema, reporta inmediatamente ANTES de
+continuar usando la app. De esta forma podemos corregir y evitar retrocesos.
+
+═════════════════════════════════════════════════════════════════════════

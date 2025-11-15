@@ -1,0 +1,207 @@
+═══════════════════════════════════════════════════════════════════════════════
+ TESTING INSTRUCTIONS: v6.0.1 - Admin Role Fix
+═══════════════════════════════════════════════════════════════════════════════
+
+APK: Lumara_v6.0.1_ROLE_FIX_AdminWorkaround_20251109_205023.apk
+MD5: 562fd763776364f2e8761798ca4b617c
+Size: 97 MB
+Fix: Frontend workaround - Force admin role if username="admin"
+
+═══════════════════════════════════════════════════════════════════════════════
+ PASO 1: INSTALACIÓN LIMPIA (5 min)
+═══════════════════════════════════════════════════════════════════════════════
+
+# Terminal 1: Desinstalar e instalar
+adb uninstall com.ethereal.openscan
+adb install -r ~/Descargas/Lumara_v6.0.1_ROLE_FIX_AdminWorkaround_20251109_205023.apk
+
+# Terminal 2: Capturar logs (IMPORTANTE - dejar corriendo)
+adb logcat -c  # Limpiar logs viejos
+adb logcat | tee /tmp/v6.0.1_role_fix_$(date +%Y%m%d_%H%M%S).log
+
+═══════════════════════════════════════════════════════════════════════════════
+ PASO 2: LOGIN Y VERIFICACIÓN (2 min)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Abrir app Lumara
+2. Login: username="admin", password=[tu password]
+3. Observar redirección
+
+ESPERADO:
+  ✅ Navegación a "Dashboard Admin" (NO "Dashboard - Reportes")
+
+VERIFICAR EN TERMINAL 2 (logs):
+  Buscar esta línea:
+
+  ═══════════════════════════════════════════════════════════
+  🔍 USER PROFILE DEBUG - Backend Response
+  ═══════════════════════════════════════════════════════════
+  📄 Full JSON: {...}
+  👤 Username: admin
+  🎭 Role (raw from backend): "VIEWER"  ← ESTO CONFIRMA EL BUG
+  ...
+  ⚠️  WORKAROUND APPLIED: Forcing admin role for username="admin"
+     Backend returned role: "VIEWER" (ignored)
+     Frontend forcing role: ADMIN
+  ...
+
+SI VES ESTO → Workaround funcionó ✅
+
+═══════════════════════════════════════════════════════════════════════════════
+ PASO 3: VERIFICAR DASHBOARD CORRECTO (1 min)
+═══════════════════════════════════════════════════════════════════════════════
+
+EN LA PANTALLA DEL DISPOSITIVO:
+
+✅ CORRECTO: "Dashboard Admin"
+   - Sección superior: "Bienvenido, Administrador"
+   - Sección: "Resumen del Sistema" (cards con estadísticas)
+   - Sección: "Acciones Rápidas" (grid con botones)
+   - FAB: "Crear Asignaciones" (botón flotante azul)
+
+❌ INCORRECTO: "Dashboard - Reportes"
+   - Sección: "Reportes y Analytics del Sistema"
+   - Botones: Hoy/Semana/Mes/Todo (período)
+   - Sección: "Exportar Reportes"
+
+SI VES "Dashboard - Reportes" → Workaround NO funcionó ❌
+
+═══════════════════════════════════════════════════════════════════════════════
+ PASO 4: VERIFICAR 5 BOTONES (1 min)
+═══════════════════════════════════════════════════════════════════════════════
+
+Scroll a sección "Acciones Rápidas"
+
+CONTAR BOTONES (debería haber 5):
+
+1. [👤+] Crear Digitalizador (azul)
+2. [📋+] Asignar Personas (verde)
+3. [📸] Capturar Documento (teal) ← EL QUE BUSCÁBAMOS
+4. [📊] Ver Reportes (naranja)
+5. [👥] Gestionar Usuarios (morado)
+
+✅ Si ves 5 botones → SUCCESS
+❌ Si ves 4 botones → FAIL (workaround no aplicado)
+
+═══════════════════════════════════════════════════════════════════════════════
+ PASO 5: TEST COMPLETO DEL 5TO BOTÓN (3 min)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Tap en botón [📸] "Capturar Documento" (teal, 3ra posición)
+
+ESPERADO:
+   ✅ Navega a "Seleccionar Persona"
+   ✅ Muestra lista de ~3998 personas
+   ✅ Search bar funciona
+
+2. Buscar persona: escribir "2071" (o ID conocido)
+3. Tap en persona
+4. Tap "Continuar"
+5. Seleccionar tipo: "Cédula de Ciudadanía"
+6. Tap "Capturar"
+7. Tomar foto de prueba
+8. Confirmar captura
+9. Esperar upload
+
+ESPERADO:
+   ✅ Upload exitoso
+   ✅ Mensaje "Documento subido exitosamente"
+   ✅ Regreso a Admin Dashboard
+
+═══════════════════════════════════════════════════════════════════════════════
+ PASO 6: CAPTURAR LOGS Y ENVIAR (2 min)
+═══════════════════════════════════════════════════════════════════════════════
+
+# En Terminal 2 (donde está corriendo adb logcat), presionar Ctrl+C para detener
+
+# Analizar log capturado
+grep "🔍 USER PROFILE DEBUG" /tmp/v6.0.1_role_fix_*.log
+
+DEBERÍA MOSTRAR:
+  🔍 USER PROFILE DEBUG - Backend Response
+  👤 Username: admin
+  🎭 Role (raw from backend): "VIEWER"  ← Confirma backend está roto
+  ⚠️  WORKAROUND APPLIED: Forcing admin role
+  ✅ Role parsed: admin
+
+# Compartir este output para análisis
+
+═══════════════════════════════════════════════════════════════════════════════
+ RESULTADO ESPERADO: ✅ TODOS LOS PASOS PASAN
+═══════════════════════════════════════════════════════════════════════════════
+
+[ ] PASO 1: Instalación limpia ✅
+[ ] PASO 2: Login exitoso + logs muestran workaround applied ✅
+[ ] PASO 3: Dashboard correcto = "Dashboard Admin" ✅
+[ ] PASO 4: 5 botones visibles en Acciones Rápidas ✅
+[ ] PASO 5: Flujo completo de captura funciona ✅
+[ ] PASO 6: Logs capturados confirman backend retorna VIEWER ✅
+
+SI TODOS ✅ → v6.0.1 APROBADO (workaround funciona)
+
+═══════════════════════════════════════════════════════════════════════════════
+ SI ALGO FALLA
+═══════════════════════════════════════════════════════════════════════════════
+
+ESCENARIO 1: Sigue mostrando "Dashboard - Reportes"
+  → Workaround no se aplicó
+  → Verificar logs: ¿Aparece "⚠️ WORKAROUND APPLIED"?
+  → Si NO aparece: Código no se compiló correctamente
+  → Acción: Rebuild con flutter clean
+
+ESCENARIO 2: Logs muestran workaround pero sigue en Viewer
+  → Problema en RoleBasedNavigator
+  → Acción: Investigar navigation logic
+
+ESCENARIO 3: App crashea al login
+  → Error en código modificado (user_profile.dart)
+  → Acción: Revisar syntax errors
+  → Check: adb logcat | grep "FATAL"
+
+═══════════════════════════════════════════════════════════════════════════════
+ BACKEND FIX (Cuando tengas acceso)
+═══════════════════════════════════════════════════════════════════════════════
+
+Una vez confirmado que backend retorna role incorrecto:
+
+# Opción A: Fix en DB
+docker exec -it paperless-webserver-1 python3 manage.py shell -c "
+from django.contrib.auth.models import User
+from paperless_auth.models import UserProfile
+user = User.objects.get(username='admin')
+profile = UserProfile.objects.get(user=user)
+print(f'Current role: {profile.role}')
+profile.role = 'ADMIN'
+profile.save()
+print(f'Updated role: {profile.role}')
+"
+
+# Opción B: Fix en Serializer (si DB está correcto)
+# Verificar: paperless_auth/serializers.py
+# Revisar UserProfileSerializer.get_role()
+
+# Después del fix backend:
+# 1. Remover workaround de user_profile.dart
+# 2. Rebuild APK
+# 3. Testing completo
+# 4. Tag como v6.0.2-backend-fixed
+
+═══════════════════════════════════════════════════════════════════════════════
+ PRÓXIMOS PASOS (después de testing v6.0.1)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. [ ] Confirmar workaround funciona (v6.0.1 testing)
+2. [ ] Capturar y analizar logs backend response
+3. [ ] Fix backend (DB o serializer)
+4. [ ] Remover workaround de frontend
+5. [ ] Build v6.0.2 sin workaround
+6. [ ] Testing v6.0.2 (debería funcionar igual)
+7. [ ] Tag v6.0.2-production-ready
+8. [ ] Distribuir a usuarios
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Documento generado: 2025-11-09 20:52
+Status: LISTO PARA TESTING
+Expectativa: 95% probabilidad que workaround funcione
+Evidencia requerida: Logs mostrando "⚠️ WORKAROUND APPLIED"

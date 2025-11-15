@@ -1,0 +1,114 @@
+name: lumara_scan
+description: Lumara Scan - Smart document digitization and management system
+  system integrated with Paperless-ngx for community archives. No ads, privacy first.
+
+publish_to: "none"
+
+version: 6.3.9+85  # FULL SYNC RESTORED: IOSink fix (v6.3.7) resolved isolate deadlock - full sync functionality with all logging and error handling
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_speed_dial: ^7.0.0
+  focused_menu: ^1.0.5
+  image_picker: ^1.1.2
+  open_filex: ^4.5.0
+  path_provider: ^2.1.4
+  pdf: ^3.11.1
+  permission_handler: ^11.3.1
+  quick_actions: ^1.1.0
+  reorderables: ^0.6.0
+  # share_extend: ^2.0.0 # DISABLED: Incompatible with Android SDK 36
+  share_plus: ^7.2.2  # For CSV export sharing (FASE 2)
+  shared_preferences: ^2.3.2
+  simple_animated_icon: ^1.0.0
+  sqflite: ^2.4.0
+  url_launcher: ^6.3.1
+  path: ^1.9.0
+  flutter_gen: ^5.8.0
+  vector_math: ^2.1.4
+
+  # New dependencies for Indigenous Communities integration
+  # HTTP Client for Paperless API
+  dio: ^5.7.0
+
+  # State management
+  provider: ^6.1.2
+
+  # Local storage for auth tokens
+  flutter_secure_storage: ^9.2.2
+
+  # CSV parsing for census data
+  csv: ^6.0.0
+
+  # JSON serialization
+  json_annotation: ^4.9.0
+
+  # HTTP multipart for file uploads
+  http: ^1.2.2
+  http_parser: ^4.0.2
+
+  # Logging
+  logger: ^2.4.0
+
+  # Date formatting
+  intl: ^0.19.0
+
+  # Offline Database (Drift)
+  drift: ^2.14.0
+  drift_flutter: ^0.1.0
+  sqlite3_flutter_libs: ^0.5.0
+
+  # Background Tasks
+  # workmanager: ^0.5.2 # Not compatible with SDK 36
+  flutter_foreground_task: ^8.14.0 # SDK 36 compatible - Foreground service for background sync
+
+  # Network connectivity
+  connectivity_plus: ^6.0.3
+
+  # Cryptography for certificate pinning
+  crypto: ^3.0.3
+
+  # File encryption (AES-256-GCM)
+  encrypt: ^5.0.3
+
+  # Image processing for quality checks
+  image: ^4.1.7
+
+  # Document cropping with edge detection (SDK 36 compatible!)
+  image_cropper: ^11.0.0
+
+  # Charts for reporting dashboard
+  fl_chart: ^0.66.0
+
+  # PDF generation for reports (using existing pdf dependency)
+  printing: ^5.11.1
+
+  # Excel generation
+  excel: ^4.0.3
+
+  # Google ML Kit for on-device OCR (Feature 2)
+  google_mlkit_text_recognition: ^0.13.1
+
+  # QR Code Scanner for automatic server configuration
+  qr_code_scanner: ^1.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.4.13
+  json_serializable: ^6.9.0
+  drift_dev: ^2.14.0
+  mockito: ^5.4.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/census/
