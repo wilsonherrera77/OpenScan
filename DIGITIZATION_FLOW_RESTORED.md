@@ -454,7 +454,7 @@ Durante integración de nuevas features (Phase 2), se agregaron TODOs en lugar d
 
 ---
 
-**Creado por:** Claude Code (Anthropic)
+**Creado por:** AI Assistant (Anthropic)
 **Última Actualización:** 2025-10-31 18:26
 **Status:** ✅ FLUJO DE DIGITALIZACIÓN COMPLETAMENTE RESTAURADO
 **APK:** `Lumara_v5.6.1_FIXED_DigitizationFlow_20251031_182606.apk` (96MB)

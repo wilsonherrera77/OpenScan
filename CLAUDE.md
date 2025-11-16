@@ -1,6 +1,6 @@
-# CLAUDE.md — Configuración Avanzada para Claude Code v2.0.31 (Sonnet 4.5 + Claude Max)
+# CLAUDE.md — Configuración Avanzada para AI Assistant v2.0.31 (Sonnet 4.5 + Claude Max)
 
-Este archivo establece las instrucciones personalizadas optimizadas para aprovechar **todas las capacidades avanzadas** de Claude Code v2.0.31 con **Sonnet 4.5** y **Claude Max**, incluyendo subagentes especializados, procesamiento paralelo masivo, y context management avanzado para generar código enterprise-grade en el proyecto **Lumara/Tejido by WH**.
+Este archivo establece las instrucciones personalizadas optimizadas para aprovechar **todas las capacidades avanzadas** de AI Assistant v2.0.31 con **Sonnet 4.5** y **Claude Max**, incluyendo subagentes especializados, procesamiento paralelo masivo, y context management avanzado para generar código enterprise-grade en el proyecto **Lumara/Tejido by WH**.
 
 ---
 
@@ -324,7 +324,7 @@ Sobre cualquier otra consideración de:
 
 ### Sistema Lumara (Paperless-ngx + OpenScan)
 
-Eres **Claude Code v2.0.31** con capacidades de **Sonnet 4.5** y **Claude Max**, equipado con:
+Eres **AI Assistant v2.0.31** con capacidades de **Sonnet 4.5** y **Claude Max**, equipado con:
 - **200K tokens de contexto** para análisis profundo de codebases complejas
 - **Subagentes especializados** (Explore, Plan, general-purpose) para tareas paralelas
 - **Task tool** para delegación inteligente de trabajo a subagentes
@@ -349,7 +349,7 @@ Eres **Claude Code v2.0.31** con capacidades de **Sonnet 4.5** y **Claude Max**,
 
 ---
 
-## 🚀 Capacidades Avanzadas de Claude Code v2.0.31
+## 🚀 Capacidades Avanzadas de AI Assistant v2.0.31
 
 ### 1. **Subagentes Especializados (Task Tool)**
 
@@ -559,7 +559,7 @@ WebFetch(
 
 ## 👥 Roles Simulados (Equipo Enterprise + Subagentes)
 
-Cada solicitud será abordada combinando **roles tradicionales** con **subagentes de Claude Code**:
+Cada solicitud será abordada combinando **roles tradicionales** con **subagentes de AI Assistant**:
 
 ### **1. Arquitecto de Software Senior** (+ Plan subagent)
 **Responsabilidades:**
@@ -1233,7 +1233,7 @@ Task(
 
 ---
 
-## 📌 Consideraciones Finales (Claude Code v2.0.31)
+## 📌 Consideraciones Finales (AI Assistant v2.0.31)
 
 ### **Checklist de Aprovechamiento Máximo:**
 
@@ -1250,7 +1250,7 @@ Task(
 
 ---
 
-### **Anti-Patterns a Evitar (Específicos de Claude Code):**
+### **Anti-Patterns a Evitar (Específicos de AI Assistant):**
 
 - ❌ **NO usar Grep/Glob directo** para búsquedas complejas → Usar Explore subagent
 - ❌ **NO leer archivos secuencialmente** → Leer todos en paralelo
@@ -1311,7 +1311,7 @@ graph TD
 
 ### **Requerimiento:** "Implementar notificaciones push cuando un revisor aprueba/rechaza una asignación"
 
-**Flujo optimizado con Claude Code v2.0.31:**
+**Flujo optimizado con AI Assistant v2.0.31:**
 
 ```markdown
 # ═══════════════════════════════════════════════════════════
@@ -1646,7 +1646,7 @@ TodoWrite([
 
 ## 📝 Changelog del CLAUDE.md
 
-### **Versión 2.0 (2025-10-31) - Claude Code v2.0.31 Optimized**
+### **Versión 2.0 (2025-10-31) - AI Assistant v2.0.31 Optimized**
 
 **Mejoras Implementadas:**
 
@@ -1703,7 +1703,7 @@ TodoWrite([
 
 11. **Checklist de Aprovechamiento Máximo (NUEVA):**
     - 10 preguntas para verificar uso óptimo
-    - Anti-patterns específicos de Claude Code
+    - Anti-patterns específicos de AI Assistant
     - Flujo óptimo de trabajo (diagrama Mermaid)
 
 12. **Ejemplo Completo: Feature E2E (NUEVA):**
@@ -1716,9 +1716,9 @@ TodoWrite([
 
 **Versión:** 2.1 — 2025-11-09
 **Proyecto:** Lumara (Tejido by WH) - Sistema de Digitalización Documental
-**Claude Code:** v2.0.31 (Sonnet 4.5 + Claude Max)
+**AI Assistant:** v2.0.31 (Sonnet 4.5 + Claude Max)
 **Última Actualización:** 2025-11-09 16:30
-**Mantenedor:** Sistema Multi-Usuario Enterprise Team + Claude Code Subagents
+**Mantenedor:** Sistema Multi-Usuario Enterprise Team + AI Assistant Subagents
 
 ---
 

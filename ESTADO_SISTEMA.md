@@ -331,5 +331,5 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/paperless-ngx/paperless
 ---
 
 **Última Actualización:** 2025-10-12 23:30 UTC
-**Compilado por:** Claude Code
+**Compilado por:** AI Assistant
 **Estado:** Documentación completa, sistema parcialmente funcional

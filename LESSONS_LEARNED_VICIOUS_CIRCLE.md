@@ -384,7 +384,7 @@ Antes de codear, verificar:
 
 **Documento vivo:** Actualizar después de cada incidente similar
 **Próxima revisión:** Después de testing v6.0.1
-**Mantenedor:** Equipo Lumara + Claude Code
+**Mantenedor:** Equipo Lumara + AI Assistant
 
 ---
 

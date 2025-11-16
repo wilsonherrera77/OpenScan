@@ -1329,7 +1329,7 @@ adb logcat | grep -i flutter
 
 ---
 
-**Documento creado por**: Claude Code (Anthropic)
+**Documento creado por**: AI Assistant (Anthropic)
 **Fecha**: 2025-10-30
 **Versión**: 1.0
 **Proyecto**: Lumara/Tejido - Tejido by WH

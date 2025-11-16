@@ -704,7 +704,7 @@ See [LICENSE](../LICENSE) for details
 
 ## 👥 Contributors
 
-- Claude Code (Implementation)
+- AI Assistant (Implementation)
 - SMT (Requirements & Testing)
 
 ---

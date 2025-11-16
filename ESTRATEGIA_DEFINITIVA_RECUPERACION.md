@@ -279,7 +279,7 @@ git checkout main
 git checkout -b feature/admin-digitization
 
 # PASO 2: TodoWrite para trackear
-# (usar TodoWrite tool de Claude Code)
+# (usar TodoWrite tool de AI Assistant)
 
 # PASO 3: Implementación focalizada
 # SOLO modificar archivos de esta feature
@@ -726,7 +726,7 @@ git log v[anterior]..v[actual] --oneline
 EOF
 ```
 
-#### 3.4: Subagent Strategy (Claude Code Specific)
+#### 3.4: Subagent Strategy (AI Assistant Specific)
 
 **Cuándo usar cada subagent:**
 

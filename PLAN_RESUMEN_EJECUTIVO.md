@@ -317,5 +317,5 @@ Lectura opcional:
 ---
 
 **Última actualización:** 2025-10-28
-**Autor:** Claude Code
+**Autor:** AI Assistant
 **Versión:** 1.0 - Resumen Ejecutivo

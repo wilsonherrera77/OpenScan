@@ -2509,5 +2509,5 @@ Person.objects.count()
 - **Fase 4-5 son opcionales** pero recomendadas
 
 **Última actualización:** 2025-10-28
-**Autor:** Claude Code
+**Autor:** AI Assistant
 **Versión del plan:** 1.0

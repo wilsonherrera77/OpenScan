@@ -483,5 +483,5 @@ adb install -r ~/Descargas/Lumara_v6.0.2_NETWORK_FIX_CorrectServerIP_20251109_21
 
 **Documento generado:** 2025-11-09 21:57 UTC
 **Status:** FASE 1 COMPLETADA - Testing v6.0.2 pendiente
-**Equipo:** Claude Code + 2 Agentes Explore (Sonnet)
+**Equipo:** AI Assistant + 2 Agentes Explore (Sonnet)
 **Próxima revisión:** Después de testing v6.0.2

@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../services/logger_adapter.dart';
 import '../../core/constants/api_constants.dart';
 import '../../core/security/rate_limiter.dart';
+import '../../core/security/audit_logger.dart';
 import '../../domain/entities/auth_token.dart';
 import '../datasources/paperless_api_client.dart';
 
@@ -12,10 +13,25 @@ class AuthRepository {
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   final LoggerAdapter _logger = LoggerAdapter();
   final LoginRateLimiter _rateLimiter = LoginRateLimiter();
+  final AuditLogger _auditLogger = AuditLogger();
 
   AuthToken? _currentToken;
+  bool _auditLoggerInitialized = false;
 
-  AuthRepository(this._apiClient);
+  AuthRepository(this._apiClient) {
+    _initializeAuditLogger();
+  }
+
+  /// Initialize audit logger (async, doesn't block constructor)
+  Future<void> _initializeAuditLogger() async {
+    try {
+      await _auditLogger.initialize();
+      _auditLoggerInitialized = true;
+      _logger.i('✅ Audit logger initialized in AuthRepository');
+    } catch (e) {
+      _logger.e('❌ Failed to initialize audit logger: $e');
+    }
+  }
 
   /// Login with username and password (with rate limiting)
   Future<AuthToken> login({
@@ -64,6 +80,14 @@ class AuthRepository {
       // SECURITY: Clear rate limit on successful login
       _rateLimiter.clearLoginLimit(username);
 
+      // 🔒 FASE 2 SECURITY: Audit log successful login
+      if (_auditLoggerInitialized) {
+        await _auditLogger.logLogin(
+          username: username,
+          success: true,
+        );
+      }
+
       _logger.i('✅ Login successful for: $username');
 
       return token;
@@ -74,6 +98,14 @@ class AuthRepository {
       final remaining = _rateLimiter.getRemainingLoginAttempts(username);
       _logger.w('❌ Login failed for: $username (Remaining attempts: $remaining)');
 
+      // 🔒 FASE 2 SECURITY: Audit log failed login
+      if (_auditLoggerInitialized) {
+        await _auditLogger.logAuthFailure(
+          username: username,
+          reason: e.toString(),
+        );
+      }
+
       _logger.e('❌ Login failed: $e');
       rethrow;
     }
@@ -83,6 +115,16 @@ class AuthRepository {
   Future<void> logout() async {
     try {
       _logger.i('🔓 Logging out');
+
+      final username = _currentToken?.username ?? 'unknown';
+
+      // 🔒 FASE 2 SECURITY: Audit log logout
+      if (_auditLoggerInitialized) {
+        await _auditLogger.logLogout(
+          username: username,
+          reason: 'user_initiated',
+        );
+      }
 
       // Clear API client token
       _apiClient.clearAuthToken();
@@ -191,6 +233,9 @@ class AuthRepository {
 
   /// Update base URL
   Future<void> updateBaseUrl(String newUrl) async {
+    final oldUrl = await getBaseUrl();
+    final username = _currentToken?.username ?? 'unknown';
+
     _apiClient.setBaseUrl(newUrl);
     await _secureStorage.write(
       key: ApiConstants.baseUrlKey,
@@ -203,6 +248,15 @@ class AuthRepository {
         username: _currentToken!.username,
         baseUrl: newUrl,
         expiresAt: _currentToken!.expiresAt,
+      );
+    }
+
+    // 🔒 FASE 2 SECURITY: Audit log base URL change
+    if (_auditLoggerInitialized) {
+      await _auditLogger.logBaseUrlChange(
+        userId: username,
+        oldUrl: oldUrl,
+        newUrl: newUrl,
       );
     }
 

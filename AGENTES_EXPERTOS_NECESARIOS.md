@@ -1,5 +1,5 @@
 # AGENTES EXPERTOS NECESARIOS
-## Análisis de Subagentes Claude Code para Proyecto Lumara
+## Análisis de Subagentes AI Assistant para Proyecto Lumara
 
 **Basado en:** CLAUDE.md v2.0 + ESTRATEGIA_DEFINITIVA_RECUPERACION.md
 **Fecha:** 2025-11-09
@@ -682,7 +682,7 @@ Task(
 
 1. **Ejecutar Agent #1** (Baseline Auditor):
    ```bash
-   # En Claude Code:
+   # En AI Assistant:
    Task(subagent_type="Explore", model="haiku", prompt="[usar prompt de arriba]")
    ```
 

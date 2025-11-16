@@ -36,6 +36,11 @@ class PaperlessApiClient {
           // ⚡ FASE 3: Enable gzip compression for responses
           // Reduces bandwidth by 60-80% for JSON responses
           'Accept-Encoding': 'gzip, deflate',
+          // 🔒 FASE 2 SECURITY: Additional security headers
+          'X-Content-Type-Options': 'nosniff',
+          'X-Frame-Options': 'DENY',
+          'X-Requested-With': 'XMLHttpRequest',
+          'User-Agent': 'Lumara-Mobile/${ApiConstants.appVersion}',
         },
       ),
     );

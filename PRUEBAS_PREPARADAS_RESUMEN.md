@@ -483,7 +483,7 @@ cat PRUEBAS_DATOS_REALES.md
 ---
 
 **Creado por:** Equipo Interdisciplinario de Ingeniería
-**Claude Code v2.0.31** (Sonnet 4.5 + Claude Max)
+**AI Assistant v2.0.31** (Sonnet 4.5 + Claude Max)
 **Fecha:** 2025-10-31 19:15
 **Proyecto:** Lumara - Sistema de Digitalización Documental
 **Status:** ✅ **PREPARACIÓN 100% COMPLETADA**

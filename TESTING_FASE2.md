@@ -509,6 +509,6 @@ Al completar testing, documentar:
 
 ---
 
-**Creado por:** Claude Code (Anthropic)
+**Creado por:** AI Assistant (Anthropic)
 **Última Actualización:** 2025-10-31
 **Status:** ✅ Listo para Testing

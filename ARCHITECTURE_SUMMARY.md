@@ -280,7 +280,7 @@ MultiProvider(
 - `ARCHITECTURE_MAP.md` - Comprehensive architecture documentation
 - `ARCHITECTURE_SUMMARY.md` - This quick reference guide
 - `pubspec.yaml` - Dependencies and version info
-- `CLAUDE.md` - AI configuration for Claude Code
+- `CLAUDE.md` - AI configuration for AI Assistant
 
 ---
 
