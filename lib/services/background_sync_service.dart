@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart'; // debugPrint
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import '../services/logger_adapter.dart';
 import 'package:lumara_scan/data/local/database/app_database.dart';
@@ -96,22 +97,26 @@ class BackgroundSyncService {
   ///
   /// ⚡ v6.0.5: Added global timeout (90s) to prevent infinite loading
   static Future<bool> scheduleImmediateSync() async {
+    debugPrint('🔵 [BG-SYNC-DEBUG] scheduleImmediateSync() CALLED');
     try {
       _logger.i('🔄 Starting immediate manual sync with 90s timeout...');
 
       // ✅ v6.0.5: Global timeout - NEVER wait more than 90 seconds
+      debugPrint('🔵 [BG-SYNC-DEBUG] Calling _performSync() with 90s timeout...');
       return await Future.any([
         _performSync(),
         Future.delayed(
           const Duration(seconds: 90),
           () {
             _logger.w('⏰ Sync timeout after 90 seconds');
+            debugPrint('🔴 [BG-SYNC-DEBUG] TIMEOUT after 90 seconds');
             return false;
           },
         ),
       ]);
     } catch (e, stackTrace) {
       _logger.e('❌ Immediate sync failed: $e', error: e, stackTrace: stackTrace);
+      debugPrint('🔴 [BG-SYNC-DEBUG] ERROR: $e');
       return false;
     }
   }
@@ -119,8 +124,12 @@ class BackgroundSyncService {
   /// Extract sync logic to separate method
   /// ⚡ v6.0.5: Extracted for timeout control
   static Future<bool> _performSync() async {
+    debugPrint('🔵 [BG-SYNC-DEBUG] _performSync() STARTED');
+
     // Step 1: Check connectivity
+    debugPrint('🔵 [BG-SYNC-DEBUG] Step 1: Checking connectivity...');
     final hasConnection = await ConnectivityService.hasInternetConnection();
+    debugPrint('🔵 [BG-SYNC-DEBUG] hasConnection=$hasConnection');
     if (!hasConnection) {
       _logger.w('⚠️ No internet connection, waiting...');
 
@@ -146,8 +155,10 @@ class BackgroundSyncService {
     }
 
     _logger.i('✅ Server validated (latency: ${serverCheck['latencyMs']}ms)');
+    debugPrint('🔵 [BG-SYNC-DEBUG] Step 2: Server validated, latency=${serverCheck['latencyMs']}ms');
 
     // Step 3: Execute sync with retry logic
+    debugPrint('🔵 [BG-SYNC-DEBUG] Step 3: Executing sync with retry logic...');
     // ✅ v6.0.5: Reduced maxRetries from 3 to 2 (faster to fail)
     final result = await ConnectivityService.retryWithBackoff<bool>(
       operation: () async {
@@ -184,19 +195,25 @@ class BackgroundSyncService {
         _logger.d('✅ [SYNC] UploadService created');
 
         _logger.d('🔧 [SYNC] Step 4: Getting pending uploads count...');
+        debugPrint('🔵 [BG-SYNC-DEBUG] Getting pending uploads count...');
         final pendingBefore = await uploadService.getPendingCount();
         _logger.i('📊 Pending uploads: $pendingBefore');
+        debugPrint('🔵 [BG-SYNC-DEBUG] Pending uploads: $pendingBefore');
 
         if (pendingBefore == 0) {
           _logger.i('✅ No pending uploads');
+          debugPrint('🔵 [BG-SYNC-DEBUG] No pending uploads, returning true');
           return true;
         }
 
         // Process all pending uploads
+        debugPrint('🔵 [BG-SYNC-DEBUG] Processing $pendingBefore pending uploads...');
         await uploadService.processAllPending();
+        debugPrint('🔵 [BG-SYNC-DEBUG] processAllPending() completed');
 
         final stats = await uploadService.getStatistics();
         _logger.i('✅ Sync completed: $stats');
+        debugPrint('🔵 [BG-SYNC-DEBUG] Sync completed: $stats');
 
         return true;
       },

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart'; // debugPrint
 import '../services/logger_adapter.dart';
 import '../core/config/env_config.dart';
 import '../core/constants/api_constants.dart';
@@ -83,13 +84,16 @@ class UploadService {
   ///
   /// v4.4.2: Added sourceDirectory parameter to enable cleanup of scanned images after PDF sync
   /// v4.5.1: ONLY assigns tag of selected document type (e.g. Cédula = tag 12)
-  Future<int> enqueueGenericDocument({
+  Future<int?> enqueueGenericDocument({
     required File documentFile,
     String? title,
     String? documentType,
     String? documentNumber,
     String? sourceDirectory, // v4.4.2: Path to directory with source images to delete after sync
   }) async {
+    debugPrint('🟣 [ENQUEUE-SERVICE] === enqueueGenericDocument() STARTED ===');
+    debugPrint('🟣 [ENQUEUE-SERVICE] File: ${documentFile.path}');
+    debugPrint('🟣 [ENQUEUE-SERVICE] Type: $documentType, Number: $documentNumber');
     _logger.i('📥 Enqueuing generic document: ${documentFile.path}');
     _logger.i('   Type: $documentType, Number: $documentNumber');
     if (sourceDirectory != null) {
@@ -147,33 +151,67 @@ class UploadService {
       final List<int> tagList = documentTagId != null ? [documentTagId] : [];
       _logger.i('🏷️  Assigning ONLY document type tag: $tagList');
 
-      final id = await _database.enqueueUpload(
-        filePath: documentFile.path,
-        personId: 'GENERIC',
-        personName: 'Usuario Lumara Scan',
-        familyId: '',
-        docNumber: documentNumber,
-        documentTypeId: nativeDocumentTypeId, // ✅ Use mapped native document_type
-        tagIds: tagList,
-        metadata: {
-          'title': generatedTitle,
-          'source': 'normal_scan',
-          'captured_at': DateTime.now().toIso8601String(),
-          if (documentType != null) 'document_type': documentType,
-          if (documentNumber != null) 'document_number': documentNumber,
-          if (sourceDirectory != null) 'source_directory': sourceDirectory, // v4.4.2: Store source directory for cleanup
-        },
-      );
+      debugPrint('🟣 [ENQUEUE-SERVICE] About to call _database.enqueueUpload()...');
+      debugPrint('🟣 [ENQUEUE-SERVICE] filePath: ${documentFile.path}');
+      debugPrint('🟣 [ENQUEUE-SERVICE] documentTypeId: $nativeDocumentTypeId');
 
+      // ✅ DEBUG: Add timeout to detect database hanging
+      final int id;
+      try {
+        id = await _database.enqueueUpload(
+          filePath: documentFile.path,
+          personId: 'GENERIC',
+          personName: 'Usuario Lumara Scan',
+          familyId: '',
+          docNumber: documentNumber,
+          documentTypeId: nativeDocumentTypeId, // ✅ Use mapped native document_type
+          tagIds: tagList,
+          metadata: {
+            'title': generatedTitle,
+            'source': 'normal_scan',
+            'captured_at': DateTime.now().toIso8601String(),
+            if (documentType != null) 'document_type': documentType,
+            if (documentNumber != null) 'document_number': documentNumber,
+            if (sourceDirectory != null) 'source_directory': sourceDirectory, // v4.4.2: Store source directory for cleanup
+          },
+        ).timeout(const Duration(seconds: 10), onTimeout: () {
+          debugPrint('🔴 [ENQUEUE-SERVICE] TIMEOUT! Database operation took >10s');
+          throw TimeoutException('Database enqueueUpload timed out after 10 seconds');
+        });
+        debugPrint('🟢 [ENQUEUE-SERVICE] Database insert succeeded: id=$id');
+      } on TimeoutException catch (e) {
+        debugPrint('🔴 [ENQUEUE-SERVICE] TimeoutException: $e');
+        return null;
+      }
+
+      debugPrint('🟣 [ENQUEUE-SERVICE] _database.enqueueUpload() returned: $id');
       _logger.i('✅ Generic document enqueued with ID: $id');
+
+      // ✅ FIX v6.4.0: LOG DETALLADO para debugging
+      print('📤 Document enqueued: ID=$id, file=${documentFile.path}');
+
+      final count = await getPendingCount();
+      print('📊 Total pending uploads now: $count');
+
+      // Listar todos los pendientes
+      final allPending = await _database.getAllPendingUploads();
+      print('📋 Pending uploads list (${allPending.length} total):');
+      for (final upload in allPending.take(5)) {
+        print('  - ${upload.id}: ${upload.fileName} (${upload.status})');
+      }
+      if (allPending.length > 5) {
+        print('  ... y ${allPending.length - 5} más');
+      }
 
       // Try immediate upload if possible (await to catch errors)
       await _attemptImmediateUpload(id);
 
       return id;
     } catch (e, stackTrace) {
+      debugPrint('🔴 [ENQUEUE-SERVICE] ERROR: $e');
+      debugPrint('🔴 [ENQUEUE-SERVICE] Stack: ${stackTrace.toString().split('\n').take(5).join('\n')}');
       _logger.e('❌ Failed to enqueue generic document: $e', error: e, stackTrace: stackTrace);
-      rethrow;
+      return null; // Return null instead of rethrowing so sync can continue
     }
   }
 
@@ -231,13 +269,19 @@ class UploadService {
   /// Auth errors are rethrown so user knows to login
   /// Network errors are silently queued for retry
   Future<void> _attemptImmediateUpload(int uploadId) async {
+    debugPrint('🔷 [UPLOAD-DEBUG] _attemptImmediateUpload($uploadId) STARTED');
     try {
+      debugPrint('🔷 [UPLOAD-DEBUG] Calling processUpload($uploadId)...');
       await processUpload(uploadId);
-    } catch (e) {
+      debugPrint('🟢 [UPLOAD-DEBUG] processUpload($uploadId) completed successfully');
+    } catch (e, stack) {
+      debugPrint('🔴 [UPLOAD-DEBUG] processUpload($uploadId) threw exception: $e');
+      debugPrint('🔴 [UPLOAD-DEBUG] Stack: ${stack.toString().split('\n').take(3).join('\n')}');
       final errorStr = e.toString().toLowerCase();
 
       // Auth errors - user needs to know immediately
       if (errorStr.contains('401') || errorStr.contains('403') || errorStr.contains('unauthorized')) {
+        debugPrint('🔴 [UPLOAD-DEBUG] Auth error detected, rethrowing');
         _logger.e('❌ Auth error during immediate upload: $e');
         throw Exception('No autorizado. Por favor inicia sesión de nuevo.');
       }
@@ -245,12 +289,14 @@ class UploadService {
       // Network/connection errors - will retry in background
       if (errorStr.contains('socket') || errorStr.contains('network') ||
           errorStr.contains('connection') || errorStr.contains('timeout')) {
+        debugPrint('🟠 [UPLOAD-DEBUG] Network error, will retry in background');
         _logger.w('⚠️ Network error, will retry in background: $e');
         // Don't throw - will be retried by background service
         return;
       }
 
       // Other errors - log and rethrow so user sees them
+      debugPrint('🔴 [UPLOAD-DEBUG] Other error, rethrowing');
       _logger.e('❌ Upload error: $e');
       throw Exception('Error al subir: ${e.toString().replaceAll('Exception: ', '')}');
     }
@@ -258,18 +304,24 @@ class UploadService {
 
   /// Process a single upload with retry logic and performance tracking
   Future<void> processUpload(int uploadId) async {
+    debugPrint('🔶 [PROCESS-DEBUG] processUpload($uploadId) STARTED');
     final upload = await _database.getPendingUploadById(uploadId);
+    debugPrint('🔶 [PROCESS-DEBUG] Got upload from DB: ${upload != null ? 'found' : 'NULL'}');
 
     if (upload == null) {
+      debugPrint('🔴 [PROCESS-DEBUG] Upload $uploadId not found in DB, returning');
       _logger.w('Upload $uploadId not found');
       return;
     }
 
+    debugPrint('🔶 [PROCESS-DEBUG] Upload status: ${upload.status}');
     if (upload.status == 'uploading') {
+      debugPrint('🟠 [PROCESS-DEBUG] Upload $uploadId already in progress, returning');
       _logger.d('Upload $uploadId already in progress');
       return;
     }
 
+    debugPrint('🔶 [PROCESS-DEBUG] Processing upload: ${upload.fileName}');
     _logger.i('📤 Processing upload $uploadId (attempt ${upload.retryCount + 1}): ${upload.fileName}');
 
     // Check if need to wait due to exponential backoff
@@ -286,19 +338,24 @@ class UploadService {
     }
 
     // Update status to uploading
+    debugPrint('🔶 [PROCESS-DEBUG] Updating status to uploading...');
     _updateSyncStatus(SyncStatus.syncing);
     await _database.updateUploadStatus(
       id: uploadId,
       status: 'uploading',
     );
+    debugPrint('🔶 [PROCESS-DEBUG] Status updated to uploading');
 
     final startTime = DateTime.now();
     final wasOffline = upload.retryCount > 0;
 
     try {
       // Verify file exists
+      debugPrint('🔶 [PROCESS-DEBUG] Checking if file exists: ${upload.filePath}');
       File file = File(upload.filePath);
-      if (!await file.exists()) {
+      final fileExists = await file.exists();
+      debugPrint('🔶 [PROCESS-DEBUG] File exists: $fileExists');
+      if (!fileExists) {
         throw Exception('File not found: ${upload.filePath}');
       }
 
@@ -337,13 +394,19 @@ class UploadService {
       }
 
       final fileSize = optimizedFileSize;
+      debugPrint('🔶 [PROCESS-DEBUG] File size: $fileSize bytes');
 
       // Upload to Paperless (generic or person-specific)
       // Note: Using potentially optimized file here
+      debugPrint('🔶 [PROCESS-DEBUG] === CALLING _uploadDocument() ===');
+      debugPrint('🔶 [PROCESS-DEBUG] upload.personId: ${upload.personId}');
+      debugPrint('🔶 [PROCESS-DEBUG] upload.fileName: ${upload.fileName}');
       final response = await _uploadDocument(upload, fileToUpload: file);
+      debugPrint('🟢 [PROCESS-DEBUG] _uploadDocument() returned: $response');
 
       final duration = DateTime.now().difference(startTime);
 
+      debugPrint('🟢 [PROCESS-DEBUG] Upload successful in ${duration.inSeconds}s');
       _logger.i('✅ Upload $uploadId successful in ${duration.inSeconds}s. Paperless ID: ${response['id']}');
 
       // Add to history with performance metrics
@@ -788,29 +851,63 @@ class UploadService {
     }
   }
 
-  /// Process all pending uploads
+  /// Process all pending uploads (with parallelization to avoid timeout)
   Future<void> processAllPending() async {
     _logger.i('🔄 Processing all pending uploads');
 
-    final pending = await _database.getAllPendingUploads();
+    // ⚡ FIX: Limit uploads to prevent timeout (90s global timeout)
+    const int batchSize = 3;    // Process 3 in parallel
+    const int maxUploads = 10;  // Max 10 per sync session
 
-    _logger.i('Found ${pending.length} pending uploads');
+    final pending = await _database.getAllPendingUploads();
+    final toProcess = pending.take(maxUploads).toList();
+
+    _logger.i('Found ${pending.length} pending uploads, processing ${toProcess.length}');
+
+    if (toProcess.isEmpty) {
+      _logger.i('✅ No pending uploads to process');
+      return;
+    }
 
     int successCount = 0;
     int failCount = 0;
 
-    for (final upload in pending) {
-      try {
-        await processUpload(upload.id);
-        successCount++;
-      } catch (e) {
-        _logger.e('Failed to process upload ${upload.id}: $e');
-        failCount++;
-        // Continue with next upload
+    // ⚡ FIX: Process in parallel batches instead of sequential
+    for (int i = 0; i < toProcess.length; i += batchSize) {
+      final end = (i + batchSize > toProcess.length) ? toProcess.length : i + batchSize;
+      final batch = toProcess.sublist(i, end);
+
+      _logger.i('📦 Processing batch ${(i ~/ batchSize) + 1}: ${batch.length} uploads');
+
+      // Process batch in parallel
+      final results = await Future.wait(
+        batch.map((upload) async {
+          try {
+            await processUpload(upload.id);
+            return true; // Success
+          } catch (e) {
+            _logger.e('Failed to process upload ${upload.id}: $e');
+            return false; // Failed
+          }
+        }),
+        eagerError: false, // Continue even if one fails
+      );
+
+      // Count results
+      for (final success in results) {
+        if (success) {
+          successCount++;
+        } else {
+          failCount++;
+        }
       }
     }
 
     _logger.i('✅ Finished processing: $successCount succeeded, $failCount failed');
+
+    if (pending.length > maxUploads) {
+      _logger.w('⚠️ ${pending.length - maxUploads} uploads remaining for next sync');
+    }
   }
 
   /// Get upload statistics
@@ -823,9 +920,23 @@ class UploadService {
     return _database.getEnhancedUploadStats();
   }
 
-  /// Get pending uploads count
-  Future<int> getPendingCount() {
-    return _database.countPendingUploads();
+  /// Get pending uploads count (with timeout to prevent sync blocking)
+  Future<int> getPendingCount() async {
+    // ⚡ FIX: Add timeout to prevent DB query from blocking sync
+    const timeout = Duration(seconds: 5);
+
+    try {
+      return await Future.any([
+        _database.countPendingUploads(),
+        Future.delayed(timeout, () {
+          _logger.w('⚠️ getPendingCount() timed out after 5s');
+          return 0; // Return 0 on timeout to allow sync to continue
+        }),
+      ]);
+    } catch (e) {
+      _logger.e('❌ getPendingCount() error: $e');
+      return 0; // Return 0 on error to allow sync to continue
+    }
   }
 
   /// Get all pending uploads

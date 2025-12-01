@@ -147,7 +147,7 @@ class FileOperations {
     return imageFiles;
   }
 
-  Future<void> saveImage(
+  Future<String> saveImage(
       {required File image,
       required int index,
       required String dirPath}) async {
@@ -186,6 +186,9 @@ class FileOperations {
     if (index == 1) {
       database.updateFirstImagePath(imagePath: tempPic.path, dirPath: dirPath);
     }
+
+    // ✅ v6.4.0+88: Return saved file path for auto-enqueue
+    return tempPic.path;
   }
 
   // SAVE TO DEVICE

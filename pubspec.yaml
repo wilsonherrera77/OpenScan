@@ -4,7 +4,7 @@ description: Lumara Scan - Smart document digitization and management system
 
 publish_to: "none"
 
-version: 6.3.9+85  # FULL SYNC RESTORED: IOSink fix (v6.3.7) resolved isolate deadlock - full sync functionality with all logging and error handling
+version: 6.4.4+98  # DEV: Using localhost (127.0.0.1) via ADB reverse for development
 
 environment:
   sdk: ^3.5.3

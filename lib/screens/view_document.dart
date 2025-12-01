@@ -15,6 +15,7 @@ import 'package:reorderables/reorderables.dart';
 import 'package:share_plus/share_plus.dart';
 import '../services/upload_service.dart';
 import '../presentation/providers/census_provider.dart';
+import '../presentation/providers/auth_provider.dart';
 
 bool enableSelect = false;
 bool enableReorder = false;
@@ -163,21 +164,105 @@ class _ViewDocumentState extends State<ViewDocument>
         }
       } else {
         File imageFile = File(imageFilePath ?? image!.path);
-        await fileOperations.saveImage(
+        final savedImagePath = await fileOperations.saveImage(
           image: imageFile,
           index: directoryImages.length + 1,
           dirPath: widget.directoryOS.dirPath!,
         );
 
         await fileOperations.deleteTemporaryFiles();
-        if (quickScan) {
-          getDirectoryData();
-          return createImage(quickScan: quickScan);
-        }
-        imageFilePath = null;
+
+        // ✅ v6.4.0+88: Store saved path for auto-enqueue
+        imageFilePath = savedImagePath;
       }
+
       setState(() {});
       getDirectoryData();
+
+      // ✅ FIX v6.4.0+88: Auto-enqueue para upload a Paperless usando archivo GUARDADO
+      try {
+        print('[DEBUG] === AUTO-ENQUEUE START ===');
+
+        final uploadService = Provider.of<UploadService>(context, listen: false);
+        final censusProvider = Provider.of<CensusProvider>(context, listen: false);
+        final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+        print('[DEBUG] Providers obtained:');
+        print('[DEBUG]   - uploadService: ${uploadService != null ? "OK" : "NULL"}');
+        print('[DEBUG]   - censusProvider: ${censusProvider != null ? "OK" : "NULL"}');
+        print('[DEBUG]   - authProvider: ${authProvider != null ? "OK" : "NULL"}');
+
+        if (censusProvider != null) {
+          print('[DEBUG] CensusProvider state:');
+          print('[DEBUG]   - documentType: ${censusProvider.documentType}');
+          print('[DEBUG]   - documentNumber: ${censusProvider.documentNumber}');
+        }
+
+        print('[DEBUG] Auto-enqueuing captured images for Paperless sync...');
+        print('[DEBUG] fromGallery: $fromGallery, imageFilePath: $imageFilePath');
+
+        if (fromGallery && galleryImages != null) {
+          print('[DEBUG] Gallery mode: ${galleryImages.length} images');
+          for (int i = 0; i < galleryImages.length; i++) {
+            final file = galleryImages[i];
+            print('[DEBUG] Gallery image ${i+1}: path=${file.path}, exists=${file.existsSync()}');
+
+            final enqueueId = await uploadService.enqueueGenericDocument(
+              documentFile: file,
+              title: 'Documento ${DateTime.now().toString().substring(0, 19).replaceAll(':', '-')}',
+              documentType: censusProvider.documentType,
+              documentNumber: censusProvider.documentNumber,
+              sourceDirectory: widget.directoryOS.dirPath,
+            );
+            print('[DEBUG] ✅ Gallery image ${i+1}/${galleryImages.length} enqueued with ID: $enqueueId');
+          }
+        } else if (imageFilePath != null) {
+          print('[DEBUG] Single image mode');
+          // ✅ v6.4.0+88: Use SAVED file path (not temporary)
+          final file = File(imageFilePath);
+          final fileExists = await file.exists();
+          print('[DEBUG] File check: path=$imageFilePath, exists=$fileExists');
+
+          if (!fileExists) {
+            print('[DEBUG] ❌ ERROR: File does not exist at saved path!');
+            throw Exception('File not found at $imageFilePath');
+          }
+
+          final enqueueId = await uploadService.enqueueGenericDocument(
+            documentFile: file,
+            title: 'Documento ${DateTime.now().toString().substring(0, 19).replaceAll(':', '-')}',
+            documentType: censusProvider.documentType,
+            documentNumber: censusProvider.documentNumber,
+            sourceDirectory: widget.directoryOS.dirPath,
+          );
+          print('[DEBUG] ✅ Captured image enqueued with ID: $enqueueId, path: $imageFilePath');
+
+          // Verify enqueue
+          final pendingCount = await uploadService.getPendingCount();
+          print('[DEBUG] 📊 Total pending uploads after enqueue: $pendingCount');
+        }
+
+        print('[DEBUG] === AUTO-ENQUEUE END ===');
+
+        // Show success notification
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('📤 Documento agregado a cola de sincronización'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } catch (e, stackTrace) {
+        print('❌ Failed to auto-enqueue: $e');
+        print('Stack trace: $stackTrace');
+        // Don't block capture - just log error
+      }
+
+      // Quick Scan: continue capturing more images
+      if (quickScan) {
+        imageFilePath = null;
+        return createImage(quickScan: quickScan);
+      }
     }
   }
 
@@ -212,6 +297,7 @@ class _ViewDocumentState extends State<ViewDocument>
   }
 
   void handleClick(String value) {
+    print('[MENU] handleClick called with value: $value'); // DEBUG v6.4.0+91
     switch (value) {
       case 'Reorder':
         setState(() {
@@ -229,6 +315,89 @@ class _ViewDocumentState extends State<ViewDocument>
           builder: _buildBottomSheet,
         );
         break;
+      case 'Sync':
+        print('[MENU] Sync option selected - calling _syncAllDocuments()'); // DEBUG v6.4.0+91
+        _syncAllDocuments();
+        break;
+    }
+  }
+
+  /// ✅ v6.4.0+91: Sincronizar TODOS los documentos de esta carpeta a Paperless
+  Future<void> _syncAllDocuments() async {
+    print('[SYNC] ====== _syncAllDocuments() INICIADO ======'); // DEBUG v6.4.0+91
+    print('[SYNC] directoryImages.length = ${directoryImages.length}');
+
+    if (directoryImages.isEmpty) {
+      print('[SYNC] ❌ directoryImages está vacío, mostrando snackbar');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No hay documentos para sincronizar'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    try {
+      print('[SYNC] === SINCRONIZACIÓN MANUAL INICIADA ===');
+      print('[SYNC] Carpeta: ${widget.directoryOS.dirPath}');
+      print('[SYNC] Total documentos: ${directoryImages.length}');
+
+      final uploadService = Provider.of<UploadService>(context, listen: false);
+      final censusProvider = Provider.of<CensusProvider>(context, listen: false);
+
+      int enqueued = 0;
+      int failed = 0;
+
+      for (int i = 0; i < directoryImages.length; i++) {
+        final imageOS = directoryImages[i];
+        final file = File(imageOS.imgPath);
+
+        print('[SYNC] Procesando ${i+1}/${directoryImages.length}: ${imageOS.imgPath}');
+
+        if (!await file.exists()) {
+          print('[SYNC] ❌ Archivo no existe: ${imageOS.imgPath}');
+          failed++;
+          continue;
+        }
+
+        try {
+          final enqueueId = await uploadService.enqueueGenericDocument(
+            documentFile: file,
+            title: 'Doc_${widget.directoryOS.newName}_${i+1}_${DateTime.now().millisecondsSinceEpoch}',
+            documentType: censusProvider.documentType,
+            documentNumber: censusProvider.documentNumber,
+            sourceDirectory: widget.directoryOS.dirPath,
+          );
+          print('[SYNC] ✅ Encolado con ID: $enqueueId');
+          enqueued++;
+        } catch (e) {
+          print('[SYNC] ❌ Error al encolar: $e');
+          failed++;
+        }
+      }
+
+      final pendingCount = await uploadService.getPendingCount();
+      print('[SYNC] === SINCRONIZACIÓN COMPLETADA ===');
+      print('[SYNC] Encolados: $enqueued, Fallidos: $failed');
+      print('[SYNC] Total en cola: $pendingCount');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('✅ $enqueued documentos agregados a cola de sincronización'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 3),
+        ),
+      );
+    } catch (e, stackTrace) {
+      print('[SYNC] ❌ Error general: $e');
+      print('[SYNC] Stack: $stackTrace');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('❌ Error al sincronizar: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -274,9 +443,15 @@ class _ViewDocumentState extends State<ViewDocument>
   @override
   void initState() {
     super.initState();
+    print('[VIEW_DOC] ====== ViewDocument initState ======'); // DEBUG v6.4.0+91
+    print('[VIEW_DOC] dirPath: ${widget.directoryOS.dirPath}');
+    print('[VIEW_DOC] dirName: ${widget.directoryOS.dirName}');
+
     if (widget.directoryOS.dirPath != null) {
+      print('[VIEW_DOC] Existing directory - calling getDirectoryData()');
       getDirectoryData();
     } else {
+      print('[VIEW_DOC] New directory - creating path');
       createDirectoryPath();
       if (widget.fromGallery) {
         createImage(
@@ -518,6 +693,22 @@ class _ViewDocumentState extends State<ViewDocument>
                                           Icon(
                                             Icons.share,
                                             size: 20,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'Sync',
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Sincronizar'),
+                                          SizedBox(width: 10),
+                                          Icon(
+                                            Icons.cloud_upload,
+                                            size: 20,
+                                            color: Colors.green,
                                           ),
                                         ],
                                       ),

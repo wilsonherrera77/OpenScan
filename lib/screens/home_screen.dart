@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart'; // debugPrint
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -135,12 +136,90 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
+  /// ✅ v6.4.0+92: Encolar TODOS los documentos locales antes de sincronizar
+  /// Esta función escanea todas las carpetas de documentos y encola las imágenes
+  /// que aún no están en la base de datos de uploads pendientes
+  Future<int> _enqueueAllLocalDocuments() async {
+    _logger.i('[ENQUEUE-ALL] === Escaneando carpetas locales ===');
+    debugPrint('🔵 [ENQUEUE-DEBUG] === Escaneando ${masterDirectories.length} carpetas ===');
+
+    int totalEnqueued = 0;
+    final uploadService = Provider.of<UploadService>(context, listen: false);
+
+    for (final dirOS in masterDirectories) {
+      debugPrint('🔵 [ENQUEUE-DEBUG] Processing dir: ${dirOS.dirName}');
+      if (dirOS.dirPath == null) continue;
+
+      _logger.i('[ENQUEUE-ALL] Escaneando carpeta: ${dirOS.dirName}');
+      _logger.i('[ENQUEUE-ALL]   Path: ${dirOS.dirPath}');
+
+      final dir = Directory(dirOS.dirPath!);
+      if (!await dir.exists()) {
+        _logger.w('[ENQUEUE-ALL]   ❌ Carpeta no existe, saltando');
+        continue;
+      }
+
+      // Get all image files in this directory
+      final List<FileSystemEntity> files;
+      try {
+        files = await dir.list().toList();
+      } catch (e) {
+        _logger.e('[ENQUEUE-ALL]   ❌ Error listando archivos: $e');
+        continue;
+      }
+
+      final imageFiles = files
+          .whereType<File>()
+          .where((f) => f.path.toLowerCase().endsWith('.jpg') ||
+                        f.path.toLowerCase().endsWith('.jpeg') ||
+                        f.path.toLowerCase().endsWith('.png'))
+          .toList();
+
+      _logger.i('[ENQUEUE-ALL]   Imágenes encontradas: ${imageFiles.length}');
+
+      for (int i = 0; i < imageFiles.length; i++) {
+        final imageFile = imageFiles[i];
+        _logger.i('[ENQUEUE-ALL]   Procesando ${i+1}/${imageFiles.length}: ${imageFile.path.split('/').last}');
+
+        try {
+          final enqueueId = await uploadService.enqueueGenericDocument(
+            documentFile: imageFile,
+            title: 'Doc_${dirOS.newName}_${i+1}_${DateTime.now().millisecondsSinceEpoch}',
+            documentType: null, // Sin tipo específico
+            documentNumber: null,
+            sourceDirectory: dirOS.dirPath,
+          );
+          _logger.i('[ENQUEUE-ALL]   ✅ Encolado con ID: $enqueueId');
+          totalEnqueued++;
+        } catch (e) {
+          _logger.e('[ENQUEUE-ALL]   ❌ Error al encolar: $e');
+        }
+      }
+    }
+
+    _logger.i('[ENQUEUE-ALL] === COMPLETADO: $totalEnqueued documentos encolados ===');
+    return totalEnqueued;
+  }
+
   /// Manual sync with Paperless-ngx
   Future<void> _handleManualSync() async {
+    // ✅ v6.4.0+94: Debugging - immediate feedback
+    debugPrint('🔵 [SYNC-DEBUG] _handleManualSync() CALLED');
+
     if (_isSyncing) {
       _logger.w('⚠️ Sync already in progress');
+      debugPrint('🔴 [SYNC-DEBUG] Sync already in progress, returning');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Sync ya en progreso...'), backgroundColor: Colors.orange),
+      );
       return;
     }
+
+    // ✅ v6.4.0+94: Show immediate feedback
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Iniciando sincronización...'), backgroundColor: Colors.blue, duration: Duration(seconds: 2)),
+    );
+    debugPrint('🔵 [SYNC-DEBUG] SnackBar shown, setting _isSyncing = true');
 
     setState(() {
       _isSyncing = true;
@@ -150,6 +229,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
     try {
       _logger.i('🔄 Starting manual sync from HomeScreen...');
+      debugPrint('🔵 [SYNC-DEBUG] Starting manual sync...');
+
+      final uploadService = Provider.of<UploadService>(context, listen: false);
+
+      // ✅ v6.4.0+92: PRIMERO encolar todos los documentos locales
+      _logger.i('📂 Paso 1: Escaneando carpetas locales para encolar...');
+      debugPrint('🔵 [SYNC-DEBUG] Step 1: Calling _enqueueAllLocalDocuments()...');
+      final enqueued = await _enqueueAllLocalDocuments();
+      _logger.i('📊 Documentos encolados en este paso: $enqueued');
+      debugPrint('🔵 [SYNC-DEBUG] Enqueued $enqueued documents');
+
+      // ✅ FIX v6.4.0: Get pending count AFTER enqueuing
+      final pendingCountBefore = await uploadService.getPendingCount();
+      _logger.i('📊 Documents pending before sync: $pendingCountBefore');
+      debugPrint('🔵 [SYNC-DEBUG] Pending count: $pendingCountBefore');
 
       // Show loading dialog
       showDialog(
@@ -178,9 +272,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
       );
       dialogShown = true;
+      debugPrint('🔵 [SYNC-DEBUG] Dialog shown, calling BackgroundSyncService.scheduleImmediateSync()...');
 
       // Perform sync
       final success = await BackgroundSyncService.scheduleImmediateSync();
+      debugPrint('🔵 [SYNC-DEBUG] scheduleImmediateSync() returned: $success');
 
       // Close loading dialog safely
       if (dialogShown && mounted && Navigator.canPop(context)) {
@@ -190,6 +286,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
       // Show result dialog
       if (mounted) {
+        // ✅ FIX v6.4.0: Mensaje claro basado en pending count
+        final String titleText = success
+          ? (pendingCountBefore > 0
+              ? 'Sincronización exitosa'
+              : 'Sin documentos pendientes')
+          : 'Error de sincronización';
+
+        final String messageText = success
+          ? (pendingCountBefore > 0
+              ? '$pendingCountBefore documentos sincronizados con Paperless-ngx'
+              : 'No hay documentos pendientes para sincronizar.\n\nCaptura documentos desde la pantalla principal.')
+          : 'No se pudo sincronizar. Verifica tu conexión.';
+
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -203,13 +312,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   color: success ? successColor : errorColor,
                 ),
                 SizedBox(width: 10),
-                Text(success ? 'Sincronización exitosa' : 'Error de sincronización'),
+                Text(titleText),
               ],
             ),
             content: Text(
-              success
-                ? 'Documentos sincronizados con Paperless-ngx'
-                : 'No se pudo sincronizar. Verifica tu conexión.',
+              messageText,
               style: TextStyle(fontSize: 14),
             ),
             actions: [
@@ -229,6 +336,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       }
     } catch (e, stackTrace) {
       _logger.e('❌ Manual sync error: $e', error: e, stackTrace: stackTrace);
+      debugPrint('🔴 [SYNC-DEBUG] ERROR: $e');
+      debugPrint('🔴 [SYNC-DEBUG] StackTrace: $stackTrace');
 
       // Close loading dialog if still open (safely)
       if (dialogShown && mounted && Navigator.canPop(context)) {

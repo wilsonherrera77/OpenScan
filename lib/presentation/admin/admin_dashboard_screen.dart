@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart'; // debugPrint
 import 'package:provider/provider.dart';
 import '../../services/logger_adapter.dart';
+import '../../services/upload_service.dart'; // ✅ v6.4.0+93: Para sincronización
+import '../../Utilities/Classes.dart'; // ✅ v6.4.0+93: Para DirectoryOS
 
 import '../../presentation/providers/assignment_provider.dart';
 import '../../domain/entities/assignment.dart';
@@ -74,6 +79,247 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     }
   }
 
+  // ✅ v6.4.0+93: Encolar TODOS los documentos locales antes de sincronizar
+  Future<int> _enqueueAllLocalDocuments() async {
+    debugPrint('🟡 [ENQUEUE-DEBUG] === _enqueueAllLocalDocuments() STARTED ===');
+    _logger.i('[ADMIN-ENQUEUE-ALL] === Escaneando carpetas locales ===');
+
+    int totalEnqueued = 0;
+    final uploadService = Provider.of<UploadService>(context, listen: false);
+    debugPrint('🟡 [ENQUEUE-DEBUG] Got uploadService');
+
+    // Buscar carpetas de documentos en el almacenamiento
+    final appDocsDir = Directory('/storage/emulated/0/Android/data/com.ethereal.openscan/files');
+    debugPrint('🟡 [ENQUEUE-DEBUG] Checking directory: ${appDocsDir.path}');
+
+    if (!await appDocsDir.exists()) {
+      debugPrint('🔴 [ENQUEUE-DEBUG] Directory NOT EXISTS: ${appDocsDir.path}');
+      _logger.w('[ADMIN-ENQUEUE-ALL] Directorio de app no existe: ${appDocsDir.path}');
+      return 0;
+    }
+    debugPrint('🟢 [ENQUEUE-DEBUG] Directory EXISTS');
+
+    final List<FileSystemEntity> folders;
+    try {
+      folders = await appDocsDir.list().toList();
+      debugPrint('🟢 [ENQUEUE-DEBUG] Found ${folders.length} items in directory');
+    } catch (e) {
+      debugPrint('🔴 [ENQUEUE-DEBUG] Error listing directory: $e');
+      _logger.e('[ADMIN-ENQUEUE-ALL] Error listando carpetas: $e');
+      return 0;
+    }
+
+    for (final entity in folders) {
+      if (entity is! Directory) {
+        debugPrint('🟡 [ENQUEUE-DEBUG] Skipping non-directory: ${entity.path}');
+        continue;
+      }
+      if (entity.path.contains('logs')) {
+        debugPrint('🟡 [ENQUEUE-DEBUG] Skipping logs directory');
+        continue; // Ignorar carpeta de logs
+      }
+
+      debugPrint('🟡 [ENQUEUE-DEBUG] Scanning folder: ${entity.path}');
+      _logger.i('[ADMIN-ENQUEUE-ALL] Escaneando carpeta: ${entity.path}');
+
+      final List<FileSystemEntity> files;
+      try {
+        files = await entity.list().toList();
+        debugPrint('🟢 [ENQUEUE-DEBUG] Folder has ${files.length} files');
+      } catch (e) {
+        debugPrint('🔴 [ENQUEUE-DEBUG] Error listing folder: $e');
+        _logger.w('[ADMIN-ENQUEUE-ALL] Error listando archivos en ${entity.path}: $e');
+        continue;
+      }
+
+      final imageFiles = files
+          .whereType<File>()
+          .where((f) => f.path.toLowerCase().endsWith('.jpg') ||
+                        f.path.toLowerCase().endsWith('.jpeg') ||
+                        f.path.toLowerCase().endsWith('.png'))
+          .toList();
+
+      debugPrint('🟢 [ENQUEUE-DEBUG] Found ${imageFiles.length} image files');
+      _logger.i('[ADMIN-ENQUEUE-ALL]   Imágenes encontradas: ${imageFiles.length}');
+
+      for (int i = 0; i < imageFiles.length; i++) {
+        final imageFile = imageFiles[i];
+        debugPrint('🟡 [ENQUEUE-DEBUG] Processing image $i: ${imageFile.path}');
+        try {
+          final folderName = entity.path.split('/').last;
+
+          // DEBUG v6.4.1: Log ANTES de llamar enqueueGenericDocument
+          debugPrint('🔷 [ENQUEUE-DEBUG] === ABOUT TO CALL enqueueGenericDocument ===');
+          debugPrint('🔷 [ENQUEUE-DEBUG] uploadService is null? ${uploadService == null}');
+          debugPrint('🔷 [ENQUEUE-DEBUG] imageFile exists? ${imageFile.existsSync()}');
+          debugPrint('🔷 [ENQUEUE-DEBUG] imageFile.path: ${imageFile.path}');
+          debugPrint('🔷 [ENQUEUE-DEBUG] folderName: $folderName');
+          debugPrint('🔷 [ENQUEUE-DEBUG] Calling now...');
+
+          // v6.4.2: Envolver en timeout para detectar bloqueos
+          int? enqueueId;
+          try {
+            enqueueId = await uploadService.enqueueGenericDocument(
+              documentFile: imageFile,
+              title: 'Doc_Admin_${folderName}_${i+1}_${DateTime.now().millisecondsSinceEpoch}',
+              documentType: null,
+              documentNumber: null,
+              sourceDirectory: entity.path,
+            ).timeout(
+              const Duration(seconds: 15),
+              onTimeout: () {
+                debugPrint('🔴🔴🔴 [ENQUEUE-DEBUG] TIMEOUT! enqueueGenericDocument took >15s');
+                return null;
+              },
+            );
+          } catch (timeoutError) {
+            debugPrint('🔴 [ENQUEUE-DEBUG] Timeout or error in enqueue: $timeoutError');
+            enqueueId = null;
+          }
+
+          // DEBUG v6.4.1: Log DESPUÉS de enqueueGenericDocument
+          debugPrint('🔷 [ENQUEUE-DEBUG] enqueueGenericDocument() RETURNED');
+          debugPrint('🔷 [ENQUEUE-DEBUG] enqueueId: $enqueueId');
+
+          if (enqueueId != null) {
+            debugPrint('🟢 [ENQUEUE-DEBUG] ✅ Enqueued: $enqueueId');
+            _logger.i('[ADMIN-ENQUEUE-ALL]   ✅ Encolado: ${imageFile.path} -> ID=$enqueueId');
+            totalEnqueued++;
+          } else {
+            debugPrint('🟡 [ENQUEUE-DEBUG] ⚠️ Already exists or null');
+            _logger.w('[ADMIN-ENQUEUE-ALL]   ⚠️ Ya existe o error: ${imageFile.path}');
+          }
+        } catch (e) {
+          debugPrint('🔴 [ENQUEUE-DEBUG] ❌ Error: $e');
+          _logger.e('[ADMIN-ENQUEUE-ALL]   ❌ Error al encolar: $e');
+        }
+      }
+    }
+
+    debugPrint('🟢 [ENQUEUE-DEBUG] === Total enqueued: $totalEnqueued ===');
+    _logger.i('[ADMIN-ENQUEUE-ALL] === Total encolados: $totalEnqueued ===');
+    return totalEnqueued;
+  }
+
+  // ✅ v6.4.0+93: Manejar sincronización manual desde Admin
+  Future<void> _handleManualSync() async {
+    debugPrint('🔵 [SYNC-DEBUG] ========================================');
+    debugPrint('🔵 [SYNC-DEBUG] _handleManualSync() STARTED');
+    debugPrint('🔵 [SYNC-DEBUG] ========================================');
+    _logger.i('🔄 [ADMIN-SYNC] Starting manual sync from Admin Dashboard...');
+
+    if (!mounted) {
+      debugPrint('🔴 [SYNC-DEBUG] NOT MOUNTED - returning early');
+      return;
+    }
+    debugPrint('🔵 [SYNC-DEBUG] Widget is mounted, continuing...');
+
+    final uploadService = Provider.of<UploadService>(context, listen: false);
+    debugPrint('🔵 [SYNC-DEBUG] Got uploadService instance');
+
+    // Mostrar indicador de progreso
+    debugPrint('🔵 [SYNC-DEBUG] Showing SnackBar...');
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Row(
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+            ),
+            SizedBox(width: 16),
+            Text('Escaneando documentos locales...'),
+          ],
+        ),
+        duration: Duration(seconds: 2),
+      ),
+    );
+    debugPrint('🔵 [SYNC-DEBUG] SnackBar shown');
+
+    // Paso 1: Encolar todos los documentos locales
+    debugPrint('🔵 [SYNC-DEBUG] STEP 1: Calling _enqueueAllLocalDocuments()...');
+    _logger.i('📂 Paso 1: Escaneando carpetas locales para encolar...');
+    final enqueued = await _enqueueAllLocalDocuments();
+    debugPrint('🔵 [SYNC-DEBUG] STEP 1 COMPLETE: enqueued=$enqueued');
+    _logger.i('📊 Documentos encolados en este paso: $enqueued');
+
+    // Paso 2: Obtener conteo de pendientes DESPUÉS de encolar
+    debugPrint('🔵 [SYNC-DEBUG] STEP 2: Getting pending count...');
+    final pendingCount = await uploadService.getPendingCount();
+    debugPrint('🔵 [SYNC-DEBUG] STEP 2 COMPLETE: pendingCount=$pendingCount');
+    _logger.i('📊 Total documentos pendientes de subir: $pendingCount');
+
+    if (!mounted) {
+      debugPrint('🔴 [SYNC-DEBUG] NOT MOUNTED after step 2 - returning');
+      return;
+    }
+
+    if (pendingCount == 0) {
+      debugPrint('🟡 [SYNC-DEBUG] No pending documents, showing orange snackbar');
+      _logger.i('✅ No hay documentos pendientes para sincronizar');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No hay documentos pendientes (encolados: $enqueued)'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      debugPrint('🔵 [SYNC-DEBUG] ========================================');
+      debugPrint('🔵 [SYNC-DEBUG] _handleManualSync() FINISHED (no pending)');
+      debugPrint('🔵 [SYNC-DEBUG] ========================================');
+      return;
+    }
+
+    // Paso 3: Iniciar la subida
+    debugPrint('🔵 [SYNC-DEBUG] STEP 3: Starting upload of $pendingCount documents...');
+    _logger.i('🚀 Iniciando subida de $pendingCount documentos...');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Subiendo $pendingCount documentos a Paperless...'),
+        backgroundColor: Colors.blue,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+
+    try {
+      debugPrint('🔵 [SYNC-DEBUG] Calling uploadService.processAllPending()...');
+      await uploadService.processAllPending();
+      debugPrint('🔵 [SYNC-DEBUG] processAllPending() completed');
+
+      if (!mounted) {
+        debugPrint('🔴 [SYNC-DEBUG] NOT MOUNTED after upload - returning');
+        return;
+      }
+
+      final remainingCount = await uploadService.getPendingCount();
+      final uploadedCount = pendingCount - remainingCount;
+      debugPrint('🟢 [SYNC-DEBUG] UPLOAD COMPLETE: uploaded=$uploadedCount, remaining=$remainingCount');
+
+      _logger.i('✅ Sincronización completada: $uploadedCount subidos, $remainingCount pendientes');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('✅ Sincronización: $uploadedCount subidos, $remainingCount pendientes'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } catch (e) {
+      debugPrint('🔴 [SYNC-DEBUG] ERROR in processAllPending: $e');
+      _logger.e('❌ Error en sincronización: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error en sincronización: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+    debugPrint('🔵 [SYNC-DEBUG] ========================================');
+    debugPrint('🔵 [SYNC-DEBUG] _handleManualSync() FINISHED');
+    debugPrint('🔵 [SYNC-DEBUG] ========================================');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,6 +333,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             onTap: () {
               _showSessionDetailsDialog(context);
             },
+          ),
+          // ✅ v6.4.0+93: Sync button for admin
+          IconButton(
+            icon: const Icon(Icons.cloud_upload),
+            onPressed: _handleManualSync,
+            tooltip: 'Sincronizar documentos a Paperless',
           ),
           IconButton(
             icon: const Icon(Icons.refresh),

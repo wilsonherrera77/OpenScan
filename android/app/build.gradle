@@ -68,6 +68,11 @@ android {
        }
    }
    buildTypes {
+       debug {
+           debuggable true
+           minifyEnabled false
+           shrinkResources false
+       }
        release {
            signingConfig signingConfigs.release
            // Enable minification and resource shrinking for smaller APK

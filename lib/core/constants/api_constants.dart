@@ -4,7 +4,7 @@ class ApiConstants {
   // Paperless API Configuration
   // ⚠️ IMPORTANT: Configure server URL in app settings
   // This is the default fallback - will be overridden by user config
-  static const String defaultBaseUrl = 'http://192.168.110.149:8001'; // ✅ FIX: IP correcta (2025-11-16)
+  static const String defaultBaseUrl = 'http://127.0.0.1:8001'; // ✅ DEV: localhost via ADB reverse (adb reverse tcp:8001 tcp:8001)
   static const String apiVersion = 'api';
 
   // Alternative URLs for development/testing

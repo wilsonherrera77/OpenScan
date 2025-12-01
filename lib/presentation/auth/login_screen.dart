@@ -32,6 +32,13 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _loadSavedBaseUrl();
+    // ✅ DEBUG: Auto-fill for testing (REMOVE BEFORE PRODUCTION)
+    _usernameController.text = 'admin';
+    _passwordController.text = 'admin';
+    // ✅ DEBUG: Auto-login after 2 seconds (REMOVE BEFORE PRODUCTION)
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) _handleLogin();
+    });
   }
 
   /// Load previously saved base URL
@@ -172,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     labelText: 'URL del Servidor Paperless',
                     prefixIcon: Icon(Icons.cloud),
                     border: OutlineInputBorder(),
-                    hintText: 'http://192.168.40.17:8001',
+                    hintText: 'http://127.0.0.1:8001',
                     helperText: 'Asegúrate de estar en la misma WiFi que el servidor',
                   ),
                   keyboardType: TextInputType.url,
@@ -336,7 +343,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// ⚡ Configuración INSTANTÁNEA de IP sin QR
   Future<void> _showManualIPConfig() async {
-    final ipController = TextEditingController(text: '192.168.40.17');
+    final ipController = TextEditingController(text: '127.0.0.1');
     final portController = TextEditingController(text: '8001');
 
     final result = await showDialog<bool>(
@@ -361,7 +368,7 @@ class _LoginScreenState extends State<LoginScreen> {
               controller: ipController,
               decoration: const InputDecoration(
                 labelText: 'IP del Servidor',
-                hintText: '192.168.40.17',
+                hintText: '127.0.0.1',
                 prefixIcon: Icon(Icons.computer),
                 border: OutlineInputBorder(),
               ),

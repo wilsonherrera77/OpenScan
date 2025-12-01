@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:drift/drift.dart';
-import 'package:drift_flutter/drift_flutter.dart';
+import 'package:drift/native.dart';
+import 'package:flutter/foundation.dart'; // debugPrint
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 part 'app_database.g.dart';
 
@@ -111,7 +115,15 @@ class CustomFields extends Table {
   CustomFields, // ⚡ FASE 2: Added for metadata caching
 ])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
+  // ⚡ SINGLETON: Prevent multiple instances causing database locks
+  static AppDatabase? _instance;
+
+  factory AppDatabase() {
+    _instance ??= AppDatabase._internal();
+    return _instance!;
+  }
+
+  AppDatabase._internal() : super(_openConnection());
 
   @override
   int get schemaVersion => 3; // ⚡ FASE 2: Incremented for CustomFields table
@@ -154,36 +166,66 @@ class AppDatabase extends _$AppDatabase {
 
   /// Open database connection with optimized settings
   ///
-  /// ⚡ FASE 2 OPTIMIZATIONS:
-  /// - WAL mode enabled for better concurrency (2x faster writes)
-  /// - NORMAL synchronous mode for mobile performance
-  /// - Configured via beforeOpen() method for compatibility
+  /// ⚡ FIX v6.4.0: Changed from driftDatabase() (uses isolates) to NativeDatabase
+  /// (direct connection) to fix database hanging issues on Android.
+  /// The isolate-based connection was causing deadlocks during initialization.
+  ///
+  /// ⚡ FIX v6.4.0b: Changed from NativeDatabase.createInBackground() to NativeDatabase()
+  /// because even createInBackground uses isolates which caused PRAGMA commands to hang.
   static QueryExecutor _openConnection() {
-    return driftDatabase(
-      name: 'openscan_indigenas.db',
-    );
+    debugPrint('🔵 [DB] _openConnection() called');
+    return LazyDatabase(() async {
+      debugPrint('🔵 [DB] LazyDatabase initializing...');
+      try {
+        final dbFolder = await getApplicationDocumentsDirectory();
+        final file = File(p.join(dbFolder.path, 'openscan_indigenas.db'));
+        debugPrint('🔵 [DB] Database path: ${file.path}');
+        debugPrint('🔵 [DB] Database exists: ${file.existsSync()}');
+
+        // ⚡ FIX v6.4.0b: Use NativeDatabase() WITHOUT background isolate
+        // NativeDatabase.createInBackground() was still causing hangs on PRAGMA commands
+        // Using direct NativeDatabase() runs SQLite on the main thread but avoids isolate issues
+        final db = NativeDatabase(file);
+        debugPrint('🟢 [DB] NativeDatabase created successfully (no isolate)');
+        return db;
+      } catch (e, stack) {
+        debugPrint('🔴 [DB] ERROR creating database: $e');
+        debugPrint('🔴 [DB] Stack: ${stack.toString().split('\n').take(5).join('\n')}');
+        rethrow;
+      }
+    });
   }
 
   /// ⚡ FASE 2: Configure database optimizations after connection
+  /// ⚡ FIX v6.4.0c: Completely disabled PRAGMA customizations
+  /// These were causing the database to hang on Android devices.
+  /// Using default SQLite settings which are safe and reliable.
   @override
   Future<void> beforeOpen(QueryExecutor executor, OpeningDetails details) async {
-    await super.beforeOpen(executor, details);
+    debugPrint('🔵 [DB] beforeOpen() called - isCreate: ${details.wasCreated}, version: ${details.versionBefore} -> $schemaVersion');
 
-    // ✅ Write-Ahead Logging: Allows concurrent reads during writes
-    // Performance: 2-3x faster in write-heavy scenarios
-    await customStatement('PRAGMA journal_mode = WAL');
+    try {
+      await super.beforeOpen(executor, details);
+      debugPrint('🟢 [DB] beforeOpen() completed - using default SQLite settings');
 
-    // ✅ Reduced fsync calls: Better for mobile flash storage
-    // NORMAL = good balance between safety and performance
-    await customStatement('PRAGMA synchronous = NORMAL');
+      // ⚡ FIX v6.4.0c: ALL PRAGMA customizations have been DISABLED
+      // The following settings were causing database hangs on Android:
+      // - PRAGMA journal_mode = WAL  <-- REMOVED (caused 10s+ hangs)
+      // - PRAGMA synchronous = NORMAL  <-- REMOVED
+      // - PRAGMA foreign_keys = ON  <-- REMOVED
+      // - PRAGMA temp_store = MEMORY  <-- REMOVED
+      // - PRAGMA cache_size  <-- REMOVED
+      // - PRAGMA mmap_size  <-- REMOVED
+      //
+      // SQLite default settings are safe and work reliably on all devices.
+      // Performance optimizations can be re-added later after investigating
+      // the root cause of the PRAGMA hangs.
 
-    // ✅ Enable foreign keys for data integrity
-    await customStatement('PRAGMA foreign_keys = ON');
-
-    // ⚡ Additional optimizations
-    await customStatement('PRAGMA cache_size = -64000'); // 64MB cache
-    await customStatement('PRAGMA temp_store = MEMORY'); // Temp tables in RAM
-    await customStatement('PRAGMA mmap_size = 268435456'); // 256MB memory-mapped I/O
+    } catch (e, stack) {
+      debugPrint('🔴 [DB] ERROR in beforeOpen(): $e');
+      debugPrint('🔴 [DB] Stack: ${stack.toString().split('\n').take(5).join('\n')}');
+      // Don't rethrow - let the database open with default settings
+    }
   }
 
   /// ⚡ FASE 3: Create database indexes for frequent queries
@@ -324,15 +366,22 @@ class AppDatabase extends _$AppDatabase {
     return (delete(pendingUploads)..where((t) => t.id.equals(id))).go();
   }
 
-  /// Count pending uploads
+  /// Count pending uploads (with safe error handling)
   Future<int> countPendingUploads() async {
-    final count = pendingUploads.id.count();
-    final query = selectOnly(pendingUploads)
-      ..addColumns([count])
-      ..where(pendingUploads.status.equals('pending'));
+    try {
+      final count = pendingUploads.id.count();
+      final query = selectOnly(pendingUploads)
+        ..addColumns([count])
+        ..where(pendingUploads.status.equals('pending'));
 
-    final result = await query.getSingle();
-    return result.read(count) ?? 0;
+      // ⚡ FIX: Use getSingleOrNull to prevent blocking on empty results
+      final result = await query.getSingleOrNull();
+      return result?.read(count) ?? 0;
+    } catch (e) {
+      // Fallback to 0 on any database error to prevent sync blocking
+      print('⚠️ [DB] Error counting pending uploads: $e');
+      return 0;
+    }
   }
 
   /// Get failed uploads

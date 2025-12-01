@@ -17,7 +17,7 @@ final slideList = [
     description: 'Ingresa tus credenciales de Paperless:\n'
         '• Usuario: admin (o tu usuario)\n'
         '• Contraseña: tu contraseña\n'
-        '• URL del Servidor: http://192.168.40.17:8001\n\n'
+        '• URL del Servidor: http://192.168.10.48:8001\n\n'
         '⚠️ IMPORTANTE: Asegúrate de estar conectado a la misma WiFi que el servidor Paperless.',
   ),
   Slide(
@@ -68,7 +68,7 @@ final slideList = [
     imageUrl: 'assets/view_doc_04.jpg',
     title: '6. Verificar en Paperless',
     description: 'En tu navegador:\n'
-        '• Abre http://192.168.40.17:8001\n'
+        '• Abre http://192.168.10.48:8001\n'
         '• Inicia sesión en Paperless\n'
         '• Ve a "Documentos"\n'
         '• Verás tus documentos sincronizados\n\n'

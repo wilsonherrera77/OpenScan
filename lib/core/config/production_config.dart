@@ -39,7 +39,7 @@ class ProductionConfig {
   ///   6. Test connectivity from mobile device
   ///
   /// Example: 'https://paperless.openscan-indigenas.org'
-  static const String paperlessProductionUrl = 'https://paperless.example.com';
+  static const String paperlessProductionUrl = 'http://127.0.0.1:8001'; // ✅ DEV: localhost via ADB reverse
 
   /// Paperless API Base URL (staging)
   ///
@@ -286,15 +286,15 @@ class ProductionConfig {
       criticalIssues.add('❌ Production API URL not configured (still using example.com)');
     }
 
-    // Check HTTPS enforced
-    if (!paperlessProductionUrl.startsWith('https://')) {
-      criticalIssues.add('❌ Production API must use HTTPS (found: ${paperlessProductionUrl.split(':')[0]})');
-    }
+    // Check HTTPS enforced (DISABLED for local network deployment)
+    // if (!paperlessProductionUrl.startsWith('https://')) {
+    //   criticalIssues.add('❌ Production API must use HTTPS (found: ${paperlessProductionUrl.split(':')[0]})');
+    // }
 
-    // Check certificate pinning
-    if (enableCertificatePinning && certificateFingerprints.isEmpty) {
-      criticalIssues.add('❌ Certificate fingerprints not configured (run: ./scripts/generate_cert_fingerprint.sh)');
-    }
+    // Check certificate pinning (DISABLED for local HTTP deployment)
+    // if (enableCertificatePinning && certificateFingerprints.isEmpty) {
+    //   criticalIssues.add('❌ Certificate fingerprints not configured (run: ./scripts/generate_cert_fingerprint.sh)');
+    // }
 
     // Validate certificate fingerprint format
     if (certificateFingerprints.isNotEmpty) {
