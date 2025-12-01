@@ -1170,17 +1170,49 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ],
           ),
         ),
-        // ✅ v6.4.5: FAB ahora navega a PersonSelectionScreen para vincular documento con censo
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            // 📸 Navegar a selección de persona antes de capturar
-            Navigator.of(context).pushNamed(PersonSelectionScreen.route).whenComplete(() {
+        // ✅ v6.4.6: FAB restaurado con opciones de captura
+        // La selección de persona se hace desde Dashboard → Capturar Documento
+        floatingActionButton: FAB(
+          normalScanOnPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewDocument(
+                  directoryOS: DirectoryOS(),
+                  quickScan: false,
+                ),
+              ),
+            ).whenComplete(() {
               homeRefresh();
             });
           },
-          icon: const Icon(Icons.camera_alt),
-          label: const Text('Nuevo Documento'),
-          backgroundColor: secondaryColor,
+          quickScanOnPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewDocument(
+                  directoryOS: DirectoryOS(),
+                  quickScan: true,
+                ),
+              ),
+            ).whenComplete(() {
+              homeRefresh();
+            });
+          },
+          galleryOnPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewDocument(
+                  directoryOS: DirectoryOS(),
+                  quickScan: false,
+                  fromGallery: true,
+                ),
+              ),
+            ).whenComplete(() {
+              homeRefresh();
+            });
+          },
         ),
       ),
     );
