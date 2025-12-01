@@ -79,17 +79,21 @@ class UploadService {
     );
   }
 
-  /// Enqueue document upload WITHOUT person (for generic documents)
+  /// Enqueue document upload with optional person data (for documents linked to census)
   /// Used when user captures documents through Normal Scan flow
   ///
   /// v4.4.2: Added sourceDirectory parameter to enable cleanup of scanned images after PDF sync
   /// v4.5.1: ONLY assigns tag of selected document type (e.g. Cédula = tag 12)
+  /// v6.4.5: Added personId, personName, familyId to link documents with census
   Future<int?> enqueueGenericDocument({
     required File documentFile,
     String? title,
     String? documentType,
     String? documentNumber,
     String? sourceDirectory, // v4.4.2: Path to directory with source images to delete after sync
+    String? personId, // v6.4.5: Census person ID for document-person linking
+    String? personName, // v6.4.5: Person name for display
+    String? familyId, // v6.4.5: Family ID for grouping
   }) async {
     debugPrint('🟣 [ENQUEUE-SERVICE] === enqueueGenericDocument() STARTED ===');
     debugPrint('🟣 [ENQUEUE-SERVICE] File: ${documentFile.path}');
@@ -158,11 +162,18 @@ class UploadService {
       // ✅ DEBUG: Add timeout to detect database hanging
       final int id;
       try {
+        // v6.4.5: Use person data from CensusProvider if available
+        final effectivePersonId = personId ?? 'GENERIC';
+        final effectivePersonName = personName ?? 'Usuario Lumara Scan';
+        final effectiveFamilyId = familyId ?? '';
+
+        _logger.i('👤 Linking document to person: $effectivePersonName (ID: $effectivePersonId, Family: $effectiveFamilyId)');
+
         id = await _database.enqueueUpload(
           filePath: documentFile.path,
-          personId: 'GENERIC',
-          personName: 'Usuario Lumara Scan',
-          familyId: '',
+          personId: effectivePersonId,
+          personName: effectivePersonName,
+          familyId: effectiveFamilyId,
           docNumber: documentNumber,
           documentTypeId: nativeDocumentTypeId, // ✅ Use mapped native document_type
           tagIds: tagList,

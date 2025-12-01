@@ -20,6 +20,8 @@ import 'package:lumara_scan/services/background_sync_service.dart';
 import 'package:lumara_scan/services/connectivity_service.dart';
 import 'package:lumara_scan/data/datasources/paperless_api_client.dart';
 import 'package:lumara_scan/presentation/settings/server_config_screen.dart';
+import 'package:lumara_scan/presentation/census/person_selection_screen.dart';
+import 'package:lumara_scan/presentation/providers/census_provider.dart';
 import '../services/logger_adapter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -139,12 +141,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   /// ✅ v6.4.0+92: Encolar TODOS los documentos locales antes de sincronizar
   /// Esta función escanea todas las carpetas de documentos y encola las imágenes
   /// que aún no están en la base de datos de uploads pendientes
+  /// v6.4.5: Ahora vincula documentos con persona seleccionada del censo
   Future<int> _enqueueAllLocalDocuments() async {
     _logger.i('[ENQUEUE-ALL] === Escaneando carpetas locales ===');
     debugPrint('🔵 [ENQUEUE-DEBUG] === Escaneando ${masterDirectories.length} carpetas ===');
 
     int totalEnqueued = 0;
     final uploadService = Provider.of<UploadService>(context, listen: false);
+
+    // ✅ v6.4.5: Obtener datos de persona seleccionada del CensusProvider
+    final censusProvider = Provider.of<CensusProvider>(context, listen: false);
+    final selectedPerson = censusProvider.selectedPerson;
+    final documentType = censusProvider.documentType;
+    final documentNumber = censusProvider.documentNumber;
+
+    if (selectedPerson != null) {
+      _logger.i('[ENQUEUE-ALL] 👤 Persona seleccionada: ${selectedPerson.fullName} (ID: ${selectedPerson.personId})');
+      _logger.i('[ENQUEUE-ALL] 📄 Tipo documento: $documentType, Número: $documentNumber');
+    } else {
+      _logger.w('[ENQUEUE-ALL] ⚠️ No hay persona seleccionada - documentos se marcarán como GENERIC');
+    }
 
     for (final dirOS in masterDirectories) {
       debugPrint('🔵 [ENQUEUE-DEBUG] Processing dir: ${dirOS.dirName}');
@@ -182,14 +198,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         _logger.i('[ENQUEUE-ALL]   Procesando ${i+1}/${imageFiles.length}: ${imageFile.path.split('/').last}');
 
         try {
+          // ✅ v6.4.5: Pasar datos de persona seleccionada al encolar
           final enqueueId = await uploadService.enqueueGenericDocument(
             documentFile: imageFile,
             title: 'Doc_${dirOS.newName}_${i+1}_${DateTime.now().millisecondsSinceEpoch}',
-            documentType: null, // Sin tipo específico
-            documentNumber: null,
+            documentType: documentType, // Tipo de documento seleccionado
+            documentNumber: documentNumber, // Número de documento
             sourceDirectory: dirOS.dirPath,
+            personId: selectedPerson?.personId, // ID de persona del censo
+            personName: selectedPerson?.fullName, // Nombre completo
+            familyId: selectedPerson?.familyId, // ID de familia
           );
-          _logger.i('[ENQUEUE-ALL]   ✅ Encolado con ID: $enqueueId');
+          _logger.i('[ENQUEUE-ALL]   ✅ Encolado con ID: $enqueueId (Persona: ${selectedPerson?.personId ?? "GENERIC"})');
           totalEnqueued++;
         } catch (e) {
           _logger.e('[ENQUEUE-ALL]   ❌ Error al encolar: $e');
@@ -1150,47 +1170,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ],
           ),
         ),
-        floatingActionButton: FAB(
-          normalScanOnPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ViewDocument(
-                  directoryOS: DirectoryOS(),
-                  quickScan: false,
-                ),
-              ),
-            ).whenComplete(() {
+        // ✅ v6.4.5: FAB ahora navega a PersonSelectionScreen para vincular documento con censo
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            // 📸 Navegar a selección de persona antes de capturar
+            Navigator.of(context).pushNamed(PersonSelectionScreen.route).whenComplete(() {
               homeRefresh();
             });
           },
-          quickScanOnPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ViewDocument(
-                  directoryOS: DirectoryOS(),
-                  quickScan: true,
-                ),
-              ),
-            ).whenComplete(() {
-              homeRefresh();
-            });
-          },
-          galleryOnPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ViewDocument(
-                  directoryOS: DirectoryOS(),
-                  quickScan: false,
-                  fromGallery: true,
-                ),
-              ),
-            ).whenComplete(() {
-              homeRefresh();
-            });
-          },
+          icon: const Icon(Icons.camera_alt),
+          label: const Text('Nuevo Documento'),
+          backgroundColor: secondaryColor,
         ),
       ),
     );
