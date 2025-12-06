@@ -580,7 +580,7 @@ class PaperlessApiClient {
       });
 
       final response = await _dio.post(
-        '/api/documents/smart_upload/',
+        '/api/documents/upload_with_person/',  // ✅ FIX v6.4.11: Endpoint correcto (smart_upload estaba comentado en backend)
         data: formData,
         options: Options(
           contentType: 'multipart/form-data',

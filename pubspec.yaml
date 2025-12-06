@@ -4,7 +4,7 @@ description: Lumara Scan - Smart document digitization and management system
 
 publish_to: "none"
 
-version: 6.4.4+98  # DEV: Using localhost (127.0.0.1) via ADB reverse for development
+version: 6.4.12+106  # v6.4.12: FIX documentType vacío - usar metadata['document_type']
 
 environment:
   sdk: ^3.5.3

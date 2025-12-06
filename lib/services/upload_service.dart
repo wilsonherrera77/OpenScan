@@ -13,6 +13,24 @@ import '../Utilities/database_helper.dart'; // v4.4.2: For deleting scanned imag
 import 'file_deletion_service.dart';
 import 'image_optimizer.dart'; // ⚡ FASE 2: Image optimization
 
+/// v6.4.9: Exception thrown when duplicate document is detected
+class DuplicateDocumentException implements Exception {
+  final String message;
+  final int? existingDocumentId;
+  final double ocrQuality;
+  final bool canReplace;
+
+  DuplicateDocumentException({
+    required this.message,
+    this.existingDocumentId,
+    this.ocrQuality = 0.0,
+    this.canReplace = false,
+  });
+
+  @override
+  String toString() => 'DuplicateDocumentException: $message (existing ID: $existingDocumentId, OCR: ${ocrQuality.toStringAsFixed(1)}%, canReplace: $canReplace)';
+}
+
 /// Sync Status States
 enum SyncStatus {
   idle,       // No activity
@@ -85,6 +103,12 @@ class UploadService {
   /// v4.4.2: Added sourceDirectory parameter to enable cleanup of scanned images after PDF sync
   /// v4.5.1: ONLY assigns tag of selected document type (e.g. Cédula = tag 12)
   /// v6.4.5: Added personId, personName, familyId to link documents with census
+  /// v6.4.9: Added pre-enqueue duplicate check with Tejido
+  ///
+  /// Returns:
+  /// - int (queue ID) if enqueued successfully
+  /// - null if failed to enqueue
+  /// - throws DuplicateDocumentException if document already exists
   Future<int?> enqueueGenericDocument({
     required File documentFile,
     String? title,
@@ -94,6 +118,7 @@ class UploadService {
     String? personId, // v6.4.5: Census person ID for document-person linking
     String? personName, // v6.4.5: Person name for display
     String? familyId, // v6.4.5: Family ID for grouping
+    bool skipDuplicateCheck = false, // v6.4.9: Skip duplicate check (for retries)
   }) async {
     debugPrint('🟣 [ENQUEUE-SERVICE] === enqueueGenericDocument() STARTED ===');
     debugPrint('🟣 [ENQUEUE-SERVICE] File: ${documentFile.path}');
@@ -105,6 +130,64 @@ class UploadService {
     }
 
     try {
+      // ═══════════════════════════════════════════════════════════════════════
+      // v6.4.9: PRE-ENQUEUE DUPLICATE CHECK WITH TEJIDO
+      // ═══════════════════════════════════════════════════════════════════════
+      // Only check if:
+      // 1. personId is not null and not 'GENERIC'
+      // 2. documentType is provided
+      // 3. skipDuplicateCheck is false
+      // ═══════════════════════════════════════════════════════════════════════
+      bool isReplacement = false;
+
+      if (!skipDuplicateCheck &&
+          personId != null &&
+          personId != 'GENERIC' &&
+          documentType != null) {
+        _logger.i('🔍 v6.4.9: Checking for existing document in Tejido...');
+        _logger.i('   Person ID: $personId');
+        _logger.i('   Document Type: $documentType');
+
+        try {
+          final existenceCheck = await _documentRepository.checkDocumentExists(
+            personId: personId,
+            documentType: documentType,
+          );
+
+          if (existenceCheck.exists) {
+            _logger.w('⚠️ DUPLICATE DETECTED: Document already exists');
+            _logger.w('   Person: ${existenceCheck.person.name}');
+            _logger.w('   Can Replace: ${existenceCheck.canReplace}');
+            _logger.w('   OCR Quality: ${existenceCheck.ocrQualityPercentage}%');
+
+            if (existenceCheck.existsWithGoodQuality) {
+              // Document exists with good quality - reject the upload
+              _logger.e('❌ Cannot enqueue: High-quality document already exists');
+              throw DuplicateDocumentException(
+                message: 'Este documento ya existe para ${existenceCheck.person.name}',
+                existingDocumentId: existenceCheck.existingDocument?.id,
+                ocrQuality: (existenceCheck.ocrQualityPercentage ?? 0).toDouble(),
+                canReplace: false,
+              );
+            } else if (existenceCheck.existsWithLowQuality) {
+              // Document exists but is low quality - allow replacement
+              _logger.i('✅ Existing document has low quality - allowing replacement');
+              isReplacement = true;
+            }
+          } else {
+            _logger.i('✅ No existing document found - safe to upload');
+          }
+        } catch (e) {
+          if (e is DuplicateDocumentException) {
+            rethrow; // Re-throw duplicate exceptions
+          }
+          // For other errors (network, etc.), log and continue with enqueue
+          // The backend will handle duplicates if this check failed
+          _logger.w('⚠️ Pre-enqueue check failed, continuing anyway: $e');
+        }
+      } else {
+        _logger.d('ℹ️ Skipping duplicate check: ${skipDuplicateCheck ? "forced skip" : personId == null || personId == "GENERIC" ? "no person linked" : "no document type"}');
+      }
       final fileName = documentFile.path.split('/').last;
 
       // Use document number as title if available, otherwise use provided title or generate one
@@ -184,6 +267,7 @@ class UploadService {
             if (documentType != null) 'document_type': documentType,
             if (documentNumber != null) 'document_number': documentNumber,
             if (sourceDirectory != null) 'source_directory': sourceDirectory, // v4.4.2: Store source directory for cleanup
+            'is_replacement': isReplacement, // v6.4.9: Flag for duplicate replacement
           },
         ).timeout(const Duration(seconds: 10), onTimeout: () {
           debugPrint('🔴 [ENQUEUE-SERVICE] TIMEOUT! Database operation took >10s');
@@ -218,6 +302,9 @@ class UploadService {
       await _attemptImmediateUpload(id);
 
       return id;
+    } on DuplicateDocumentException {
+      // v6.4.9: Re-throw duplicate exceptions so UI can handle them
+      rethrow;
     } catch (e, stackTrace) {
       debugPrint('🔴 [ENQUEUE-SERVICE] ERROR: $e');
       debugPrint('🔴 [ENQUEUE-SERVICE] Stack: ${stackTrace.toString().split('\n').take(5).join('\n')}');
@@ -599,11 +686,23 @@ class UploadService {
       // Extract isReplacement flag from metadata (set by anti-duplicate check)
       final isReplacement = metadata['is_replacement'] as bool? ?? false;
 
+      // ✅ FIX v6.4.12: Get documentType from metadata (upload.documentType is always '')
+      final effectiveDocumentType = (metadata['document_type'] as String?) ?? upload.documentType;
+      final effectiveDocumentNumber = upload.documentNumber ?? (metadata['document_number'] as String?);
+
       _logger.i('🎯 Parámetros de upload:');
       _logger.i('   Is Replacement: $isReplacement');
-      _logger.i('   Document Type: ${upload.documentType}');
-      _logger.i('   Document Number: ${upload.documentNumber ?? "N/A"}');
+      _logger.i('   Document Type (from metadata): $effectiveDocumentType');
+      _logger.i('   Document Number: ${effectiveDocumentNumber ?? "N/A"}');
       _logger.i('');
+
+      // ✅ FIX v6.4.12: Validate required fields before upload
+      if (effectiveDocumentType.isEmpty) {
+        _logger.e('❌ ERROR: documentType está vacío. No se puede continuar.');
+        _logger.e('   metadata: $metadata');
+        throw Exception('documentType es requerido pero está vacío. Recaptura el documento.');
+      }
+
       _logger.i('🌐 Llamando a DocumentRepository.smartUploadDocumentForPerson...');
       _logger.i('   ✨ SMART UPLOAD: Backend will compare quality automatically');
 
@@ -612,8 +711,8 @@ class UploadService {
           filePath: filePath, // ⚡ Use potentially optimized file
           fileName: upload.fileName,
           person: person,
-          documentType: upload.documentType,
-          documentNumber: upload.documentNumber,
+          documentType: effectiveDocumentType,  // ✅ FIX: Use effective type from metadata
+          documentNumber: effectiveDocumentNumber,  // ✅ FIX: Use effective number
           digitizedBy: upload.digitizedBy,
         );
 

@@ -155,12 +155,41 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final documentType = censusProvider.documentType;
     final documentNumber = censusProvider.documentNumber;
 
-    if (selectedPerson != null) {
-      _logger.i('[ENQUEUE-ALL] 👤 Persona seleccionada: ${selectedPerson.fullName} (ID: ${selectedPerson.personId})');
-      _logger.i('[ENQUEUE-ALL] 📄 Tipo documento: $documentType, Número: $documentNumber');
-    } else {
-      _logger.w('[ENQUEUE-ALL] ⚠️ No hay persona seleccionada - documentos se marcarán como GENERIC');
+    // ✅ FIX v6.4.10: Verificar que hay persona Y tipo de documento seleccionados
+    // para permitir verificación de duplicados
+    if (selectedPerson == null || documentType == null || documentType.isEmpty) {
+      _logger.w('[ENQUEUE-ALL] ⚠️ FALTAN DATOS: persona=${selectedPerson?.fullName ?? "null"}, tipo=$documentType');
+
+      // Mostrar advertencia al usuario
+      if (mounted) {
+        final missingItems = <String>[];
+        if (selectedPerson == null) missingItems.add('persona del censo');
+        if (documentType == null || documentType.isEmpty) missingItems.add('tipo de documento');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              '⚠️ Para verificar duplicados, selecciona: ${missingItems.join(" y ")}.\n\n'
+              'Ve al Censo → selecciona persona → elige tipo de documento.',
+            ),
+            backgroundColor: Colors.orange,
+            duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'Entendido',
+              textColor: Colors.white,
+              onPressed: () {},
+            ),
+          ),
+        );
+      }
+
+      // Retornar 0 - no encolar sin datos completos
+      _logger.e('[ENQUEUE-ALL] ❌ NO SE ENCOLARÁ SIN PERSONA Y TIPO DE DOCUMENTO');
+      return 0;
     }
+
+    _logger.i('[ENQUEUE-ALL] 👤 Persona seleccionada: ${selectedPerson.fullName} (ID: ${selectedPerson.personId})');
+    _logger.i('[ENQUEUE-ALL] 📄 Tipo documento: $documentType, Número: $documentNumber');
 
     for (final dirOS in masterDirectories) {
       debugPrint('🔵 [ENQUEUE-DEBUG] Processing dir: ${dirOS.dirName}');
@@ -298,6 +327,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       final success = await BackgroundSyncService.scheduleImmediateSync();
       debugPrint('🔵 [SYNC-DEBUG] scheduleImmediateSync() returned: $success');
 
+      // ✅ FIX v6.4.10: Get pending count AFTER sync to calculate actual uploads
+      final pendingCountAfter = await uploadService.getPendingCount();
+      final actualSynced = pendingCountBefore - pendingCountAfter;
+      _logger.i('📊 Documents pending after sync: $pendingCountAfter');
+      _logger.i('📊 Actually synced: $actualSynced (before: $pendingCountBefore, after: $pendingCountAfter)');
+      debugPrint('🔵 [SYNC-DEBUG] Pending after: $pendingCountAfter, Actually synced: $actualSynced');
+
       // Close loading dialog safely
       if (dialogShown && mounted && Navigator.canPop(context)) {
         Navigator.pop(context);
@@ -306,18 +342,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
       // Show result dialog
       if (mounted) {
-        // ✅ FIX v6.4.0: Mensaje claro basado en pending count
-        final String titleText = success
-          ? (pendingCountBefore > 0
-              ? 'Sincronización exitosa'
-              : 'Sin documentos pendientes')
-          : 'Error de sincronización';
+        // ✅ FIX v6.4.10: Mensaje basado en documentos REALMENTE sincronizados
+        final String titleText;
+        final String messageText;
 
-        final String messageText = success
-          ? (pendingCountBefore > 0
-              ? '$pendingCountBefore documentos sincronizados con Paperless-ngx'
-              : 'No hay documentos pendientes para sincronizar.\n\nCaptura documentos desde la pantalla principal.')
-          : 'No se pudo sincronizar. Verifica tu conexión.';
+        if (!success) {
+          titleText = 'Error de sincronización';
+          messageText = 'No se pudo sincronizar. Verifica tu conexión.';
+        } else if (pendingCountBefore == 0) {
+          titleText = 'Sin documentos pendientes';
+          messageText = 'No hay documentos pendientes para sincronizar.\n\nCaptura documentos desde la pantalla principal.';
+        } else if (actualSynced > 0) {
+          titleText = 'Sincronización exitosa';
+          messageText = '$actualSynced documento${actualSynced > 1 ? 's' : ''} sincronizado${actualSynced > 1 ? 's' : ''} con Paperless-ngx';
+        } else if (pendingCountAfter > 0) {
+          titleText = 'Sincronización incompleta';
+          messageText = 'No se pudo subir ningún documento.\n\n$pendingCountAfter documento${pendingCountAfter > 1 ? 's' : ''} pendiente${pendingCountAfter > 1 ? 's' : ''} de sincronizar.\n\nVerifica tu conexión e intenta de nuevo.';
+        } else {
+          titleText = 'Sincronización completada';
+          messageText = 'Todos los documentos están sincronizados.';
+        }
 
         showDialog(
           context: context,
@@ -641,6 +685,132 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
         ),
       ],
+    );
+  }
+
+  /// v6.4.7: Mostrar diálogo para seleccionar persona antes de capturar
+  /// Esto asegura que los documentos se vinculen correctamente con el censo
+  void _showPersonSelectionDialog({required bool quickScan, required bool fromGallery}) {
+    final censusProvider = Provider.of<CensusProvider>(context, listen: false);
+    final hasSelectedPerson = censusProvider.selectedPerson != null;
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            Icon(Icons.person_add, color: secondaryColor, size: 28),
+            SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                'Vincular Documento',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '¿A quién pertenece este documento?',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 16),
+            if (hasSelectedPerson) ...[
+              Container(
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.green.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.green.withOpacity(0.3)),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.check_circle, color: Colors.green),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Persona seleccionada:',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                          Text(
+                            censusProvider.selectedPerson!.fullName,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          if (censusProvider.documentType != null)
+                            Text(
+                              '${censusProvider.documentType} - ${censusProvider.documentNumber ?? "Sin número"}',
+                              style: TextStyle(fontSize: 12, color: Colors.grey),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 16),
+            ],
+            Text(
+              hasSelectedPerson
+                  ? 'Puedes continuar con esta persona o seleccionar otra.'
+                  : 'Debes seleccionar una persona del censo para vincular el documento.',
+              style: TextStyle(color: Colors.grey[600], fontSize: 14),
+            ),
+          ],
+        ),
+        actions: [
+          // Botón para seleccionar/cambiar persona
+          TextButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+              // Navegar a PersonSelectionScreen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PersonSelectionScreen(),
+                ),
+              );
+            },
+            icon: Icon(Icons.person_search, color: secondaryColor),
+            label: Text(
+              hasSelectedPerson ? 'Cambiar Persona' : 'Seleccionar Persona',
+              style: TextStyle(color: secondaryColor),
+            ),
+          ),
+          // Botón para continuar (solo si hay persona seleccionada)
+          if (hasSelectedPerson)
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.pop(context);
+                // Navegar a captura con la persona ya seleccionada
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewDocument(
+                      directoryOS: DirectoryOS(),
+                      quickScan: quickScan,
+                      fromGallery: fromGallery,
+                    ),
+                  ),
+                ).whenComplete(() {
+                  homeRefresh();
+                });
+              },
+              icon: Icon(Icons.camera_alt),
+              label: Text('Continuar'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: successColor,
+                foregroundColor: Colors.white,
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -1170,49 +1340,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ],
           ),
         ),
-        // ✅ v6.4.6: FAB restaurado con opciones de captura
-        // La selección de persona se hace desde Dashboard → Capturar Documento
+        // ✅ v6.4.7: FAB con selección de persona obligatoria
+        // Siempre navega a PersonSelectionScreen primero para vincular documentos
         floatingActionButton: FAB(
-          normalScanOnPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ViewDocument(
-                  directoryOS: DirectoryOS(),
-                  quickScan: false,
-                ),
-              ),
-            ).whenComplete(() {
-              homeRefresh();
-            });
-          },
-          quickScanOnPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ViewDocument(
-                  directoryOS: DirectoryOS(),
-                  quickScan: true,
-                ),
-              ),
-            ).whenComplete(() {
-              homeRefresh();
-            });
-          },
-          galleryOnPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ViewDocument(
-                  directoryOS: DirectoryOS(),
-                  quickScan: false,
-                  fromGallery: true,
-                ),
-              ),
-            ).whenComplete(() {
-              homeRefresh();
-            });
-          },
+          normalScanOnPressed: () => _showPersonSelectionDialog(quickScan: false, fromGallery: false),
+          quickScanOnPressed: () => _showPersonSelectionDialog(quickScan: true, fromGallery: false),
+          galleryOnPressed: () => _showPersonSelectionDialog(quickScan: false, fromGallery: true),
         ),
       ),
     );

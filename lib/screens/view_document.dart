@@ -207,14 +207,18 @@ class _ViewDocumentState extends State<ViewDocument>
             final file = galleryImages[i];
             print('[DEBUG] Gallery image ${i+1}: path=${file.path}, exists=${file.existsSync()}');
 
+            // v6.4.8: Include person data for document-census linking
             final enqueueId = await uploadService.enqueueGenericDocument(
               documentFile: file,
               title: 'Documento ${DateTime.now().toString().substring(0, 19).replaceAll(':', '-')}',
               documentType: censusProvider.documentType,
               documentNumber: censusProvider.documentNumber,
               sourceDirectory: widget.directoryOS.dirPath,
+              personId: censusProvider.selectedPerson?.personId,
+              personName: censusProvider.selectedPerson?.fullName,
+              familyId: censusProvider.selectedPerson?.familyId,
             );
-            print('[DEBUG] ✅ Gallery image ${i+1}/${galleryImages.length} enqueued with ID: $enqueueId');
+            print('[DEBUG] ✅ Gallery image ${i+1}/${galleryImages.length} enqueued with ID: $enqueueId, person: ${censusProvider.selectedPerson?.fullName ?? "GENERIC"}');
           }
         } else if (imageFilePath != null) {
           print('[DEBUG] Single image mode');
@@ -228,14 +232,18 @@ class _ViewDocumentState extends State<ViewDocument>
             throw Exception('File not found at $imageFilePath');
           }
 
+          // v6.4.8: Include person data for document-census linking
           final enqueueId = await uploadService.enqueueGenericDocument(
             documentFile: file,
             title: 'Documento ${DateTime.now().toString().substring(0, 19).replaceAll(':', '-')}',
             documentType: censusProvider.documentType,
             documentNumber: censusProvider.documentNumber,
             sourceDirectory: widget.directoryOS.dirPath,
+            personId: censusProvider.selectedPerson?.personId,
+            personName: censusProvider.selectedPerson?.fullName,
+            familyId: censusProvider.selectedPerson?.familyId,
           );
-          print('[DEBUG] ✅ Captured image enqueued with ID: $enqueueId, path: $imageFilePath');
+          print('[DEBUG] ✅ Captured image enqueued with ID: $enqueueId, person: ${censusProvider.selectedPerson?.fullName ?? "GENERIC"}');
 
           // Verify enqueue
           final pendingCount = await uploadService.getPendingCount();
@@ -250,6 +258,21 @@ class _ViewDocumentState extends State<ViewDocument>
             content: Text('📤 Documento agregado a cola de sincronización'),
             backgroundColor: Colors.green,
             duration: Duration(seconds: 2),
+          ),
+        );
+      } on DuplicateDocumentException catch (e) {
+        // v6.4.9: Handle duplicate document detected
+        print('⚠️ Duplicate document detected: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('⚠️ ${e.message}'),
+            backgroundColor: Colors.orange,
+            duration: Duration(seconds: 4),
+            action: SnackBarAction(
+              label: 'OK',
+              textColor: Colors.white,
+              onPressed: () {},
+            ),
           ),
         );
       } catch (e, stackTrace) {
@@ -362,14 +385,18 @@ class _ViewDocumentState extends State<ViewDocument>
         }
 
         try {
+          // v6.4.8: Include person data for document-census linking
           final enqueueId = await uploadService.enqueueGenericDocument(
             documentFile: file,
             title: 'Doc_${widget.directoryOS.newName}_${i+1}_${DateTime.now().millisecondsSinceEpoch}',
             documentType: censusProvider.documentType,
             documentNumber: censusProvider.documentNumber,
             sourceDirectory: widget.directoryOS.dirPath,
+            personId: censusProvider.selectedPerson?.personId,
+            personName: censusProvider.selectedPerson?.fullName,
+            familyId: censusProvider.selectedPerson?.familyId,
           );
-          print('[SYNC] ✅ Encolado con ID: $enqueueId');
+          print('[SYNC] ✅ Encolado con ID: $enqueueId, persona: ${censusProvider.selectedPerson?.fullName ?? "GENERIC"}');
           enqueued++;
         } catch (e) {
           print('[SYNC] ❌ Error al encolar: $e');
@@ -1102,15 +1129,19 @@ class _ViewDocumentState extends State<ViewDocument>
                   // Enqueue for Paperless upload with document metadata
                   // v4.4.2: Pass source directory to enable cleanup after sync
                   // v4.5.1: Only assigns document type tag automatically
+                  // v6.4.8: Include person data for document-census linking
                   await uploadService.enqueueGenericDocument(
                     documentFile: pdfFile,
                     title: fileName,
                     documentType: censusProvider.documentType,
                     documentNumber: censusProvider.documentNumber,
                     sourceDirectory: widget.directoryOS.dirPath, // v4.4.2: Delete images after PDF sync
+                    personId: censusProvider.selectedPerson?.personId,
+                    personName: censusProvider.selectedPerson?.fullName,
+                    familyId: censusProvider.selectedPerson?.familyId,
                   );
 
-                  print('✅ Shared PDF enqueued for Paperless sync');
+                  print('✅ Shared PDF enqueued for Paperless sync, person: ${censusProvider.selectedPerson?.fullName ?? "GENERIC"}');
                   shareEnqueued = true;
                 } else {
                   print('⚠️ Shared PDF file not found at: $pdfPath');
@@ -1189,15 +1220,19 @@ class _ViewDocumentState extends State<ViewDocument>
                     // Enqueue for Paperless upload with document metadata
                     // v4.4.2: Pass source directory to enable cleanup after sync
                     // v4.5.1: Only assigns document type tag automatically
+                    // v6.4.8: Include person data for document-census linking
                     await uploadService.enqueueGenericDocument(
                       documentFile: pdfFile,
                       title: fileName,
                       documentType: censusProvider.documentType,
                       documentNumber: censusProvider.documentNumber,
                       sourceDirectory: widget.directoryOS.dirPath, // v4.4.2: Delete images after PDF sync
+                      personId: censusProvider.selectedPerson?.personId,
+                      personName: censusProvider.selectedPerson?.fullName,
+                      familyId: censusProvider.selectedPerson?.familyId,
                     );
 
-                    print('✅ PDF enqueued for Paperless sync');
+                    print('✅ PDF enqueued for Paperless sync, person: ${censusProvider.selectedPerson?.fullName ?? "GENERIC"}');
                     enqueuedSuccessfully = true;
                   } else {
                     print('⚠️ PDF file not found at: $pdfPath');
