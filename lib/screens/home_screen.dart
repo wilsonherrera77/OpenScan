@@ -342,7 +342,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
       // Show result dialog
       if (mounted) {
-        // ✅ FIX v6.4.10: Mensaje basado en documentos REALMENTE sincronizados
+        // ✅ FIX v6.4.13: Incluir información de duplicados rechazados
+        final duplicatesRejected = uploadService.duplicatesRejected;
+        uploadService.resetDuplicatesCount(); // Reset for next sync
+
         final String titleText;
         final String messageText;
 
@@ -352,6 +355,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         } else if (pendingCountBefore == 0) {
           titleText = 'Sin documentos pendientes';
           messageText = 'No hay documentos pendientes para sincronizar.\n\nCaptura documentos desde la pantalla principal.';
+        } else if (actualSynced > 0 && duplicatesRejected > 0) {
+          // ✅ FIX v6.4.13: Mostrar info de duplicados
+          titleText = 'Sincronización con advertencias';
+          messageText = '$actualSynced documento${actualSynced > 1 ? 's' : ''} sincronizado${actualSynced > 1 ? 's' : ''}.\n\n⚠️ $duplicatesRejected documento${duplicatesRejected > 1 ? 's' : ''} rechazado${duplicatesRejected > 1 ? 's' : ''} por duplicado${duplicatesRejected > 1 ? 's' : ''} (ya exist${duplicatesRejected > 1 ? 'en' : 'e'} en Paperless).';
+        } else if (duplicatesRejected > 0 && actualSynced == 0) {
+          // Only duplicates, no new uploads
+          titleText = 'Documentos duplicados';
+          messageText = '$duplicatesRejected documento${duplicatesRejected > 1 ? 's' : ''} rechazado${duplicatesRejected > 1 ? 's' : ''} porque ya exist${duplicatesRejected > 1 ? 'en' : 'e'} en Paperless.\n\nNo es necesario volver a digitalizar estos documentos.';
         } else if (actualSynced > 0) {
           titleText = 'Sincronización exitosa';
           messageText = '$actualSynced documento${actualSynced > 1 ? 's' : ''} sincronizado${actualSynced > 1 ? 's' : ''} con Paperless-ngx';

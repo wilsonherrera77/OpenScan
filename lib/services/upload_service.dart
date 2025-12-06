@@ -60,6 +60,11 @@ class UploadService {
   SyncStatus _currentStatus = SyncStatus.idle;
   SyncStatus get currentStatus => _currentStatus;
 
+  // ✅ FIX v6.4.13: Track duplicates rejected during sync
+  int _duplicatesRejected = 0;
+  int get duplicatesRejected => _duplicatesRejected;
+  void resetDuplicatesCount() => _duplicatesRejected = 0;
+
   // Configuration
   static const int maxRetryAttempts = 3;
   static const Duration retryDelayBase = Duration(seconds: 5);
@@ -535,6 +540,32 @@ class UploadService {
           _updateSyncStatus(SyncStatus.idle);
         }
       });
+    } on DuplicateDocumentException catch (e) {
+      // ✅ FIX v6.4.13: Handle duplicate document rejection
+      _logger.w('⚠️ Upload $uploadId rejected - DUPLICATE: ${e.message}');
+      _duplicatesRejected++;
+
+      // Mark as failed (not retryable) with specific error
+      await _database.updateUploadStatus(
+        id: uploadId,
+        status: 'duplicate', // Special status for duplicates
+        retryCount: maxRetryAttempts, // Don't retry
+        lastError: 'DUPLICADO: ${e.message}',
+      );
+
+      // ✅ FIX v6.4.15: Delete local files even for duplicates (privacy compliance)
+      // The document already exists on server, no need to keep local copy
+      final file = File(upload.filePath);
+      await _deleteLocalFileAfterSync(file, upload.filePath, uploadId);
+      _logger.i('🗑️ Local files deleted for duplicate document');
+
+      // Delete from pending since it's a permanent failure
+      await _database.deletePendingUpload(uploadId);
+
+      _logger.i('📊 Total duplicados rechazados esta sesión: $_duplicatesRejected');
+
+      // Don't rethrow - let sync continue with other files
+      return;
     } catch (e, stackTrace) {
       _logger.e('❌ Upload $uploadId failed: $e', error: e, stackTrace: stackTrace);
 

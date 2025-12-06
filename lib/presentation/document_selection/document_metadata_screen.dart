@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../domain/entities/person.dart';
 import '../providers/census_provider.dart';
 import '../../screens/home_screen.dart';
+import '../../data/repositories/document_repository.dart';
+import 'package:logger/logger.dart';
 
 /// Document Metadata Selection Screen
 /// Allows user to select document type and enter document number after person selection
@@ -24,6 +26,8 @@ class DocumentMetadataScreen extends StatefulWidget {
 class _DocumentMetadataScreenState extends State<DocumentMetadataScreen> {
   String? _selectedDocumentType;
   final _documentNumberController = TextEditingController();
+  final _logger = Logger(printer: PrettyPrinter(methodCount: 0));
+  bool _isCheckingDuplicate = false;
 
   // Document types matching Paperless tags (IDs 10-16)
   final Map<String, int> _documentTypes = {
@@ -42,7 +46,8 @@ class _DocumentMetadataScreenState extends State<DocumentMetadataScreen> {
     super.dispose();
   }
 
-  void _proceedToScan() {
+  /// PRE-captura: Verificar si documento ya existe ANTES de capturar
+  Future<void> _proceedToScan() async {
     if (_selectedDocumentType == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -63,6 +68,112 @@ class _DocumentMetadataScreenState extends State<DocumentMetadataScreen> {
       return;
     }
 
+    // v6.4.17: PRE-captura duplicate check
+    setState(() => _isCheckingDuplicate = true);
+
+    try {
+      final documentRepository = Provider.of<DocumentRepository>(context, listen: false);
+
+      _logger.i('🔍 PRE-captura: Verificando duplicados para ${widget.person.fullName} - $_selectedDocumentType');
+
+      final check = await documentRepository.checkDocumentExists(
+        personId: widget.person.personId,
+        documentType: _selectedDocumentType!,
+      );
+
+      if (check.exists) {
+        // Documento ya existe - mostrar diálogo de confirmación
+        final ocrConfidence = check.ocrConfidence ?? 1.0;
+        final createdAt = check.existingDocument?.formattedDate ?? 'desconocida';
+
+        _logger.w('⚠️ Documento duplicado detectado PRE-captura: OCR=${check.ocrQualityPercentage}%');
+
+        if (!mounted) return;
+
+        final shouldProceed = await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (ctx) => AlertDialog(
+            title: const Row(
+              children: [
+                Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 28),
+                SizedBox(width: 8),
+                Expanded(child: Text('Documento ya existe', overflow: TextOverflow.ellipsis)),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${widget.person.fullName} ya tiene este documento:',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('📄 $_selectedDocumentType'),
+                      Text('📅 Fecha: $createdAt'),
+                      Text('🔍 Calidad OCR: ${check.ocrQualityPercentage ?? 0}%'),
+                      if (check.existingDocument?.digitizedBy != null)
+                        Text('👤 Digitalizado por: ${check.existingDocument!.digitizedBy}'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  check.canReplace == true
+                      ? '💡 La calidad OCR es baja. Puedes capturar una nueva versión para reemplazarla.'
+                      : '⚠️ Este documento ya tiene buena calidad. ¿Estás seguro de capturar otro?',
+                  style: TextStyle(
+                    color: check.canReplace == true ? Colors.green.shade700 : Colors.orange.shade700,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text('Cancelar'),
+              ),
+              ElevatedButton.icon(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                icon: const Icon(Icons.camera_alt),
+                label: Text(check.canReplace == true ? 'Reemplazar' : 'Capturar de todos modos'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: check.canReplace == true ? Colors.green : Colors.orange,
+                ),
+              ),
+            ],
+          ),
+        );
+
+        if (shouldProceed != true) {
+          _logger.i('❌ Usuario canceló captura de documento duplicado');
+          return;
+        }
+
+        _logger.i('✅ Usuario confirmó reemplazo de documento');
+      } else {
+        _logger.i('✅ No hay duplicados - procediendo a captura');
+      }
+    } catch (e) {
+      // Si falla la verificación, permitir continuar (fail-open para no bloquear)
+      _logger.w('⚠️ Error verificando duplicados (continuando): $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isCheckingDuplicate = false);
+      }
+    }
+
     // Store metadata in CensusProvider for use during upload
     final censusProvider = Provider.of<CensusProvider>(context, listen: false);
     censusProvider.setDocumentMetadata(
@@ -71,7 +182,9 @@ class _DocumentMetadataScreenState extends State<DocumentMetadataScreen> {
     );
 
     // Navigate to OpenScan home
-    Navigator.of(context).pushReplacementNamed(HomeScreen.route);
+    if (mounted) {
+      Navigator.of(context).pushReplacementNamed(HomeScreen.route);
+    }
   }
 
   @override
@@ -227,18 +340,28 @@ class _DocumentMetadataScreenState extends State<DocumentMetadataScreen> {
 
             const SizedBox(height: 24),
 
-            // Continue Button
+            // Continue Button with loading state
             ElevatedButton.icon(
-              onPressed: _proceedToScan,
-              icon: const Icon(Icons.camera_alt, size: 28),
-              label: const Text(
-                'Continuar a Escanear',
-                style: TextStyle(fontSize: 18),
+              onPressed: _isCheckingDuplicate ? null : _proceedToScan,
+              icon: _isCheckingDuplicate
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Icon(Icons.camera_alt, size: 28),
+              label: Text(
+                _isCheckingDuplicate ? 'Verificando...' : 'Continuar a Escanear',
+                style: const TextStyle(fontSize: 18),
               ),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
+                disabledBackgroundColor: Colors.green.shade300,
               ),
             ),
           ],

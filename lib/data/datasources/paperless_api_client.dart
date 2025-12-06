@@ -2,6 +2,7 @@ import 'dart:convert'; // ⚡ FASE 3: For JSON encoding and gzip compression
 import 'dart:io'; // ⚡ FASE 3: For gzip compression and File class
 import 'package:dio/dio.dart';
 import '../../services/logger_adapter.dart';
+import '../../services/upload_service.dart' show DuplicateDocumentException; // v6.4.13: Import exception
 import '../../core/constants/api_constants.dart';
 import '../../core/security/secure_config_manager.dart';
 import '../../core/utils/input_sanitizer.dart';
@@ -521,8 +522,16 @@ class PaperlessApiClient {
         _logger.w('   El backend rechazó este upload porque ya existe un documento del mismo tipo');
         _logger.w('   Respuesta: ${e.response?.data}');
 
-        // NO lanzar excepción, devolver respuesta para que caller la maneje
-        return e.response?.data as Map<String, dynamic>;
+        // v6.4.13: Lanzar DuplicateDocumentException para que UI muestre feedback
+        final responseData = e.response?.data as Map<String, dynamic>?;
+        final existingDoc = responseData?['existing_document'] as Map<String, dynamic>?;
+
+        throw DuplicateDocumentException(
+          message: responseData?['error'] as String? ?? 'Documento duplicado detectado',
+          existingDocumentId: existingDoc?['id'] as int?,
+          ocrQuality: (existingDoc?['ocr_confidence'] as num?)?.toDouble() ?? 0.0,
+          canReplace: (existingDoc?['ocr_confidence'] as num? ?? 1.0) < 0.8,
+        );
       } else if (e.response?.statusCode == 500) {
         _logger.e('⚠️ HTTP 500: Internal Server Error - Error en el backend');
         _logger.e('   Revisa los logs del servidor Paperless');
@@ -587,7 +596,30 @@ class PaperlessApiClient {
         ),
       );
 
-      final action = response.data['action'] as String?;
+      final data = response.data as Map<String, dynamic>;
+
+      // ✅ FIX v6.4.13: Detect duplicate document rejection from backend
+      final success = data['success'] as bool? ?? true;
+      final errorCode = data['error_code'] as String?;
+
+      if (!success && errorCode == 'DUPLICATE_DOCUMENT') {
+        final existingDoc = data['existing_document'] as Map<String, dynamic>?;
+        final errorMsg = data['error'] as String? ?? 'Documento duplicado detectado';
+
+        _logger.w('⚠️ DUPLICADO DETECTADO: $errorMsg');
+        _logger.w('   Documento existente ID: ${existingDoc?['id']}');
+        _logger.w('   OCR Quality: ${existingDoc?['ocr_confidence']}');
+
+        // Throw specific exception so UI can handle it
+        throw DuplicateDocumentException(
+          message: errorMsg,
+          existingDocumentId: existingDoc?['id'] as int?,
+          ocrQuality: (existingDoc?['ocr_confidence'] as num?)?.toDouble() ?? 0.0,
+          canReplace: (existingDoc?['ocr_confidence'] as num? ?? 1.0) < 0.8,
+        );
+      }
+
+      final action = data['action'] as String?;
 
       if (action == 'pending_comparison') {
         _logger.i('🔄 Document will be compared with existing one');
@@ -595,7 +627,10 @@ class PaperlessApiClient {
         _logger.i('✅ Document uploaded successfully');
       }
 
-      return response.data as Map<String, dynamic>;
+      return data;
+    } on DuplicateDocumentException {
+      // v6.4.13: Let duplicate exceptions propagate to UI
+      rethrow;
     } on DioException catch (e) {
       _logger.e('❌ Smart upload failed: ${e.message}');
 
@@ -605,6 +640,18 @@ class PaperlessApiClient {
         throw Exception('Persona no encontrada en censo');
       } else if (e.response?.statusCode == 401) {
         throw Exception('No autorizado. Por favor inicia sesión de nuevo.');
+      } else if (e.response?.statusCode == 409) {
+        // v6.4.14: HTTP 409 Conflict = Duplicate document detected by backend
+        _logger.w('⚠️ HTTP 409: Duplicate document detected by backend');
+        final responseData = e.response?.data as Map<String, dynamic>?;
+        final existingDoc = responseData?['existing_document'] as Map<String, dynamic>?;
+
+        throw DuplicateDocumentException(
+          message: responseData?['error'] as String? ?? 'Documento duplicado detectado',
+          existingDocumentId: existingDoc?['id'] as int?,
+          ocrQuality: (existingDoc?['ocr_confidence'] as num?)?.toDouble() ?? 0.0,
+          canReplace: (existingDoc?['ocr_confidence'] as num? ?? 1.0) < 0.8,
+        );
       }
 
       rethrow;
