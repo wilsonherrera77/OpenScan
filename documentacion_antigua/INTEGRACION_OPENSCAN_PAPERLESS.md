@@ -1,4 +1,4 @@
-# 🔗 Integración OpenScan ↔️ Paperless-ngx
+# 🔗 Integración Lumara ↔️ Tejido-ngx
 
 **Cómo se comunican ambos sistemas**
 
@@ -6,11 +6,11 @@
 
 ## 📋 Resumen Ejecutivo
 
-**OpenScan Indígenas** es una **aplicación móvil Android** (cliente) que permite digitalizar documentos físicos con la cámara del teléfono.
+**Lumara Indígenas** es una **aplicación móvil Android** (cliente) que permite digitalizar documentos físicos con la cámara del teléfono.
 
-**Paperless-ngx** es un **servidor web** que almacena, indexa y gestiona documentos digitales con OCR e inteligencia artificial.
+**Tejido-ngx** es un **servidor web** que almacena, indexa y gestiona documentos digitales con OCR e inteligencia artificial.
 
-**La integración** permite que documentos digitalizados en campo con OpenScan se suban automáticamente a Paperless para su almacenamiento centralizado y procesamiento.
+**La integración** permite que documentos digitalizados en campo con Lumara se suban automáticamente a Tejido para su almacenamiento centralizado y procesamiento.
 
 ---
 
@@ -18,7 +18,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    OPENSCAN INDÍGENAS (Cliente)                 │
+│                    LUMARA INDÍGENAS (Cliente)                 │
 │                        Aplicación Android                        │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
@@ -30,7 +30,7 @@
 │     ↓ SINCRONIZACIÓN (Automática o Manual) ↓                   │
 │                                                                 │
 │  5. Upload Service procesa cola                                 │
-│  6. Paperless API Client envía documento via REST API 🌐        │
+│  6. Tejido API Client envía documento via REST API 🌐        │
 │  7. Servidor responde con confirmación ✅                       │
 │  8. App marca documento como sincronizado                       │
 │                                                                 │
@@ -40,7 +40,7 @@
                               │ (JSON + Multipart/Form-Data)
                               ↓
 ┌─────────────────────────────────────────────────────────────────┐
-│                   PAPERLESS-NGX (Servidor)                      │
+│                   TEJIDO-NGX (Servidor)                      │
 │                     Servidor Web Backend                         │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                 │
@@ -63,12 +63,12 @@
 
 ## 🔌 Componentes de Integración
 
-### 1️⃣ **PaperlessApiClient** - Cliente API REST
+### 1️⃣ **TejidoApiClient** - Cliente API REST
 
-**Archivo:** `lib/data/datasources/paperless_api_client.dart`
+**Archivo:** `lib/data/datasources/tejido_api_client.dart`
 
 **Funciones:**
-- Maneja comunicación HTTP con servidor Paperless
+- Maneja comunicación HTTP con servidor Tejido
 - Autenticación con tokens Bearer
 - Envío de documentos (multipart/form-data)
 - Gestión de metadatos (tags, tipos, custom fields)
@@ -123,7 +123,7 @@ Future<bool> testConnection()
 **Flujo de upload:**
 ```dart
 Future<Map<String, dynamic>> uploadDocumentForPerson({
-  required String filePath,        // /storage/emulated/0/OpenScan/doc.jpg
+  required String filePath,        // /storage/emulated/0/Lumara/doc.jpg
   required String fileName,         // cedula_juan_perez.jpg
   required Person person,           // Entidad con datos de persona
   required String documentType,     // "CEDULA", "REGISTRO_CIVIL", etc.
@@ -132,7 +132,7 @@ Future<Map<String, dynamic>> uploadDocumentForPerson({
 })
 ```
 
-**Metadatos enviados a Paperless:**
+**Metadatos enviados a Tejido:**
 - `person_id`: ID único de la persona (del censo)
 - `family_id`: ID de la familia
 - `full_name`: Nombre completo
@@ -231,9 +231,9 @@ void callbackDispatcher() {
 
 ---
 
-## 📡 Endpoints de la API de Paperless
+## 📡 Endpoints de la API de Tejido
 
-**Base URL:** `https://paperless.openscan-indigenas.org`
+**Base URL:** `https://tejido.lumara-indigenas.org`
 
 ### Autenticación
 ```http
@@ -348,7 +348,7 @@ Authorization: Token abc123xyz789...
 
 ---
 
-## 🗄️ Base de Datos Local (OpenScan)
+## 🗄️ Base de Datos Local (Lumara)
 
 **Tecnología:** SQLite con Drift ORM
 
@@ -397,7 +397,7 @@ CREATE TABLE persons (
 
 ### Paso 1: Usuario captura documento
 ```
-1. Abre app OpenScan
+1. Abre app Lumara
 2. Tap en botón "Capturar Documento"
 3. Cámara se abre
 4. Usuario toma foto del documento físico
@@ -439,7 +439,7 @@ INSERT INTO upload_queue (
   file_path, person_id, person_name, family_id,
   doc_number, status, created_at
 ) VALUES (
-  '/storage/emulated/0/OpenScan/cedula_123.jpg',
+  '/storage/emulated/0/Lumara/cedula_123.jpg',
   'PERSON-001',
   'Juan Pérez García',
   'FAMILY-001',
@@ -456,11 +456,11 @@ INSERT INTO upload_queue (
     └─ NO: Queda en cola para sincronización posterior
 
 11. Si hay conexión:
-    a. PaperlessApiClient construye request HTTP
+    a. TejidoApiClient construye request HTTP
     b. Envía POST a /api/documents/post_document/
     c. Espera respuesta del servidor
 
-12. Servidor Paperless procesa:
+12. Servidor Tejido procesa:
     a. Valida token de autenticación
     b. Guarda archivo en /media/documents/
     c. Crea registro en PostgreSQL
@@ -494,7 +494,7 @@ Si NO había conexión en paso 4:
 
 ---
 
-## 📊 Metadatos Enviados a Paperless
+## 📊 Metadatos Enviados a Tejido
 
 ### Custom Fields (Campos Personalizados)
 
@@ -578,13 +578,13 @@ Cada documento subido incluye estos metadatos:
 
 ## 🔧 Configuración de Producción
 
-### OpenScan (Móvil)
+### Lumara (Móvil)
 **Archivo:** `lib/core/config/production_config.dart`
 
 ```dart
 // URLs
-static const String paperlessProductionUrl =
-  'https://paperless.openscan-indigenas.org';
+static const String tejidoProductionUrl =
+  'https://tejido.lumara-indigenas.org';
 
 // Certificate Pinning
 static const List<String> certificateFingerprints = [
@@ -598,26 +598,26 @@ static const Duration receiveTimeout = Duration(seconds: 120);
 static const Duration sendTimeout = Duration(seconds: 300);
 ```
 
-### Paperless-ngx (Servidor)
+### Tejido-ngx (Servidor)
 **Archivo:** `docker-compose.yml`
 
 ```yaml
 version: "3.4"
 services:
-  paperless:
-    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+  tejido:
+    image: ghcr.io/tejido-ngx/tejido-ngx:latest
     environment:
-      PAPERLESS_URL: https://paperless.openscan-indigenas.org
-      PAPERLESS_SECRET_KEY: [SECRET]
-      PAPERLESS_OCR_LANGUAGE: spa
-      PAPERLESS_OCR_USER_ARGS: '{"continue_on_soft_render_error": true}'
-      PAPERLESS_ENABLE_HTTP_REMOTE_USER: false
-      PAPERLESS_ALLOWED_HOSTS: paperless.openscan-indigenas.org
-      PAPERLESS_CORS_ALLOWED_HOSTS: https://paperless.openscan-indigenas.org
+      TEJIDO_URL: https://tejido.lumara-indigenas.org
+      TEJIDO_SECRET_KEY: [SECRET]
+      TEJIDO_OCR_LANGUAGE: spa
+      TEJIDO_OCR_USER_ARGS: '{"continue_on_soft_render_error": true}'
+      TEJIDO_ENABLE_HTTP_REMOTE_USER: false
+      TEJIDO_ALLOWED_HOSTS: tejido.lumara-indigenas.org
+      TEJIDO_CORS_ALLOWED_HOSTS: https://tejido.lumara-indigenas.org
     volumes:
-      - /data/paperless/media:/usr/src/paperless/media
-      - /data/paperless/data:/usr/src/paperless/data
-      - /data/paperless/consume:/usr/src/paperless/consume
+      - /data/tejido/media:/usr/src/tejido/media
+      - /data/tejido/data:/usr/src/tejido/data
+      - /data/tejido/consume:/usr/src/tejido/consume
     ports:
       - "8000:8000"
 ```
@@ -680,7 +680,7 @@ services:
 **Causa:** Fingerprint SSL no coincide
 ```
 ✓ Solución: Regenerar fingerprints con:
-  ./scripts/generate_cert_fingerprint.sh paperless.openscan-indigenas.org
+  ./scripts/generate_cert_fingerprint.sh tejido.lumara-indigenas.org
 ```
 
 ### Error "Unauthorized"
@@ -705,16 +705,16 @@ services:
 
 ### Agregar nuevo tipo de documento
 
-1. **En Paperless (servidor):**
+1. **En Tejido (servidor):**
 ```bash
 # Crear nuevo tipo en admin panel
-https://paperless.openscan-indigenas.org/admin/
+https://tejido.lumara-indigenas.org/admin/
 
 Documents → Document types → Add document type
 Name: "Certificado de Vacunación"
 ```
 
-2. **En OpenScan (móvil):**
+2. **En Lumara (móvil):**
 ```dart
 // lib/core/constants/api_constants.dart
 static const Map<String, int> documentTypeIds = {
@@ -742,7 +742,7 @@ final documentTypes = [
 
 ### Agregar nuevo custom field
 
-1. **En Paperless (servidor):**
+1. **En Tejido (servidor):**
 ```bash
 # Crear custom field en admin panel
 Documents → Custom fields → Add custom field
@@ -750,7 +750,7 @@ Name: "numero_afiliacion_eps"
 Data type: String
 ```
 
-2. **En OpenScan (móvil):**
+2. **En Lumara (móvil):**
 ```dart
 // lib/core/constants/api_constants.dart
 static const Map<String, int> customFieldIds = {
@@ -773,7 +773,7 @@ if (numeroAfiliacionEps != null) {
 ## ✅ Resumen
 
 ```
-OpenScan (Android App)  →→→  REST API  →→→  Paperless-ngx (Server)
+Lumara (Android App)  →→→  REST API  →→→  Tejido-ngx (Server)
       ↓                        ↓                      ↓
   Captura foto            HTTP/HTTPS              Almacena
   Valida calidad          JSON/Multipart          Indexa con OCR
@@ -791,4 +791,4 @@ OpenScan (Android App)  →→→  REST API  →→→  Paperless-ngx (Server)
 
 ---
 
-**¿Preguntas?** Lee [USER_MANUAL_ES.md](docs/USER_MANUAL_ES.md) o contacta: dev@openscan-indigenas.org
+**¿Preguntas?** Lee [USER_MANUAL_ES.md](docs/USER_MANUAL_ES.md) o contacta: dev@lumara-indigenas.org

@@ -72,7 +72,7 @@ adb devices
 
 ```bash
 # Ubicarse en directorio del proyecto
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Verificar scripts disponibles
 ls -lh scripts/*.sh
@@ -287,7 +287,7 @@ En **3 terminales separadas**, ejecutar:
 1. Desconectar temporalmente el servidor backend (o simular offline)
 ```bash
 # En otra terminal
-docker-compose stop paperless-webserver
+docker-compose stop tejido-webserver
 ```
 
 2. Intentar upload de documento (esto fallará)
@@ -335,7 +335,7 @@ docker-compose stop paperless-webserver
 1. Con circuit breaker OPEN (del test anterior)
 2. Reconectar servidor backend
 ```bash
-docker-compose start paperless-webserver
+docker-compose start tejido-webserver
 ```
 
 3. Esperar 2 minutos
@@ -703,7 +703,7 @@ static const Duration openDuration = Duration(minutes: 2); // Debe ser 2min
 
 2. Si la imagen es muy pequeña (<1KB), la compresión no se aplica (esperado)
 
-3. Verificar interceptor en `paperless_api_client.dart`:
+3. Verificar interceptor en `tejido_api_client.dart`:
 ```dart
 static const int compressionThreshold = 1024; // 1KB
 ```

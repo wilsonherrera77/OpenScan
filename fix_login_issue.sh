@@ -19,14 +19,14 @@ echo -e "${BLUE}═════════════════════�
 echo ""
 
 echo -e "${YELLOW}1️⃣  Limpiando cache de Rate Limiting...${NC}"
-docker exec paperless_broker_1 redis-cli FLUSHDB
+docker exec tejido_broker_1 redis-cli FLUSHDB
 echo -e "${GREEN}   ✅ Cache limpiado${NC}"
 echo ""
 
 echo -e "${YELLOW}2️⃣  Verificando usuario 'Digitador'...${NC}"
-docker exec paperless_webserver_1 python3 manage.py shell -c "
+docker exec tejido_webserver_1 python3 manage.py shell -c "
 from django.contrib.auth.models import User
-from paperless_auth.models import UserProfile
+from tejido_auth.models import UserProfile
 
 # Get or create user
 user, created = User.objects.get_or_create(
@@ -61,7 +61,7 @@ echo -e "${GREEN}   ✅ Usuario configurado${NC}"
 echo ""
 
 echo -e "${YELLOW}3️⃣  Probando autenticación...${NC}"
-docker exec paperless_webserver_1 python3 manage.py shell -c "
+docker exec tejido_webserver_1 python3 manage.py shell -c "
 from django.contrib.auth import authenticate
 
 user = authenticate(username='Digitador', password='Indigena')

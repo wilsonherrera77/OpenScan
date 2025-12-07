@@ -27,7 +27,7 @@ Antes de testear, asegúrate de tener:
 - [x] APK v6.0.0 compilado (ubicado en `~/Descargas/`)
 - [ ] Dispositivo Android conectado vía USB
 - [ ] USB Debugging habilitado en el dispositivo
-- [ ] Backend Tejido corriendo (`docker ps | grep paperless`)
+- [ ] Backend Tejido corriendo (`docker ps | grep tejido`)
 - [ ] Credenciales Admin disponibles
 
 ---
@@ -37,7 +37,7 @@ Antes de testear, asegúrate de tener:
 ### Opción A: Usando Script Automático (RECOMENDADO)
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Ejecutar script de testing
 ./scripts/test_apk_before_release.sh ~/Descargas/Lumara_v6.0.0_AdminDigitization_5Buttons_20251109_195349.apk
@@ -59,16 +59,16 @@ adb devices
 # Debe mostrar: XXXXXXXX    device
 
 # 2. Desinstalar versión anterior (IMPORTANTE - limpia cache)
-adb uninstall com.ethereal.openscan
+adb uninstall com.ethereal.lumara
 
 # 3. Instalar APK v6.0.0
 adb install -r ~/Descargas/Lumara_v6.0.0_AdminDigitization_5Buttons_20251109_195349.apk
 
 # 4. Lanzar app
-adb shell am start -n com.ethereal.openscan/.MainActivity
+adb shell am start -n com.ethereal.lumara/.MainActivity
 
 # 5. (Opcional) Capturar logs en terminal separada
-adb logcat | grep -iE "lumara|openscan|flutter|error" > /tmp/v6.0.0_test_$(date +%Y%m%d_%H%M%S).log
+adb logcat | grep -iE "lumara|lumara|flutter|error" > /tmp/v6.0.0_test_$(date +%Y%m%d_%H%M%S).log
 ```
 
 ---
@@ -222,11 +222,11 @@ adb logcat | grep -iE "lumara|openscan|flutter|error" > /tmp/v6.0.0_test_$(date 
 **Posibles Causas:**
 
 1. **Dispositivo tiene APK antiguo cacheado**
-   - Solución: `adb uninstall com.ethereal.openscan` y reinstalar
+   - Solución: `adb uninstall com.ethereal.lumara` y reinstalar
 
 2. **APK incorrecto instalado**
-   - Verificar: `adb shell pm list packages | grep openscan`
-   - Verificar versión: `adb shell dumpsys package com.ethereal.openscan | grep versionName`
+   - Verificar: `adb shell pm list packages | grep lumara`
+   - Verificar versión: `adb shell dumpsys package com.ethereal.lumara | grep versionName`
    - Debe ser: `6.0.0`
 
 3. **GridView rendering issue**
@@ -261,13 +261,13 @@ adb logcat | grep -iE "lumara|openscan|flutter|error" > /tmp/v6.0.0_test_$(date 
 1. Verificar permisos en AndroidManifest.xml
 2. Verificar permisos concedidos en dispositivo:
    ```bash
-   adb shell dumpsys package com.ethereal.openscan | grep -A 5 "granted=true"
+   adb shell dumpsys package com.ethereal.lumara | grep -A 5 "granted=true"
    ```
 
 3. Si faltan permisos, conceder manualmente:
    ```bash
-   adb shell pm grant com.ethereal.openscan android.permission.CAMERA
-   adb shell pm grant com.ethereal.openscan android.permission.WRITE_EXTERNAL_STORAGE
+   adb shell pm grant com.ethereal.lumara android.permission.CAMERA
+   adb shell pm grant com.ethereal.lumara android.permission.WRITE_EXTERNAL_STORAGE
    ```
 
 ### Problema: Upload falla
@@ -363,7 +363,7 @@ adb logcat | grep -iE "lumara|openscan|flutter|error" > /tmp/v6.0.0_test_$(date 
 ### 1. Actualizar Git
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Agregar cambios si hay alguno pendiente
 git add -A

@@ -44,7 +44,7 @@ ls -la android/key.properties
 
 ### Validación HTTPS para Red Local
 ```bash
-grep -A 30 "isLocalNetwork" lib/data/datasources/paperless_api_client.dart
+grep -A 30 "isLocalNetwork" lib/data/datasources/tejido_api_client.dart
 ```
 
 **Verificar que incluye:**
@@ -95,11 +95,11 @@ grep -n "UCropActivity" android/app/src/main/AndroidManifest.xml
 
 ### Campo URL Visible en Login
 ```bash
-grep -n "URL del Servidor Paperless" lib/presentation/auth/login_screen.dart
+grep -n "URL del Servidor Tejido" lib/presentation/auth/login_screen.dart
 ```
 
 - [ ] ✅ Campo URL es siempre visible (NO en "Configuración Avanzada")
-- [ ] ✅ Label es claro: "URL del Servidor Paperless"
+- [ ] ✅ Label es claro: "URL del Servidor Tejido"
 - [ ] ✅ Helper text menciona WiFi
 
 ### Instrucciones de Uso
@@ -246,7 +246,7 @@ adb devices
 #### Sincronización
 - [ ] ✅ Icono de sincronización funciona
 - [ ] ✅ Si en misma WiFi: sincroniza correctamente
-- [ ] ✅ Documentos aparecen en Paperless web
+- [ ] ✅ Documentos aparecen en Tejido web
 
 #### Instrucciones de Uso
 - [ ] ✅ Menú lateral accesible
@@ -307,7 +307,7 @@ adb devices
 ### Errores Comunes a Revisar
 
 #### Error: "HTTPS required in production"
-→ Revisar validación en `paperless_api_client.dart`
+→ Revisar validación en `tejido_api_client.dart`
 → Asegurar que permite IPs locales (192.168.x.x)
 
 #### Error: "Paquete no es válido"

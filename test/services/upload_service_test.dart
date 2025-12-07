@@ -4,10 +4,10 @@ import 'package:drift/native.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'dart:io';
-import 'package:openscan_indigenas/data/local/database/app_database.dart';
-import 'package:openscan_indigenas/data/repositories/document_repository.dart';
-import 'package:openscan_indigenas/services/upload_service.dart';
-import 'package:openscan_indigenas/domain/entities/person.dart';
+import 'package:lumara_indigenas/data/local/database/app_database.dart';
+import 'package:lumara_indigenas/data/repositories/document_repository.dart';
+import 'package:lumara_indigenas/services/upload_service.dart';
+import 'package:lumara_indigenas/domain/entities/person.dart';
 
 // Generate mocks
 @GenerateMocks([DocumentRepository, File])

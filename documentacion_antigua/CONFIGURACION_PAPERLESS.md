@@ -1,10 +1,10 @@
-# 🔗 Configuración Conexión OpenScan ↔ Paperless
+# 🔗 Configuración Conexión Lumara ↔ Tejido
 
-**Objetivo:** Conectar la app móvil OpenScan con servidor Paperless-ngx
+**Objetivo:** Conectar la app móvil Lumara con servidor Tejido-ngx
 
 ---
 
-## 📍 Paso 1: Identificar IP del Servidor Paperless
+## 📍 Paso 1: Identificar IP del Servidor Tejido
 
 ### Obtener IP de tu máquina
 
@@ -23,18 +23,18 @@ hostname -I | awk '{print $1}'
 
 ---
 
-## 🌐 Paso 2: Exponer Paperless en la Red Local
+## 🌐 Paso 2: Exponer Tejido en la Red Local
 
 ### Verificar Puerto Actual
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/paperless-ngx
+cd /home/smt/Escritorio/programacion_proyectos/tejido/tejido-ngx
 docker compose ps
 ```
 
 **Buscar línea:**
 ```
-paperless-ngx-webserver-1   0.0.0.0:8001->8000/tcp
+tejido-ngx-webserver-1   0.0.0.0:8001->8000/tcp
 ```
 
 Si dice `127.0.0.1:8001` en lugar de `0.0.0.0:8001`, necesitas cambiar:
@@ -50,14 +50,14 @@ nano docker-compose.yml
 ```yaml
 services:
   webserver:
-    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    image: ghcr.io/tejido-ngx/tejido-ngx:latest
     ports:
       - "0.0.0.0:8001:8000"  # ← Cambiar a 0.0.0.0 para acceso externo
 ```
 
 **Guardar:** Ctrl+O, Enter, Ctrl+X
 
-### Reiniciar Paperless
+### Reiniciar Tejido
 
 ```bash
 docker compose down
@@ -85,7 +85,7 @@ sudo ufw status
 
 ---
 
-## 📱 Paso 4: Configurar OpenScan
+## 📱 Paso 4: Configurar Lumara
 
 ### Opción A: URL Dinámica (Recomendado)
 
@@ -140,9 +140,9 @@ Abrir navegador en el dispositivo:
 http://192.168.1.100:8001
 ```
 
-**Debería cargar la interfaz web de Paperless.**
+**Debería cargar la interfaz web de Tejido.**
 
-Si carga ✅ → OpenScan podrá conectarse
+Si carga ✅ → Lumara podrá conectarse
 Si NO carga ❌ → Hay problema de red/firewall
 
 ---
@@ -151,11 +151,11 @@ Si NO carga ❌ → Hay problema de red/firewall
 
 Si quieres usar token fijo en lugar de login:
 
-### Generar Token en Paperless
+### Generar Token en Tejido
 
 ```bash
 # Entrar al contenedor
-docker exec -it paperless-ngx-webserver-1 bash
+docker exec -it tejido-ngx-webserver-1 bash
 
 # Crear token
 python3 manage.py drf_create_token admin
@@ -164,12 +164,12 @@ python3 manage.py drf_create_token admin
 # Generated token abc123def456... for user admin
 ```
 
-### Configurar en OpenScan
+### Configurar en Lumara
 
 **Editar:** `lib/core/config/env_config.dart`
 
 ```dart
-static const String paperlessApiToken = 'abc123def456...';
+static const String tejidoApiToken = 'abc123def456...';
 ```
 
 ---
@@ -180,7 +180,7 @@ static const String paperlessApiToken = 'abc123def456...';
 |-----------|-----------|
 | **Emulador Android en misma PC** | `http://10.0.2.2:8001` |
 | **Dispositivo físico en misma WiFi** | `http://192.168.X.X:8001` |
-| **Servidor remoto con dominio** | `https://paperless.tudominio.com` |
+| **Servidor remoto con dominio** | `https://tejido.tudominio.com` |
 | **Servidor remoto con IP pública** | `http://X.X.X.X:8001` |
 
 ---
@@ -195,14 +195,14 @@ Si quieres usar HTTPS:
 sudo apt install nginx certbot python3-certbot-nginx
 
 # Configurar nginx
-sudo nano /etc/nginx/sites-available/paperless
+sudo nano /etc/nginx/sites-available/tejido
 ```
 
 **Contenido:**
 ```nginx
 server {
     listen 80;
-    server_name paperless.tudominio.com;
+    server_name tejido.tudominio.com;
 
     location / {
         proxy_pass http://localhost:8001;
@@ -214,18 +214,18 @@ server {
 
 ```bash
 # Habilitar sitio
-sudo ln -s /etc/nginx/sites-available/paperless /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/tejido /etc/nginx/sites-enabled/
 
 # Certificado SSL
-sudo certbot --nginx -d paperless.tudominio.com
+sudo certbot --nginx -d tejido.tudominio.com
 
 # Reiniciar nginx
 sudo systemctl restart nginx
 ```
 
-**Luego en OpenScan usar:**
+**Luego en Lumara usar:**
 ```
-https://paperless.tudominio.com
+https://tejido.tudominio.com
 ```
 
 ---
@@ -254,7 +254,7 @@ En dispositivo Android, abrir Chrome:
 http://192.168.1.100:8001
 ```
 
-### 3. Test desde OpenScan
+### 3. Test desde Lumara
 
 1. Abrir app
 2. LoginScreen
@@ -274,7 +274,7 @@ http://192.168.1.100:8001
 
 **Verificar:**
 ```bash
-# 1. Paperless corriendo
+# 1. Tejido corriendo
 docker compose ps | grep webserver
 
 # 2. Puerto abierto
@@ -343,10 +343,10 @@ sudo ufw allow 8001/tcp
 ## 🎯 Checklist de Configuración
 
 - [ ] IP del servidor identificada
-- [ ] Paperless expuesto en 0.0.0.0:8001
+- [ ] Tejido expuesto en 0.0.0.0:8001
 - [ ] Firewall permite puerto 8001
-- [ ] Navegador móvil carga Paperless
-- [ ] OpenScan configurado con IP correcta
+- [ ] Navegador móvil carga Tejido
+- [ ] Lumara configurado con IP correcta
 - [ ] Login funciona desde app
 - [ ] Census data carga (3,997 personas)
 - [ ] Upload de prueba exitoso
@@ -355,19 +355,19 @@ sudo ufw allow 8001/tcp
 
 ## 📞 URLs de Referencia
 
-**Paperless API Docs:**
+**Tejido API Docs:**
 ```
 http://192.168.1.100:8001/api/docs/
 ```
 
-**Paperless Admin:**
+**Tejido Admin:**
 ```
 http://192.168.1.100:8001/admin/
 ```
 
 **Census Data Location:**
 ```
-OpenScan/assets/census/persons.csv
+Lumara/assets/census/persons.csv
 ```
 
 ---
@@ -376,8 +376,8 @@ OpenScan/assets/census/persons.csv
 
 Una vez completados todos los pasos:
 
-1. ✅ Paperless accesible desde red local
-2. ✅ OpenScan sabe dónde conectarse
+1. ✅ Tejido accesible desde red local
+2. ✅ Lumara sabe dónde conectarse
 3. ✅ Firewall configurado
 4. ✅ Testing completado
 

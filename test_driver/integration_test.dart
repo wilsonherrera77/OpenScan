@@ -1,4 +1,4 @@
-// Integration tests for OpenScan App
+// Integration tests for Lumara App
 
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';

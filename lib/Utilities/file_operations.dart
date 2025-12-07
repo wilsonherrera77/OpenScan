@@ -10,7 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class FileOperations {
-  final String appName = 'OpenScan';
+  final String appName = 'Lumara';
   DatabaseHelper database = DatabaseHelper();
 
   Future<String> getAppPath() async {
@@ -216,19 +216,19 @@ class FileOperations {
     required int quality,
   }) async {
     Directory? selectedDirectory;
-    Directory openscanDir = Directory("/storage/emulated/0/Documents/OpenScan");
-    Directory openscanPdfDir =
-        Directory("/storage/emulated/0/Documents/OpenScan/PDF");
+    Directory lumaraDir = Directory("/storage/emulated/0/Documents/Lumara");
+    Directory lumaraPdfDir =
+        Directory("/storage/emulated/0/Documents/Lumara/PDF");
     int desiredQuality = 100;
 
     try {
-      if (!openscanDir.existsSync()) {
-        openscanDir.createSync();
+      if (!lumaraDir.existsSync()) {
+        lumaraDir.createSync();
       }
-      if (!openscanPdfDir.existsSync()) {
-        openscanPdfDir.createSync();
+      if (!lumaraPdfDir.existsSync()) {
+        lumaraPdfDir.createSync();
       }
-      selectedDirectory = openscanPdfDir;
+      selectedDirectory = lumaraPdfDir;
     } catch (e) {
       print(e);
       selectedDirectory = await pickDirectory(context, selectedDirectory);

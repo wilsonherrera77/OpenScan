@@ -27,7 +27,7 @@ Impacto:
 ═══════════════════════════════════════════════════════════════════════
 
 Archivo modificado:
-  lib/data/datasources/paperless_api_client.dart (líneas 127-157)
+  lib/data/datasources/tejido_api_client.dart (líneas 127-157)
 
 Cambio:
   ANTES: Bloqueaba TODO HTTP en modo producción
@@ -88,7 +88,7 @@ Documentación:
 ✅ Instrucciones de uso completas (6 pantallas)
 ✅ Recorte automático de fotos sin crashear
 ✅ Diagnóstico de red detallado
-✅ Sincronización con Paperless (misma WiFi)
+✅ Sincronización con Tejido (misma WiFi)
 ✅ Validación HTTPS para URLs externas (seguridad)
 
 
@@ -164,7 +164,7 @@ Componentes:
 ═══════════════════════════════════════════════════════════════════════
 
 Comando:
-  cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+  cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
   ./install_apk.sh
 
 El script:
@@ -210,7 +210,7 @@ Prueba 4: Sincronización
   [ ] Tocar icono de sincronización
   [ ] ¿Muestra confirmación de sincronización?
   [ ] Abrir http://192.168.40.17:8001 en navegador
-  [ ] ¿Documentos aparecen en Paperless? → CRÍTICO ✅
+  [ ] ¿Documentos aparecen en Tejido? → CRÍTICO ✅
 
 
 ═══════════════════════════════════════════════════════════════════════
@@ -261,9 +261,9 @@ Corto plazo:
   3. Acumular feedback de usuarios finales
   4. Identificar posibles mejoras
 
-Largo plazo (mejoras de Paperless):
+Largo plazo (mejoras de Tejido):
   → Una vez que app esté estable y funcionando
-  → Enfocarse en optimizaciones de Paperless
+  → Enfocarse en optimizaciones de Tejido
   → Integración avanzada con censo
   → Dashboard de reportes
 
@@ -278,7 +278,7 @@ CRÍTICOS (sin estos NO se puede actualizar app):
 
 CONFIGURACIÓN:
   📄 lib/core/constants/api_constants.dart
-  📄 lib/data/datasources/paperless_api_client.dart
+  📄 lib/data/datasources/tejido_api_client.dart
   📄 android/app/src/main/AndroidManifest.xml
   📄 android/app/build.gradle
 

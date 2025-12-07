@@ -1,7 +1,7 @@
 # Estado del Proyecto - 2025-11-15
 
 ## Git: baseline-clean | Commit: 3e0cf08 | Versión: 7.0.0
-## GitHub: wilsonherrera77/OpenScan - SINCRONIZADO ✅
+## GitHub: wilsonherrera77/Lumara - SINCRONIZADO ✅
 
 ---
 
@@ -104,7 +104,7 @@
 
 ## CAPACIDADES IMPLEMENTADAS
 
-### Backend (Django/Paperless-ngx)
+### Backend (Django/Tejido-ngx)
 - ✅ Audit logging (AuditLog model)
 - ✅ Security middleware stack
 - ✅ RBAC permissions
@@ -165,7 +165,7 @@ adb install -r build/app/outputs/flutter-apk/app-release.apk
 **Razón:** 985 errores por package rename sin reflejar
 
 **Plan:**
-1. Actualizar imports: `openscan_indigenas` → `lumara_scan`
+1. Actualizar imports: `lumara_indigenas` → `lumara_scan`
 2. Regenerar tests con nuevos subagentes
 3. Alcanzar >80% coverage
 4. CI/CD pipeline setup
@@ -176,9 +176,9 @@ adb install -r build/app/outputs/flutter-apk/app-release.apk
 
 ```bash
 # Comandos de diagnóstico
-docker logs paperless-webserver-1 --tail 100 | grep -i error
+docker logs tejido-webserver-1 --tail 100 | grep -i error
 curl -v http://192.168.40.17:8001/api/census/persons/?limit=1
-docker exec -it paperless-webserver-1 python manage.py check
+docker exec -it tejido-webserver-1 python manage.py check
 ```
 
 ### 4. Despliegue a Producción (MEDIA)
@@ -206,7 +206,7 @@ docker exec -it paperless-webserver-1 python manage.py check
 
 ## GITHUB REPOSITORY
 
-**URL:** https://github.com/wilsonherrera77/OpenScan  
+**URL:** https://github.com/wilsonherrera77/Lumara  
 **Branch principal:** baseline-clean  
 **Último commit:** 3e0cf08 (docs: Actualizar README a v7.0.0 Production Ready)  
 **Estado:** Sincronizado ✅  
@@ -239,9 +239,9 @@ docker exec -it paperless-webserver-1 python manage.py check
 - `lib/core/localization/i18n_service.dart` - i18n (3 idiomas)
 
 ### Backend
-- `paperless-ngx/src/paperless/models_audit.py` - Audit logging
-- `paperless-ngx/src/paperless/middleware_security.py` - Security middleware
-- `paperless-ngx/src/paperless/permissions.py` - RBAC
+- `tejido-ngx/src/tejido/models_audit.py` - Audit logging
+- `tejido-ngx/src/tejido/middleware_security.py` - Security middleware
+- `tejido-ngx/src/tejido/permissions.py` - RBAC
 
 ---
 

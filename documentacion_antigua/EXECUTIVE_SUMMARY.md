@@ -1,4 +1,4 @@
-# 📋 Resumen Ejecutivo - OpenScan Indígenas
+# 📋 Resumen Ejecutivo - Lumara Indígenas
 
 **Para:** Stakeholders y Líderes del Proyecto
 **Fecha:** 2025-10-07
@@ -10,7 +10,7 @@
 
 ### Estado del Proyecto: ✅ DESARROLLO COMPLETO
 
-**OpenScan Indígenas** es una aplicación móvil para digitalización de documentos en comunidades indígenas, completamente desarrollada y lista para despliegue tras resolver bloqueadores de infraestructura.
+**Lumara Indígenas** es una aplicación móvil para digitalización de documentos en comunidades indígenas, completamente desarrollada y lista para despliegue tras resolver bloqueadores de infraestructura.
 
 | Aspecto | Estado | Detalles |
 |---------|--------|----------|
@@ -60,8 +60,8 @@
 - Validación automática de calidad
 - Clasificación inteligente de documentos
 
-#### Sprint 3: Integración Paperless
-- Conexión completa con API Paperless-ngx
+#### Sprint 3: Integración Tejido
+- Conexión completa con API Tejido-ngx
 - Modo offline con cola de sincronización
 - Subida con indicador de progreso
 
@@ -141,7 +141,7 @@
 **Por qué es necesario:** Previene ataques man-in-the-middle
 
 **Qué se necesita:**
-- Servidor Paperless con SSL instalado
+- Servidor Tejido con SSL instalado
 - Ejecutar script: `./scripts/generate_cert_fingerprint.sh`
 - Actualizar 1 archivo de configuración (5 líneas)
 
@@ -160,7 +160,7 @@
 **Por qué es necesario:** La app necesita saber a qué servidor conectarse
 
 **Qué se necesita:**
-- Servidor Paperless desplegado
+- Servidor Tejido desplegado
 - DNS configurado apuntando al servidor
 - Páginas de Privacy Policy y Terms publicadas
 - Actualizar 4 URLs en código
@@ -180,7 +180,7 @@
 **Por qué es necesario:** Los usuarios necesitan soporte real
 
 **Qué se necesita:**
-- Crear cuenta: soporte@openscan-indigenas.org
+- Crear cuenta: soporte@lumara-indigenas.org
 - Asignar persona responsable
 - Actualizar 1 línea en código
 
@@ -322,7 +322,7 @@
 
 ### Equipo de Infraestructura
 **Responsabilidades pendientes:**
-- [ ] Desplegar servidor Paperless-ngx
+- [ ] Desplegar servidor Tejido-ngx
 - [ ] Configurar DNS y SSL
 - [ ] Generar certificate fingerprints
 
@@ -405,7 +405,7 @@
 
 ## ✨ Conclusión
 
-**OpenScan Indígenas** está completamente desarrollado y listo para producción desde la perspectiva técnica. Los bloqueadores restantes son de **infraestructura y operacionales**, no de código.
+**Lumara Indígenas** está completamente desarrollado y listo para producción desde la perspectiva técnica. Los bloqueadores restantes son de **infraestructura y operacionales**, no de código.
 
 **Fortalezas:**
 - ✅ Desarrollo de alta calidad (85.7% coverage)
@@ -423,13 +423,13 @@
 
 ---
 
-**Preparado por:** Equipo de Desarrollo OpenScan Indígenas
+**Preparado por:** Equipo de Desarrollo Lumara Indígenas
 **Fecha:** 2025-10-07
 **Versión:** 1.0
 
 **Para preguntas o aclaraciones, contactar:**
-- **Técnico:** [dev-lead@openscan-indigenas.org]
-- **Proyecto:** [pm@openscan-indigenas.org]
+- **Técnico:** [dev-lead@lumara-indigenas.org]
+- **Proyecto:** [pm@lumara-indigenas.org]
 
 ---
 

@@ -12,12 +12,12 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: Text('OpenScan'),
+            body: Text('Lumara'),
           ),
         ),
       );
 
-      expect(find.text('OpenScan'), findsOneWidget);
+      expect(find.text('Lumara'), findsOneWidget);
     });
   });
 

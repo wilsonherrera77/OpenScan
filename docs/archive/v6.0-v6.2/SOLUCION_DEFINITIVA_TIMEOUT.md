@@ -270,7 +270,7 @@ ListTile(
 
 #### 1. Backend: Endpoint de status
 
-**Crear:** `paperless-ngx/src/documents/views.py`
+**Crear:** `tejido-ngx/src/documents/views.py`
 
 ```python
 from rest_framework.decorators import api_view, permission_classes
@@ -325,12 +325,12 @@ def task_status(request, task_id):
 ```dart
 import 'dart:async';
 import 'package:logger/logger.dart';
-import '../data/datasources/paperless_api_client.dart';
+import '../data/datasources/tejido_api_client.dart';
 import '../data/local/database/app_database.dart';
 
 /// Background service que monitorea tasks de Celery
 class TaskPollingService {
-  final PaperlessApiClient _apiClient;
+  final TejidoApiClient _apiClient;
   final AppDatabase _database;
   final Logger _logger = Logger();
 
@@ -430,7 +430,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     // Inicializar polling service
     _taskPollingService = TaskPollingService(
-      PaperlessApiClient(),
+      TejidoApiClient(),
       AppDatabase(),
     );
 

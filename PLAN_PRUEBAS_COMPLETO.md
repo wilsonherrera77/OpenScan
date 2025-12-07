@@ -103,7 +103,7 @@
 | **Sobrecargado** | Responde 503 | Script sobrecarga |
 | **Caído** | No responde | Detener container |
 | **Intermitente** | 50% success, 50% timeout | Script aleatorio |
-| **Rate Limited** | Responde 429 tras 10 requests | Config en Paperless |
+| **Rate Limited** | Responde 429 tras 10 requests | Config en Tejido |
 
 ### 4. Volúmenes de Datos
 
@@ -204,7 +204,7 @@
 
 **Precondiciones**:
 - App instalada en dispositivo
-- Servidor Paperless corriendo en 172.20.10.3:8001
+- Servidor Tejido corriendo en 172.20.10.3:8001
 - Dispositivo en misma red
 
 **Pasos**:
@@ -491,7 +491,7 @@ awk '{sum+=$1; count++} END {print "Mean:", sum/count, "Stddev:", ...}' jitter_r
 **Objetivo**: Validar que circuit breaker se abre tras 5 fallos
 
 **Pasos**:
-1. Detener servidor Paperless
+1. Detener servidor Tejido
 2. Intentar 5 uploads consecutivos
 3. Intentar 6to upload
 4. Verificar exception: `CircuitBreakerOpenException`
@@ -570,7 +570,7 @@ awk '{sum+=$1; count++} END {print "Mean:", sum/count, "Stddev:", ...}' jitter_r
 
 **Script**:
 ```bash
-adb shell "run-as com.lumara.app sqlite3 /data/data/com.lumara.app/databases/openscan_indigenas.db 'EXPLAIN QUERY PLAN SELECT * FROM pending_uploads WHERE status=\"pending\" ORDER BY created_at;'"
+adb shell "run-as com.lumara.app sqlite3 /data/data/com.lumara.app/databases/lumara_indigenas.db 'EXPLAIN QUERY PLAN SELECT * FROM pending_uploads WHERE status=\"pending\" ORDER BY created_at;'"
 ```
 
 **Resultado Esperado**:
@@ -653,7 +653,7 @@ SEARCH pending_uploads USING INDEX idx_pending_uploads_status_created (status=?)
 **Criterio de Éxito**:
 - ✅ Flujo completo en <30 segundos
 - ✅ Sin errores
-- ✅ Documento visible en Paperless
+- ✅ Documento visible en Tejido
 
 ---
 
@@ -924,7 +924,7 @@ echo "✅ Benchmarks completados. Resultados guardados en: $OUTPUT_FILE"
 # Valida que los índices SQLite existen y se usan
 
 DEVICE=${1:-$(adb devices | grep -w "device" | awk '{print $1}' | head -1)}
-DB_PATH="/data/data/com.lumara.app/databases/openscan_indigenas.db"
+DB_PATH="/data/data/com.lumara.app/databases/lumara_indigenas.db"
 
 echo "🔍 Validando índices SQLite..."
 echo ""
@@ -1008,7 +1008,7 @@ case $FILTER in
     ;;
 
   "all")
-    adb -s $DEVICE logcat | grep -E "Lumara|lumara|openscan"
+    adb -s $DEVICE logcat | grep -E "Lumara|lumara|lumara"
     ;;
 
   *)
@@ -1043,7 +1043,7 @@ esac
 
 DEVICE=${1:-$(adb devices | grep -w "device" | awk '{print $1}' | head -1)}
 COUNT=${2:-10000}
-DB_PATH="/data/data/com.lumara.app/databases/openscan_indigenas.db"
+DB_PATH="/data/data/com.lumara.app/databases/lumara_indigenas.db"
 
 echo "📊 Insertando $COUNT registros de prueba en SQLite..."
 
@@ -1119,7 +1119,7 @@ echo "🔍 Ahora ejecuta benchmarks de búsqueda para medir performance"
 ### Fase 1: Preparación (1 hora)
 
 **Checklist**:
-- [ ] Servidor Paperless corriendo en 172.20.10.3:8001
+- [ ] Servidor Tejido corriendo en 172.20.10.3:8001
 - [ ] Base de datos poblada con 500 personas de prueba
 - [ ] Dispositivos de prueba cargados y conectados
 - [ ] Scripts de test instalados y validados
@@ -1441,7 +1441,7 @@ VACUUM;
 
 **Recursos Necesarios**:
 - 4 dispositivos de prueba (gama baja/media prioritario)
-- Servidor Paperless configurado
+- Servidor Tejido configurado
 - Conexión a internet estable
 - Herramientas ADB y scripts
 - 1-2 testers experimentados

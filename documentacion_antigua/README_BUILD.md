@@ -1,4 +1,4 @@
-# OpenScan Indigenous Communities - Build Instructions
+# Lumara Indigenous Communities - Build Instructions
 
 ## 🚀 Quick Start
 
@@ -77,14 +77,14 @@ assets/census/censo_indigenas.csv
 
 Ensure this file is included in your assets.
 
-### Paperless API Configuration
+### Tejido API Configuration
 
 Default configuration in `lib/core/config/env_config.dart`:
 
 ```dart
 class EnvConfig {
-  static const String paperlessBaseUrl = 'http://10.0.2.2:8001';
-  static const String paperlessApiToken = 'YOUR_TOKEN_HERE';
+  static const String tejidoBaseUrl = 'http://10.0.2.2:8001';
+  static const String tejidoApiToken = 'YOUR_TOKEN_HERE';
   static const bool enableOfflineMode = true;
   static const int maxRetryAttempts = 3;
 }
@@ -111,7 +111,7 @@ class EnvConfig {
 
 **UploadHistory:**
 - Records successful uploads
-- Links to Paperless document IDs
+- Links to Tejido document IDs
 - Keeps last 1,000 records
 
 ### Testing Offline Mode
@@ -139,7 +139,7 @@ lib/
 │   └── utils/input_sanitizer.dart     # Security utilities
 ├── data/
 │   ├── datasources/
-│   │   ├── paperless_api_client.dart  # Paperless API
+│   │   ├── tejido_api_client.dart  # Tejido API
 │   │   └── census_data_source.dart    # Census CSV loader
 │   ├── repositories/
 │   │   ├── auth_repository.dart       # Authentication
@@ -289,7 +289,7 @@ flutter pub run build_runner build --delete-conflicting-outputs
 **Solution:**
 - For Android Emulator: `10.0.2.2` should work
 - For Physical Device: Use actual IP address (e.g., `192.168.1.10:8001`)
-- Update `EnvConfig.paperlessBaseUrl`
+- Update `EnvConfig.tejidoBaseUrl`
 
 ### WorkManager not running background tasks
 
@@ -304,7 +304,7 @@ flutter pub run build_runner build --delete-conflicting-outputs
 - **Flutter Docs:** https://docs.flutter.dev
 - **Drift Documentation:** https://drift.simonbinder.eu
 - **WorkManager:** https://pub.dev/packages/workmanager
-- **Paperless-ngx API:** https://docs.paperless-ngx.com/api/
+- **Tejido-ngx API:** https://docs.tejido-ngx.com/api/
 
 ## 🤝 Contributing
 
@@ -315,4 +315,4 @@ flutter pub run build_runner build --delete-conflicting-outputs
 
 ## 📄 License
 
-This project is a fork of OpenScan for Indigenous Communities document digitization.
+This project is a fork of Lumara for Indigenous Communities document digitization.

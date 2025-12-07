@@ -32,15 +32,15 @@
 
 ### Paso 1: Limpiar Cache de Rate Limiting
 ```bash
-docker exec paperless_broker_1 redis-cli FLUSHDB
+docker exec tejido_broker_1 redis-cli FLUSHDB
 ```
 **Resultado:** ✅ Cache limpiado, rate limiting reseteado
 
 ### Paso 2: Verificar y Configurar Usuario
 ```bash
-docker exec paperless_webserver_1 python3 manage.py shell -c "
+docker exec tejido_webserver_1 python3 manage.py shell -c "
 from django.contrib.auth.models import User
-from paperless_auth.models import UserProfile
+from tejido_auth.models import UserProfile
 
 # Get or create user
 user, created = User.objects.get_or_create(
@@ -63,7 +63,7 @@ profile, _ = UserProfile.objects.get_or_create(
 
 ### Paso 3: Verificar Autenticación
 ```bash
-docker exec paperless_webserver_1 python3 manage.py shell -c "
+docker exec tejido_webserver_1 python3 manage.py shell -c "
 from django.contrib.auth import authenticate
 user = authenticate(username='Digitador', password='Indigena')
 print('✅ Auth OK' if user else '❌ Auth FAILED')
@@ -103,7 +103,7 @@ Server:   http://192.168.40.17:8001
 ### 2. Si Aún Falla (poco probable)
 Ejecutar script de fix:
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 bash fix_login_issue.sh
 ```
 
@@ -113,7 +113,7 @@ bash fix_login_issue.sh
 # Abrir navegador en el móvil y navegar a:
 http://192.168.40.17:8001
 
-# Debe mostrar la interfaz de Paperless-ngx
+# Debe mostrar la interfaz de Tejido-ngx
 ```
 
 ---
@@ -129,7 +129,7 @@ Se creó el script `fix_login_issue.sh` que realiza automáticamente:
 
 **Uso:**
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 bash fix_login_issue.sh
 ```
 
@@ -194,13 +194,13 @@ Una vez que el login funcione, probar las features de Fase 2:
 
 ### 2. Verificar Logs (1 min)
 ```bash
-docker logs -f paperless_webserver_1 | grep -E "(login|session|Digitador)"
+docker logs -f tejido_webserver_1 | grep -E "(login|session|Digitador)"
 ```
 
 ### 3. Verificar Base de Datos (1 min)
 ```bash
-docker exec paperless_webserver_1 python3 manage.py shell -c "
-from paperless_auth.models import DigitizationSession
+docker exec tejido_webserver_1 python3 manage.py shell -c "
+from tejido_auth.models import DigitizationSession
 sessions = DigitizationSession.objects.filter(user__username='Digitador')
 print(f'Sesiones del usuario: {sessions.count()}')
 for s in sessions[:3]:
@@ -249,10 +249,10 @@ docker ps | grep 8001
 ### Logs en Tiempo Real
 ```bash
 # Terminal 1: Backend logs
-docker logs -f paperless_webserver_1
+docker logs -f tejido_webserver_1
 
 # Terminal 2: Redis logs
-docker logs -f paperless_broker_1
+docker logs -f tejido_broker_1
 
 # Terminal 3: App logs (si está conectada por USB)
 adb logcat | grep -E "(Lumara|Login|Session)"

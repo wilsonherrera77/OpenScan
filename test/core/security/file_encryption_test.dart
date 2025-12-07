@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart' as path;
-import 'package:openscan/core/security/file_encryption_service.dart';
+import 'package:lumara/core/security/file_encryption_service.dart';
 
 void main() {
   group('File Encryption Tests', () {

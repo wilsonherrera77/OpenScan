@@ -77,7 +77,7 @@ FLUJO DE UPLOAD:
 #### Código Implementado:
 
 ```dart
-// paperless_api_client.dart
+// tejido_api_client.dart
 
 try {
   // CANAL PRIMARIO: Con metadata completa
@@ -451,7 +451,7 @@ Pérdida: <0.01%
 ## 📝 ARCHIVOS MODIFICADOS
 
 ```
-lib/data/datasources/paperless_api_client.dart
+lib/data/datasources/tejido_api_client.dart
   - Línea 411-514: Implementación Dual HTTP
   - Línea 449-461: PRIMARY channel try-catch
   - Línea 474-512: FALLBACK channel try-catch

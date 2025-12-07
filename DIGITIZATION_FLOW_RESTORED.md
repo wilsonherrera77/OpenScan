@@ -109,14 +109,14 @@ _buildQuickActionCard(
 3. DocumentMetadataScreen
    ↓ (Seleccionar tipo de documento + número)
 
-4. HomeScreen (OpenScan Camera)
+4. HomeScreen (Lumara Camera)
    ↓ (Capturar imagen del documento)
 
 5. DocumentPreviewScreen
    ↓ (Validar calidad, OCR, crop/rotate)
 
 6. UploadScreen
-   ↓ (Upload a Paperless/Tejido backend)
+   ↓ (Upload a Tejido/Tejido backend)
 
 7. ✅ Documento sincronizado con backend
 ```
@@ -148,7 +148,7 @@ Navigator.of(context).pushReplacementNamed(HomeScreen.route);
 
 #### **Step 4 → 7:** Camera → Preview → Upload → Backend Sync
 - ✅ Flujo existente verificado en documentación previa
-- ✅ Integración con Paperless-ngx backend funcionando
+- ✅ Integración con Tejido-ngx backend funcionando
 - ✅ Session tracking incrementa contador en uploads (Feature Fase 2)
 
 ---
@@ -172,7 +172,7 @@ flutter build apk --release
 
 ```bash
 # Instalar APK en dispositivo
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 bash install_fase2_apk.sh
 
 # Seleccionar opción:
@@ -198,13 +198,13 @@ bash install_fase2_apk.sh
 8. Seleccionar tipo de documento (ej: "Cédula de Ciudadanía")
 9. Ingresar número de documento
 10. Click **"Continuar a Escanear"**
-11. ✅ **VERIFICAR:** Navegación a **HomeScreen** (cámara OpenScan)
+11. ✅ **VERIFICAR:** Navegación a **HomeScreen** (cámara Lumara)
 12. Capturar imagen de documento
 13. ✅ **VERIFICAR:** Preview con validación de calidad
 14. Hacer ajustes si es necesario (crop, rotate, OCR)
 15. Click **"Upload"**
 16. ✅ **VERIFICAR:** Upload exitoso a backend
-17. ✅ **VERIFICAR:** Documento aparece en Paperless-ngx
+17. ✅ **VERIFICAR:** Documento aparece en Tejido-ngx
 
 **Resultado Esperado:**
 - Flujo completo funciona sin errores
@@ -284,11 +284,11 @@ bash install_fase2_apk.sh
 | Login Multi-Usuario | ✅ | 4 roles: Admin, Digitalizador, Revisor, Viewer |
 | Person Selection | ✅ | Búsqueda en censo de personas |
 | Document Metadata | ✅ | Selección de tipo + número de documento |
-| Camera Capture | ✅ | OpenScan camera con auto-crop |
+| Camera Capture | ✅ | Lumara camera con auto-crop |
 | Document Preview | ✅ | Validación de calidad (blur, brightness) |
 | OCR Local | ✅ | Google ML Kit on-device |
 | Smart Upload | ✅ | Hybrid OCR + OpenAI processing |
-| Backend Sync | ✅ | Paperless-ngx integration |
+| Backend Sync | ✅ | Tejido-ngx integration |
 
 ### Phase 2 Features (Nuevas):
 | Feature | Status | Descripción |
@@ -366,7 +366,7 @@ bash install_fase2_apk.sh
 
 ```bash
 # Opción 1: Script Automático
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 bash install_fase2_apk.sh
 # Seleccionar: 2) RELEASE - FIXED_DigitizationFlow
 
@@ -381,7 +381,7 @@ adb install -r ~/Descargas/Lumara_v5.6.1_FIXED_DigitizationFlow_20251031_182606.
 adb logcat | grep -E "(Lumara|Navigation|PersonSelection)"
 
 # Terminal 2: Backend logs
-docker logs -f paperless-webserver-1 | grep -E "(upload|auth|session)"
+docker logs -f tejido-webserver-1 | grep -E "(upload|auth|session)"
 
 # Verificar versión instalada
 adb shell dumpsys package com.whsys.lumara | grep versionName

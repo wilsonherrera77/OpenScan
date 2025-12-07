@@ -34,7 +34,7 @@ FIX #2: ✅ Diagnóstico de red agregado
   - Nuevo botón en HomeScreen: icono "network_check"
   - Al tocarlo, muestra:
     ✓ Estado de internet (Conectado/Sin conexión)
-    ✓ URL del servidor Paperless  
+    ✓ URL del servidor Tejido  
     ✓ Servidor alcanzable (Sí/No)
     ✓ Latencia en ms
     ✓ Error detallado si falla
@@ -43,7 +43,7 @@ FIX #2: ✅ Diagnóstico de red agregado
 📱 APK CORREGIDO:
 ═════════════════════════════════════════════════════════════════════════
 
-Ruta: /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/LumaraScan_v4.0.1_FIXED.apk
+Ruta: /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara/LumaraScan_v4.0.1_FIXED.apk
 
 MD5: 9dba422802ad7be10062d8a144823edc
 Tamaño: 159 MB
@@ -53,7 +53,7 @@ Fecha: 8 Octubre 2025, 14:46
 🚀 INSTALACIÓN RÁPIDA:
 ═════════════════════════════════════════════════════════════════════════
 
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./install_apk.sh
 
 
@@ -79,7 +79,7 @@ Verificar FIX #2 (Diagnóstico):
 ⚠️ SOBRE EL ERROR DE SINCRONIZACIÓN:
 ═════════════════════════════════════════════════════════════════════════
 
-El servidor Paperless está OK desde el PC (verificado).
+El servidor Tejido está OK desde el PC (verificado).
 El problema es que tu celular NO alcanza la IP 192.168.40.17
 
 Posibles causas:

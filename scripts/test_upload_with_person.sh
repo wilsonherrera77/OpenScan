@@ -168,9 +168,9 @@ else
 fi
 echo ""
 
-# Test 5: Verificar documento en Paperless
+# Test 5: Verificar documento en Tejido
 echo "═══════════════════════════════════════════════════════"
-echo "TEST 5: Verificar documento en Paperless"
+echo "TEST 5: Verificar documento en Tejido"
 echo "═══════════════════════════════════════════════════════"
 echo ""
 

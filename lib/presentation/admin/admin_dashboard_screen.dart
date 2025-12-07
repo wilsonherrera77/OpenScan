@@ -89,7 +89,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     debugPrint('🟡 [ENQUEUE-DEBUG] Got uploadService');
 
     // Buscar carpetas de documentos en el almacenamiento
-    final appDocsDir = Directory('/storage/emulated/0/Android/data/com.ethereal.openscan/files');
+    final appDocsDir = Directory('/storage/emulated/0/Android/data/com.ethereal.lumara/files');
     debugPrint('🟡 [ENQUEUE-DEBUG] Checking directory: ${appDocsDir.path}');
 
     if (!await appDocsDir.exists()) {
@@ -275,7 +275,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     _logger.i('🚀 Iniciando subida de $pendingCount documentos...');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Subiendo $pendingCount documentos a Paperless...'),
+        content: Text('Subiendo $pendingCount documentos a Tejido...'),
         backgroundColor: Colors.blue,
         duration: const Duration(seconds: 3),
       ),
@@ -338,7 +338,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           IconButton(
             icon: const Icon(Icons.cloud_upload),
             onPressed: _handleManualSync,
-            tooltip: 'Sincronizar documentos a Paperless',
+            tooltip: 'Sincronizar documentos a Tejido',
           ),
           IconButton(
             icon: const Icon(Icons.refresh),

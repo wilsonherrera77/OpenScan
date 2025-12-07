@@ -322,7 +322,7 @@ Sobre cualquier otra consideración de:
 
 ## 🧠 Contexto General del Proyecto
 
-### Sistema Lumara (Paperless-ngx + OpenScan)
+### Sistema Lumara (Tejido-ngx + Lumara)
 
 Eres **AI Assistant v2.0.31** con capacidades de **Sonnet 4.5** y **Claude Max**, equipado con:
 - **200K tokens de contexto** para análisis profundo de codebases complejas
@@ -613,7 +613,7 @@ Cada solicitud será abordada combinando **roles tradicionales** con **subagente
 **Ejemplo de paralelización:**
 ```markdown
 # Verificar estado de todos los servicios simultáneamente:
-Bash("docker ps | grep paperless")
+Bash("docker ps | grep tejido")
 Bash("curl -s http://192.168.40.17:8001/api/")
 Bash("adb devices")
 Bash("flutter doctor")
@@ -1087,8 +1087,8 @@ Task(
 )
 
 # PASO 2: Ejecutar tests y generar reporte de cobertura (paralelo)
-Bash("pytest src/paperless_auth/tests/test_assignment_viewset.py --cov --cov-report=html")
-Bash("pytest src/paperless_auth/tests/test_assignment_viewset.py --cov --cov-report=term")
+Bash("pytest src/tejido_auth/tests/test_assignment_viewset.py --cov --cov-report=html")
+Bash("pytest src/tejido_auth/tests/test_assignment_viewset.py --cov --cov-report=term")
 
 # PASO 3: Analizar cobertura
 Task(
@@ -1453,7 +1453,7 @@ Task(
   prompt="""
   Implement push notification system in Django backend:
 
-  1. Create new model FCMToken in paperless_auth/models.py:
+  1. Create new model FCMToken in tejido_auth/models.py:
      - user (ForeignKey to User)
      - token (CharField, unique)
      - device_id (CharField)
@@ -1466,7 +1466,7 @@ Task(
      - Creates or updates FCMToken for authenticated user
      - Returns: success message
 
-  4. Create utility function send_push_notification() in paperless_auth/utils.py:
+  4. Create utility function send_push_notification() in tejido_auth/utils.py:
      - Takes: user_id, title, body, data (dict)
      - Uses fcm_django to send notification
      - Handles errors gracefully
@@ -1575,7 +1575,7 @@ TodoWrite([
 ])
 
 # Ejecutar tests backend y frontend en paralelo:
-Bash("pytest src/paperless_auth/tests/test_notifications.py -v --cov")
+Bash("pytest src/tejido_auth/tests/test_notifications.py -v --cov")
 Bash("flutter test test/services/notification_service_test.dart")
 Bash("flutter test test/providers/notification_provider_test.dart")
 
@@ -1759,7 +1759,7 @@ Antes de usar cualquier subagente o implementar features, **SIEMPRE** seguir est
 #### PASO 0: Verificar Git Repository Exists
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ls -la | grep .git
 
 # Si NO existe:
@@ -1913,7 +1913,7 @@ flutter pub get
 flutter build apk --release
 
 # Y en dispositivo:
-adb uninstall com.ethereal.openscan  # Desinstalar limpio
+adb uninstall com.ethereal.lumara  # Desinstalar limpio
 adb install -r nuevo.apk
 ```
 

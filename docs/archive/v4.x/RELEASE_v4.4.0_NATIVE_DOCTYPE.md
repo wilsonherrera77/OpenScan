@@ -12,13 +12,13 @@
 
 ## 🎯 Objetivos de la Versión
 
-Esta versión implementa el **mapeo nativo de document_type** con Paperless-ngx, eliminando la redundancia de usar tags para clasificación de tipo de documento.
+Esta versión implementa el **mapeo nativo de document_type** con Tejido-ngx, eliminando la redundancia de usar tags para clasificación de tipo de documento.
 
 ### Mejoras Principales:
 
-1. ✅ **Mapeo Nativo de Document Type**: Los documentos ahora usan el campo nativo `document_type` de Paperless en lugar de tags redundantes
+1. ✅ **Mapeo Nativo de Document Type**: Los documentos ahora usan el campo nativo `document_type` de Tejido en lugar de tags redundantes
 2. ✅ **Optimización de Tags**: Eliminados tags redundantes, ahora solo se usan tags esenciales de estado
-3. ✅ **Clasificación Correcta**: Mapeo directo de nombres user-friendly a IDs de Paperless
+3. ✅ **Clasificación Correcta**: Mapeo directo de nombres user-friendly a IDs de Tejido
 
 ---
 
@@ -63,7 +63,7 @@ final List<int> tagList = [
   ApiConstants.tagIds['PENDIENTE']!,           // ID: 17
 ];
 
-// ✅ document_type como campo nativo de Paperless
+// ✅ document_type como campo nativo de Tejido
 formData.fields.add(MapEntry('document_type', nativeDocumentTypeId.toString()));
 formData.fields.add(MapEntry('tags', tagList.join(',')));
 ```
@@ -72,9 +72,9 @@ formData.fields.add(MapEntry('tags', tagList.join(',')));
 
 ## 📊 Mapeo de Document Types
 
-### IDs de Document Type en Paperless:
+### IDs de Document Type en Tejido:
 
-| Nombre User-Friendly | API Constant | Paperless ID |
+| Nombre User-Friendly | API Constant | Tejido ID |
 |----------------------|--------------|--------------|
 | Registro Civil de Nacimiento | REGISTRO_CIVIL | 3 |
 | Tarjeta de Identidad | TARJETA_IDENTIDAD | 2 |
@@ -111,7 +111,7 @@ formData.fields.add(MapEntry('tags', tagList.join(',')));
 
 **Código clave:**
 ```dart
-/// ✅ v4.4.0: Map document type name to native Paperless document_type ID
+/// ✅ v4.4.0: Map document type name to native Tejido document_type ID
 int? nativeDocumentTypeId;
 if (documentType != null) {
   final typeMapping = {
@@ -182,7 +182,7 @@ APK_MD5="e1f3bcd27ec4e0c644d3c1b79851cbae"      # Nuevo checksum
 
 ```bash
 # 1. Navegar al directorio del proyecto
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # 2. Verificar que el APK existe
 ls -lh LumaraScan_v4.4.0_NATIVE_DOCTYPE.apk
@@ -202,7 +202,7 @@ ls -lh LumaraScan_v4.4.0_NATIVE_DOCTYPE.apk
 
 ```bash
 # Verificar versión instalada
-adb shell dumpsys package com.ethereal.openscan | grep versionName
+adb shell dumpsys package com.ethereal.lumara | grep versionName
 
 # Esperado: versionName=4.4.0
 ```
@@ -258,7 +258,7 @@ final testMapping = {
 ### 1. Archivos No Se Borran del Dispositivo (Issue #003)
 
 **Descripción:**
-Después de subir documentos exitosamente a Paperless, los archivos PDF permanecen en `/storage/emulated/0/Documents/OpenScan/PDF/`
+Después de subir documentos exitosamente a Tejido, los archivos PDF permanecen en `/storage/emulated/0/Documents/Lumara/PDF/`
 
 **Estado:** Identificado, no resuelto en v4.4.0
 
@@ -268,7 +268,7 @@ El código de eliminación en `_deleteLocalFileAfterSync()` elimina el archivo t
 **Workaround:**
 Eliminar manualmente archivos desde la app Files o usando:
 ```bash
-adb shell rm -rf /storage/emulated/0/Documents/OpenScan/PDF/*
+adb shell rm -rf /storage/emulated/0/Documents/Lumara/PDF/*
 ```
 
 **Planificado para:** v4.4.1 (bugfix)
@@ -278,7 +278,7 @@ adb shell rm -rf /storage/emulated/0/Documents/OpenScan/PDF/*
 ## 📈 Beneficios de v4.4.0
 
 ### 1. Clasificación Correcta
-- Los documentos ahora aparecen con el tipo correcto en Paperless
+- Los documentos ahora aparecen con el tipo correcto en Tejido
 - Búsquedas por `document_type` funcionan correctamente
 - Filtros de tipo de documento precisos
 
@@ -287,10 +287,10 @@ adb shell rm -rf /storage/emulated/0/Documents/OpenScan/PDF/*
 - Base de datos más limpia
 - Mejor organización
 
-### 3. Consistencia con Paperless
-- Usa campos nativos de Paperless (document_type)
+### 3. Consistencia con Tejido
+- Usa campos nativos de Tejido (document_type)
 - No abuse de tags para clasificación
-- Arquitectura correcta según documentación de Paperless
+- Arquitectura correcta según documentación de Tejido
 
 ### 4. Mantenibilidad
 - Mapeo centralizado en `api_constants.dart`
@@ -324,7 +324,7 @@ _logger.i('   ✅ Mapped to native document_type: $apiKey (ID: $nativeDocumentTy
 _logger.i('   ✅ Tags: ${tagList.join(", ")}');
 ```
 
-### Verificar Documento en Paperless:
+### Verificar Documento en Tejido:
 ```bash
 # Obtener último documento subido
 curl -H "Authorization: Token YOUR_TOKEN" \
@@ -344,13 +344,13 @@ Usuario selecciona tipo de documento
          ↓
 enqueueGenericDocument()
          ↓
-Mapeo: Nombre → API Constant → Paperless ID
+Mapeo: Nombre → API Constant → Tejido ID
          ↓
 FormData con document_type nativo + tags simplificados
          ↓
 POST /api/documents/post_document/
          ↓
-Paperless crea documento con clasificación correcta
+Tejido crea documento con clasificación correcta
 ```
 
 ### Estructura de FormData (v4.4.0):
@@ -371,7 +371,7 @@ Nombre de la persona - Tipo de Documento
 --boundary
 Content-Disposition: form-data; name="document_type"
 
-3  ← ID nativo de Paperless (e.g., REGISTRO_CIVIL)
+3  ← ID nativo de Tejido (e.g., REGISTRO_CIVIL)
 --boundary
 Content-Disposition: form-data; name="tags"
 
@@ -390,20 +390,20 @@ Content-Disposition: form-data; name="tags"
 - [ ] APK instalado exitosamente
 - [ ] App abierta y login exitoso
 - [ ] Prueba de subida de documento con tipo específico
-- [ ] Verificar en Paperless que document_type es correcto
+- [ ] Verificar en Tejido que document_type es correcto
 - [ ] Verificar que solo aparecen 2 tags (DIGITALIZADO_MOVIL, PENDIENTE)
 
 ---
 
 ## 🎉 Conclusión
 
-Lumara Scan v4.4.0 representa una mejora significativa en la arquitectura de clasificación de documentos, alineándose correctamente con el modelo de datos de Paperless-ngx.
+Lumara Scan v4.4.0 representa una mejora significativa en la arquitectura de clasificación de documentos, alineándose correctamente con el modelo de datos de Tejido-ngx.
 
 **Mejoras Clave:**
 - ✅ Clasificación nativa de document_type
 - ✅ Eliminación de tags redundantes
 - ✅ Código más limpio y mantenible
-- ✅ Mejor consistencia con Paperless
+- ✅ Mejor consistencia con Tejido
 
 **Próximos Pasos:**
 - Probar exhaustivamente el mapeo de tipos

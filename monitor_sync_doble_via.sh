@@ -36,7 +36,7 @@ echo ""
 
 # Check installed app version
 echo "3️⃣ Verificando versión instalada de Lumara..."
-APP_VERSION=$(adb shell dumpsys package com.ethereal.openscan | grep versionName | head -1 | awk '{print $1}')
+APP_VERSION=$(adb shell dumpsys package com.ethereal.lumara | grep versionName | head -1 | awk '{print $1}')
 echo "   Versión: $APP_VERSION"
 echo ""
 
@@ -55,9 +55,9 @@ echo "--- LOGS FLUTTER (Lumara) -----------------------------------"
 echo ""
 
 # Monitor logs in real-time
-# Filter for relevant logs: sync, upload, document, dio, paperless
+# Filter for relevant logs: sync, upload, document, dio, tejido
 adb logcat -c  # Clear logcat
-adb logcat | grep -E "(flutter|Lumara|openscan|BackgroundSyncService|PaperlessApiClient|DocumentRepository|DIO|HTTP)" --line-buffered | while IFS= read -r line; do
+adb logcat | grep -E "(flutter|Lumara|lumara|BackgroundSyncService|TejidoApiClient|DocumentRepository|DIO|HTTP)" --line-buffered | while IFS= read -r line; do
     # Highlight errors in red
     if echo "$line" | grep -qi "error\|exception\|failed\|timeout"; then
         echo -e "${RED}$line${NC}"

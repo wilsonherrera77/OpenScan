@@ -18,7 +18,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:quick_actions/quick_actions.dart';
 import 'package:lumara_scan/services/background_sync_service.dart';
 import 'package:lumara_scan/services/connectivity_service.dart';
-import 'package:lumara_scan/data/datasources/paperless_api_client.dart';
+import 'package:lumara_scan/data/datasources/tejido_api_client.dart';
 import 'package:lumara_scan/presentation/settings/server_config_screen.dart';
 import 'package:lumara_scan/presentation/census/person_selection_screen.dart';
 import 'package:lumara_scan/presentation/providers/census_provider.dart';
@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         title: Text('Limpiar documentos'),
-        content: Text('¿Eliminar TODOS los documentos escaneados del dispositivo?\n\nEsta acción NO afecta los documentos ya sincronizados en Paperless.'),
+        content: Text('¿Eliminar TODOS los documentos escaneados del dispositivo?\n\nEsta acción NO afecta los documentos ya sincronizados en Tejido.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -250,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return totalEnqueued;
   }
 
-  /// Manual sync with Paperless-ngx
+  /// Manual sync with Tejido-ngx
   Future<void> _handleManualSync() async {
     // ✅ v6.4.0+94: Debugging - immediate feedback
     debugPrint('🔵 [SYNC-DEBUG] _handleManualSync() CALLED');
@@ -358,14 +358,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         } else if (actualSynced > 0 && duplicatesRejected > 0) {
           // ✅ FIX v6.4.13: Mostrar info de duplicados
           titleText = 'Sincronización con advertencias';
-          messageText = '$actualSynced documento${actualSynced > 1 ? 's' : ''} sincronizado${actualSynced > 1 ? 's' : ''}.\n\n⚠️ $duplicatesRejected documento${duplicatesRejected > 1 ? 's' : ''} rechazado${duplicatesRejected > 1 ? 's' : ''} por duplicado${duplicatesRejected > 1 ? 's' : ''} (ya exist${duplicatesRejected > 1 ? 'en' : 'e'} en Paperless).';
+          messageText = '$actualSynced documento${actualSynced > 1 ? 's' : ''} sincronizado${actualSynced > 1 ? 's' : ''}.\n\n⚠️ $duplicatesRejected documento${duplicatesRejected > 1 ? 's' : ''} rechazado${duplicatesRejected > 1 ? 's' : ''} por duplicado${duplicatesRejected > 1 ? 's' : ''} (ya exist${duplicatesRejected > 1 ? 'en' : 'e'} en Tejido).';
         } else if (duplicatesRejected > 0 && actualSynced == 0) {
           // Only duplicates, no new uploads
           titleText = 'Documentos duplicados';
-          messageText = '$duplicatesRejected documento${duplicatesRejected > 1 ? 's' : ''} rechazado${duplicatesRejected > 1 ? 's' : ''} porque ya exist${duplicatesRejected > 1 ? 'en' : 'e'} en Paperless.\n\nNo es necesario volver a digitalizar estos documentos.';
+          messageText = '$duplicatesRejected documento${duplicatesRejected > 1 ? 's' : ''} rechazado${duplicatesRejected > 1 ? 's' : ''} porque ya exist${duplicatesRejected > 1 ? 'en' : 'e'} en Tejido.\n\nNo es necesario volver a digitalizar estos documentos.';
         } else if (actualSynced > 0) {
           titleText = 'Sincronización exitosa';
-          messageText = '$actualSynced documento${actualSynced > 1 ? 's' : ''} sincronizado${actualSynced > 1 ? 's' : ''} con Paperless-ngx';
+          messageText = '$actualSynced documento${actualSynced > 1 ? 's' : ''} sincronizado${actualSynced > 1 ? 's' : ''} con Tejido-ngx';
         } else if (pendingCountAfter > 0) {
           titleText = 'Sincronización incompleta';
           messageText = 'No se pudo subir ningún documento.\n\n$pendingCountAfter documento${pendingCountAfter > 1 ? 's' : ''} pendiente${pendingCountAfter > 1 ? 's' : ''} de sincronizar.\n\nVerifica tu conexión e intenta de nuevo.';
@@ -560,20 +560,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           children: [
             CircularProgressIndicator(color: secondaryColor),
             SizedBox(height: 20),
-            Text('Verificando conexión con Paperless...'),
+            Text('Verificando conexión con Tejido...'),
           ],
         ),
       ),
     );
 
     try {
-      // Get Paperless URL
-      final apiClient = PaperlessApiClient();
+      // Get Tejido URL
+      final apiClient = TejidoApiClient();
       final baseUrl = apiClient.baseUrl;
 
       // Run diagnostics
       final hasInternet = await ConnectivityService.hasInternetConnection();
-      final serverCheck = await ConnectivityService.validatePaperlessConnection(baseUrl);
+      final serverCheck = await ConnectivityService.validateTejidoConnection(baseUrl);
 
       // Close loading dialog
       Navigator.pop(context);
@@ -605,7 +605,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 ),
                 Divider(),
                 _buildDiagnosticRow(
-                  'Servidor Paperless',
+                  'Servidor Tejido',
                   baseUrl,
                   null,
                 ),

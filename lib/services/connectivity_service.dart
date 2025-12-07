@@ -295,8 +295,8 @@ class ConnectivityService {
     return _connectivity.checkConnectivity();
   }
 
-  /// Validate Paperless server connection
-  static Future<Map<String, dynamic>> validatePaperlessConnection(String baseUrl) async {
+  /// Validate Tejido server connection
+  static Future<Map<String, dynamic>> validateTejidoConnection(String baseUrl) async {
     final result = {
       'hasInternet': false,
       'serverReachable': false,
@@ -316,7 +316,7 @@ class ConnectivityService {
       // Step 2: Check server reachability
       result['serverReachable'] = await canReachServer(baseUrl);
       if (!(result['serverReachable'] as bool)) {
-        result['error'] = 'Servidor Paperless no alcanzable en $baseUrl';
+        result['error'] = 'Servidor Tejido no alcanzable en $baseUrl';
         return result;
       }
 
@@ -334,11 +334,11 @@ class ConnectivityService {
       result['latencyMs'] = latency.inMilliseconds;
       result['serverResponding'] = true;
 
-      _logger.i('✅ Paperless connection validated (latency: ${latency.inMilliseconds}ms)');
+      _logger.i('✅ Tejido connection validated (latency: ${latency.inMilliseconds}ms)');
 
     } catch (e, stackTrace) {
       result['error'] = 'Error de conexión: $e';
-      _logger.e('❌ Paperless connection validation failed: $e', error: e, stackTrace: stackTrace);
+      _logger.e('❌ Tejido connection validation failed: $e', error: e, stackTrace: stackTrace);
     }
 
     return result;

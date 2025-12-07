@@ -35,7 +35,7 @@ adb devices
 ### Paso 2: Ejecutar la app SIN compilar APK
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Ejecutar directamente en el dispositivo
 flutter run --dart-define=STAGING=true
@@ -107,10 +107,10 @@ La compilación del APK falló por:
 ### 1. Error de paquete (línea 5)
 ```dart
 // Incorrecto:
-import 'package:openscan/Utilities/Classes.dart';
+import 'package:lumara/Utilities/Classes.dart';
 
 // Correcto:
-import 'package:openscan_indigenas/Utilities/Classes.dart';
+import 'package:lumara_indigenas/Utilities/Classes.dart';
 ```
 
 ### 2. Errores de const (líneas 117, 153, 170)
@@ -123,7 +123,7 @@ static int get apiRateLimit => isProduction ? 100 : 1000;
 ```
 
 ### 3. Error de DirectoryOS (línea 116)
-Falta definición de la clase `DirectoryOS` del OpenScan original
+Falta definición de la clase `DirectoryOS` del Lumara original
 
 ### 4. Error de PopupMenu (línea 66)
 Tipo de retorno incorrecto en popup menu
@@ -140,7 +140,7 @@ La versión de `excel` package cambió la API - necesita wrapping con `TextCellV
 1. **Arreglar import del paquete:**
 ```bash
 # Buscar y reemplazar en main.dart
-sed -i 's/package:openscan/package:openscan_indigenas/g' lib/main.dart
+sed -i 's/package:lumara/package:lumara_indigenas/g' lib/main.dart
 ```
 
 2. **Arreglar production_config.dart:**
@@ -188,7 +188,7 @@ ls -lh ~/Descargas/*.apk
 
 Si encuentras uno, instálalo directamente:
 ```bash
-adb install ruta/al/openscan-anterior.apk
+adb install ruta/al/lumara-anterior.apk
 ```
 
 ---
@@ -212,7 +212,7 @@ adb install ruta/al/openscan-anterior.apk
 adb devices
 
 # 2. Ejecutar app
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter run --dart-define=STAGING=true
 
 # 3. Esperar 3-5 minutos

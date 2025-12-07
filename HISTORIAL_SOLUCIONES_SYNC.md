@@ -1,7 +1,7 @@
 # Historial de Soluciones Intentadas - Sincronización Lumara → Tejido
 
 ## Problema Principal
-Los documentos capturados en Lumara no aparecen en la cola de sincronización y no se suben a Tejido (Paperless-ngx).
+Los documentos capturados en Lumara no aparecen en la cola de sincronización y no se suben a Tejido (Tejido-ngx).
 
 ---
 
@@ -71,7 +71,7 @@ Los documentos capturados en Lumara no aparecen en la cola de sincronización y 
 - defaultBaseUrl actualizado
 
 ### lib/core/config/production_config.dart
-- paperlessProductionUrl actualizado
+- tejidoProductionUrl actualizado
 
 ### android/app/build.gradle
 - debug buildType agregado con debuggable=true

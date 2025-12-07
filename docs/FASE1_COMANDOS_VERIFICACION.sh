@@ -47,7 +47,7 @@ echo ""
 # 5. DOCKER STATUS
 echo "5. DOCKER STATUS"
 echo "----------------"
-docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep -E "(NAME|paperless|postgres|redis)"
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | grep -E "(NAME|tejido|postgres|redis)"
 echo ""
 
 # 6. BACKEND API

@@ -66,7 +66,7 @@ Tamaño: 68 MB
 **Funcionalidad:**
 - Recibe: documento PDF/imagen + person_id + document_type
 - Guarda archivo en sistema de archivos
-- Procesa con pipeline Paperless (OCR, metadata)
+- Procesa con pipeline Tejido (OCR, metadata)
 - Crea DocumentPersonRelation automáticamente
 - Retorna: document_id, relation_id, person_name
 
@@ -307,9 +307,9 @@ INSTALL_v5.6.0.md                  # Guía de instalación (desactualizada)
 
 ### Commits Pendientes
 
-**OpenScan (App):**
+**Lumara (App):**
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Cambios sin commitear:
 - pubspec.yaml (versión 5.6.0+56)
@@ -320,9 +320,9 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
 - Multiple archivos de documentación
 ```
 
-**Paperless-ngx (Backend):**
+**Tejido-ngx (Backend):**
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/paperless-ngx/paperless-ngx
+cd /home/smt/Escritorio/programacion_proyectos/tejido/tejido-ngx/tejido-ngx
 
 # Cambios ya commiteados:
 ✅ src/documents/views_census.py (endpoint upload_with_person completo)

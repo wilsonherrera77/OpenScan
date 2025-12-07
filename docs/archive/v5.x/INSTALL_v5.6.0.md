@@ -63,13 +63,13 @@ md5sum Lumara_v5.6.0_UPLOAD_WITH_PERSON_FIX_20251012_174106.apk
 # Debe mostrar: b12908e86be06d79bf6b4d50416c9da1
 
 # Desinstalar versión anterior (si existe)
-adb uninstall com.openscan.app
+adb uninstall com.lumara.app
 
 # Instalar nueva versión
 adb install -r Lumara_v5.6.0_UPLOAD_WITH_PERSON_FIX_20251012_174106.apk
 
 # Verificar instalación exitosa
-adb shell pm list packages | grep openscan
+adb shell pm list packages | grep lumara
 ```
 
 ### Opción 2: Instalación Manual en Dispositivo
@@ -130,7 +130,7 @@ adb logcat | grep -E "upload_with_person|Upload with person|Document uploaded"
 
 ```bash
 # Ver último documento creado
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import Document, DocumentPersonRelation
 doc = Document.objects.last()
 rel = DocumentPersonRelation.objects.filter(document=doc).first()
@@ -151,7 +151,7 @@ Doc ID: 36, Título: [título del documento]
 ### Paso 4: Verificar en Interfaz Web de Tejido
 
 1. Abrir navegador: `http://192.168.40.17:8001`
-2. Login con credenciales de Paperless
+2. Login con credenciales de Tejido
 3. Ir a "Documentos"
 4. Buscar el documento recién subido
 5. Verificar que aparece con:
@@ -190,7 +190,7 @@ Si v5.6.0 presenta problemas, volver a v5.5.0:
 
 ```bash
 # Desinstalar v5.6.0
-adb uninstall com.openscan.app
+adb uninstall com.lumara.app
 
 # Reinstalar v5.5.0
 adb install /home/smt/Descargas/Lumara_v5.5.0_UNIX_EOL_GARANTIZADO_20251012_113207.apk
@@ -211,16 +211,16 @@ adb logcat *:E > /tmp/lumara_errors.txt
 
 ### Logs del Backend
 ```bash
-# Ver logs de Paperless
-docker logs paperless-webserver-1 --tail 100
+# Ver logs de Tejido
+docker logs tejido-webserver-1 --tail 100
 
 # Buscar errores relacionados con upload
-docker logs paperless-webserver-1 --since 10m | grep -i "upload_with_person"
+docker logs tejido-webserver-1 --since 10m | grep -i "upload_with_person"
 ```
 
 ### Verificar Estado de Containers
 ```bash
-docker ps | grep paperless
+docker ps | grep tejido
 ```
 
 Todos los containers deben estar "Up".
@@ -237,7 +237,7 @@ Después de verificar que v5.6.0 funciona:
 ## Contacto
 
 Para bugs o problemas, reportar en:
-- GitHub Issues del proyecto OpenScan
+- GitHub Issues del proyecto Lumara
 - Incluir logs de `adb logcat` y `docker logs`
 - Especificar versión de APK y timestamp del error
 

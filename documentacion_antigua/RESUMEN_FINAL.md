@@ -1,4 +1,4 @@
-# 🎯 RESUMEN FINAL - OpenScan Build
+# 🎯 RESUMEN FINAL - Lumara Build
 
 **Fecha:** 2025-10-07 07:40
 **Estado:** ✅ 95% Completado - Listo para build
@@ -30,7 +30,7 @@ Pendiente:
 ### Ejecuta en tu terminal:
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./build_apk.sh
 ```
 
@@ -131,7 +131,7 @@ Password: admin
 - ✅ Metadatos automáticos
 - ✅ Validación de datos
 
-### Paperless API
+### Tejido API
 - ✅ Upload completo
 - ✅ Token authentication
 - ✅ Manejo de errores
@@ -151,7 +151,7 @@ En el directorio del proyecto:
 | `INSTRUCCIONES_FINALES.md` | 6.2KB | Guía detallada |
 | `ESTADO_ACTUAL_BUILD.md` | 5.8KB | Estado técnico |
 | `RESUMEN_AUDITORIA.md` | 8.1KB | Auditoría completa |
-| `CONFIGURACION_PAPERLESS.md` | 7.4KB | Setup de red |
+| `CONFIGURACION_TEJIDO.md` | 7.4KB | Setup de red |
 | `DIAGNOSTICO_BUILD.md` | 9.2KB | Análisis técnico |
 | `TESTING_PLAN.md` | 10.5KB | 20 test cases |
 
@@ -280,7 +280,7 @@ Total:                16 horas
 1. Con conexión activa
 2. Capturar documento
 3. Verificar upload inmediato
-4. Confirmar en Paperless
+4. Confirmar en Tejido
 ```
 
 #### Test 4: Offline Queue
@@ -372,7 +372,7 @@ flutter doctor -v
 ## 🚀 COMANDO FINAL
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./build_apk.sh
 ```
 
@@ -381,7 +381,7 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
 - ✅ Offline queue
 - ✅ Background sync
 - ✅ 3,997 personas del censo
-- ✅ Upload a Paperless
+- ✅ Upload a Tejido
 
 ---
 

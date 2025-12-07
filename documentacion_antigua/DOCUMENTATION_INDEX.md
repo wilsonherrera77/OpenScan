@@ -1,4 +1,4 @@
-# 📚 Índice de Documentación - OpenScan Indígenas
+# 📚 Índice de Documentación - Lumara Indígenas
 
 **Versión:** 3.0.0
 **Última actualización:** 2025-10-07
@@ -36,7 +36,7 @@ Este índice te ayuda a navegar toda la documentación del proyecto según tu ro
 **Reportes de Progreso:**
 - [SPRINT_1_REPORT.md](SPRINT_1_REPORT.md) - Infraestructura base
 - [SPRINT_2_REPORT.md](SPRINT_2_REPORT.md) - Funcionalidades core
-- [SPRINT_3_REPORT.md](SPRINT_3_REPORT.md) - Integración Paperless
+- [SPRINT_3_REPORT.md](SPRINT_3_REPORT.md) - Integración Tejido
 - [SPRINT_4_REPORT.md](SPRINT_4_REPORT.md) - Características avanzadas
 
 ---
@@ -355,15 +355,15 @@ Este índice te ayuda a navegar toda la documentación del proyecto según tu ro
 ### Documentación Externa
 
 - **Flutter Docs:** https://flutter.dev/docs
-- **Paperless-ngx API:** https://docs.paperless-ngx.com/api/
+- **Tejido-ngx API:** https://docs.tejido-ngx.com/api/
 - **OWASP Mobile:** https://owasp.org/www-project-mobile-top-10/
 - **Clean Architecture:** https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
 
 ### Repositorio
 
-- **GitHub:** https://github.com/yourusername/openscan-indigenas
-- **Issues:** https://github.com/yourusername/openscan-indigenas/issues
-- **Wiki:** https://github.com/yourusername/openscan-indigenas/wiki
+- **GitHub:** https://github.com/yourusername/lumara-indigenas
+- **Issues:** https://github.com/yourusername/lumara-indigenas/issues
+- **Wiki:** https://github.com/yourusername/lumara-indigenas/wiki
 
 ---
 
@@ -433,8 +433,8 @@ Antes de lanzar a producción, verificar:
 
 **¿Documento faltante o error en el índice?**
 
-- **Issues:** https://github.com/yourusername/openscan-indigenas/issues
-- **Email:** docs@openscan-indigenas.org
+- **Issues:** https://github.com/yourusername/lumara-indigenas/issues
+- **Email:** docs@lumara-indigenas.org
 
 ---
 

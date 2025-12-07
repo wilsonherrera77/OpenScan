@@ -147,7 +147,7 @@ if __name__ == "__main__":
     script_dir = Path(__file__).parent
     project_root = script_dir.parent
 
-    input_file = Path("/home/smt/Escritorio/programacion_proyectos/paperless/Censo_Chia_Consolidado_2025_Principal.csv")
+    input_file = Path("/home/smt/Escritorio/programacion_proyectos/tejido/Censo_Chia_Consolidado_2025_Principal.csv")
     output_file = project_root / "assets" / "census" / "persons.csv"
 
     if not input_file.exists():

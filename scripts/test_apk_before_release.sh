@@ -88,7 +88,7 @@ echo ""
 echo -e "${YELLOW}🔧 Installing APK...${NC}"
 
 # Uninstall old version first (ignore errors if not installed)
-adb -s "$DEVICE_ID" uninstall com.ethereal.openscan 2>/dev/null || true
+adb -s "$DEVICE_ID" uninstall com.ethereal.lumara 2>/dev/null || true
 
 # Install new APK
 if adb -s "$DEVICE_ID" install -r "$APK_PATH" >/dev/null 2>&1; then
@@ -110,7 +110,7 @@ LOG_FILE="$LOG_DIR/test_$(date +%Y%m%d_%H%M%S).log"
 
 echo -e "${YELLOW}📝 Starting log capture...${NC}"
 adb -s "$DEVICE_ID" logcat -c  # Clear logs
-adb -s "$DEVICE_ID" logcat | grep -iE "lumara|openscan|flutter|error|exception" > "$LOG_FILE" &
+adb -s "$DEVICE_ID" logcat | grep -iE "lumara|lumara|flutter|error|exception" > "$LOG_FILE" &
 LOGCAT_PID=$!
 
 echo -e "${GREEN}✅ Logs capturing to: $LOG_FILE${NC}"

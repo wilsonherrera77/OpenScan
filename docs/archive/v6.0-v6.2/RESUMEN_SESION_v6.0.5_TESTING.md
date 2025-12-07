@@ -226,8 +226,8 @@ Text('Por favor espera (timeout: 90s)')  // ✅ Was 60s
 
 **Containers:**
 ```bash
-paperless_webserver_1   Up 3 days (healthy)   0.0.0.0:8001->8000/tcp
-paperless_broker_1      Up 3 days             6379/tcp
+tejido_webserver_1   Up 3 days (healthy)   0.0.0.0:8001->8000/tcp
+tejido_broker_1      Up 3 days             6379/tcp
 ```
 
 **API Test:**
@@ -299,7 +299,7 @@ adb logcat | grep "BackgroundSyncService\|DioException"
 
 # Buscar específicamente:
 - "❌ Sync aborted: No internet connection"
-- "❌ Paperless server validation failed"
+- "❌ Tejido server validation failed"
 - "❌ Immediate sync failed:"
 - Status codes: 401 (auth), 403 (permisos), 500 (server)
 ```

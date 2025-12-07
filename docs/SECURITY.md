@@ -9,7 +9,7 @@
 
 ## 📋 Executive Summary
 
-This document describes the security hardening measures implemented in OpenScan Indígenas to protect sensitive data and prevent common attack vectors.
+This document describes the security hardening measures implemented in Lumara Indígenas to protect sensitive data and prevent common attack vectors.
 
 **Security Rating**: 8.5/10 (Post-Implementation)
 **Risk Reduction**: ~80% attack surface reduction
@@ -49,18 +49,18 @@ This document describes the security hardening measures implemented in OpenScan 
 #### Implementation
 
 ```dart
-import 'package:openscan_indigenas/core/security/secure_config_manager.dart';
+import 'package:lumara_indigenas/core/security/secure_config_manager.dart';
 
 final configManager = SecureConfigManager();
 
 // Initialize (first run)
 await configManager.initialize(
-  defaultBaseUrl: 'https://paperless.example.com',
+  defaultBaseUrl: 'https://tejido.example.com',
   defaultToken: 'initial-token-from-env',
 );
 
 // Store credentials
-await configManager.setBaseUrl('https://paperless.example.com');
+await configManager.setBaseUrl('https://tejido.example.com');
 await configManager.setApiToken('new-token-from-login');
 await configManager.setUsername('admin');
 
@@ -79,8 +79,8 @@ await configManager.clearCredentials();
 ```
 
 #### Storage Keys
-- `paperless_api_token` - API authentication token
-- `paperless_base_url` - Paperless server URL
+- `tejido_api_token` - API authentication token
+- `tejido_base_url` - Tejido server URL
 - `username` - Logged-in username
 - `last_token_rotation` - ISO 8601 timestamp
 
@@ -94,7 +94,7 @@ await configManager.clearCredentials();
 #### CRITICAL ACTIONS REQUIRED
 
 **🔴 IMMEDIATE (Within 24 hours)**:
-1. **Rotate all exposed tokens** in Paperless admin
+1. **Rotate all exposed tokens** in Tejido admin
 2. Remove old tokens from version control history:
    ```bash
    git filter-branch --force --index-filter \
@@ -131,7 +131,7 @@ await configManager.clearCredentials();
 #### Implementation
 
 ```dart
-import 'package:openscan_indigenas/core/security/certificate_pinner.dart';
+import 'package:lumara_indigenas/core/security/certificate_pinner.dart';
 
 final pinner = CertificatePinner();
 
@@ -163,12 +163,12 @@ static const List<String> pinnedCertificates = [
 
 ```bash
 # Method 1: OpenSSL
-openssl s_client -connect paperless.example.com:443 < /dev/null 2>/dev/null | \
+openssl s_client -connect tejido.example.com:443 < /dev/null 2>/dev/null | \
   openssl x509 -fingerprint -sha256 -noout -in /dev/stdin
 
 # Method 2: Using curl
-echo | openssl s_client -servername paperless.example.com \
-  -connect paperless.example.com:443 2>/dev/null | \
+echo | openssl s_client -servername tejido.example.com \
+  -connect tejido.example.com:443 2>/dev/null | \
   openssl x509 -fingerprint -sha256 -noout
 
 # Output format:
@@ -195,7 +195,7 @@ echo | openssl s_client -servername paperless.example.com \
 
 1. **Get production certificate**:
    ```bash
-   ./get_certificate.sh paperless.example.com 443
+   ./get_certificate.sh tejido.example.com 443
    ```
 
 2. **Add to certificate_pinner.dart**
@@ -224,7 +224,7 @@ echo | openssl s_client -servername paperless.example.com \
 
 #### Implementation
 
-Integrated into `PaperlessApiClient.setBaseUrl()`:
+Integrated into `TejidoApiClient.setBaseUrl()`:
 
 ```dart
 void setBaseUrl(String url) {
@@ -281,7 +281,7 @@ flutter build apk --release
 
 #### Implementation
 
-Integrated into `PaperlessApiClient` interceptor:
+Integrated into `TejidoApiClient` interceptor:
 
 ```dart
 // Before
@@ -310,7 +310,7 @@ _logger.d('Body: $sanitized');
 #### Usage
 
 ```dart
-import 'package:openscan_indigenas/core/utils/input_sanitizer.dart';
+import 'package:lumara_indigenas/core/utils/input_sanitizer.dart';
 
 final message = 'Login with token: ABC123, password: secret123';
 final sanitized = InputSanitizer.sanitizeForLogging(message);
@@ -346,7 +346,7 @@ print(sanitized);
 #### Implementation
 
 ```dart
-import 'package:openscan_indigenas/core/security/rate_limiter.dart';
+import 'package:lumara_indigenas/core/security/rate_limiter.dart';
 
 // Login rate limiting (already integrated in AuthRepository)
 final loginLimiter = LoginRateLimiter();
@@ -483,7 +483,7 @@ print('Rate limit stats: $rateLimitStats');
 ### Token Compromise
 
 1. **Immediate**:
-   - Revoke compromised token in Paperless admin
+   - Revoke compromised token in Tejido admin
    - Force logout all users
    - Generate new token
 

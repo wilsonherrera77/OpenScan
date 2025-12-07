@@ -571,7 +571,7 @@ class _AssignmentListScreenState extends State<AssignmentListScreen> {
 El rate limiting del backend (implementado en Fase 2) se maneja automáticamente en el cliente a través de los interceptores de Dio. Cuando el backend responde con HTTP 429 (Too Many Requests), el cliente puede implementar retry logic:
 
 ```dart
-// En paperless_api_client.dart (ya existente)
+// En tejido_api_client.dart (ya existente)
 _dio.interceptors.add(
   InterceptorsWrapper(
     onError: (error, handler) {
@@ -767,7 +767,7 @@ flutter pub get
 ```dart
 // test/domain/entities/digitization_session_test.dart
 import 'package:flutter_test/flutter_test.dart';
-import 'package:openscan/domain/entities/digitization_session.dart';
+import 'package:lumara/domain/entities/digitization_session.dart';
 
 void main() {
   group('DigitizationSession', () {
@@ -809,7 +809,7 @@ void main() {
 // test/providers/assignment_provider_test.dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:openscan/presentation/providers/assignment_provider.dart';
+import 'package:lumara/presentation/providers/assignment_provider.dart';
 
 void main() {
   group('AssignmentProvider - Session Tracking', () {
@@ -1311,8 +1311,8 @@ adb logcat | grep -i flutter
 ### Documentación Backend
 - `FASE2_COMPLETADA_DOCUMENTACION.md` - Features del backend implementadas
 - `RESUMEN_IMPLEMENTACION_FASES.md` - Estado general del proyecto
-- API Endpoints: `src/paperless_auth/urls.py`
-- Models: `src/paperless_auth/models.py`
+- API Endpoints: `src/tejido_auth/urls.py`
+- Models: `src/tejido_auth/models.py`
 
 ### Código Flutter Clave
 - Entities: `lib/domain/entities/`

@@ -7,12 +7,17 @@
 # Propósito: Simular envío de documento con 3 canales (Primary + Fallback + Queue)
 # ═══════════════════════════════════════════════════════════════════════════
 
-SERVER="http://192.168.40.17:8001"
-TOKEN="e0282ce5e8fe0d64aee117cfba27b4082e32ce01"
+SERVER="${SERVER:-${TEJIDO_URL:-http://192.168.40.17:8001}}"
+TOKEN="${TEJIDO_TOKEN:-${TOKEN:-e0282ce5e8fe0d64aee117cfba27b4082e32ce01}}"
 TEST_FILE="/tmp/test_document_redundancy.txt"
-PERSON_ID=6061
-DOCUMENT_TYPE="Cédula de Ciudadanía"
-NUIP="11200453"
+PERSON_ID="${TEJIDO_TEST_PERSON_ID:-6061}"
+DOCUMENT_TYPE="${TEJIDO_TEST_DOCUMENT_TYPE:-Cédula de Ciudadanía}"
+NUIP="${TEJIDO_TEST_NUIP:-11200453}"
+
+if [[ -z "$PERSON_ID" || -z "$DOCUMENT_TYPE" || -z "$NUIP" ]]; then
+  echo -e "${RED}❌ Variables TEJIDO_TEST_PERSON_ID/TEJIDO_TEST_DOCUMENT_TYPE/TEJIDO_TEST_NUIP no configuradas${NC}" >&2
+  exit 1
+fi
 
 # Colores para output
 RED='\033[0;31m'
@@ -25,6 +30,7 @@ echo -e "${BLUE}═════════════════════�
 echo -e "${BLUE}  SIMULACIÓN: Canal Multicanal/Redundante Lumara → Tejido${NC}"
 echo -e "${BLUE}═══════════════════════════════════════════════════════════════${NC}"
 echo ""
+echo -e "${YELLOW}Servidor: ${SERVER}${NC}"
 
 # Crear documento de prueba
 echo "Documento de prueba para simulación de canal redundante - $(date)" > "$TEST_FILE"

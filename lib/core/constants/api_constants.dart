@@ -1,7 +1,7 @@
-/// API Constants for Paperless-ngx Integration
+/// API Constants for Tejido-ngx Integration
 /// Indigenous Communities Document Digitization System
 class ApiConstants {
-  // Paperless API Configuration
+  // Tejido API Configuration
   // ⚠️ IMPORTANT: Configure server URL in app settings
   // This is the default fallback - will be overridden by user config
   static const String defaultBaseUrl = 'http://127.0.0.1:8001'; // ✅ DEV: localhost via ADB reverse (adb reverse tcp:8001 tcp:8001)
@@ -32,9 +32,9 @@ class ApiConstants {
   static const String acceptHeader = 'Accept';
 
   // Storage keys
-  static const String tokenKey = 'paperless_token';
-  static const String baseUrlKey = 'paperless_base_url';
-  static const String usernameKey = 'paperless_username';
+  static const String tokenKey = 'tejido_token';
+  static const String baseUrlKey = 'tejido_base_url';
+  static const String usernameKey = 'tejido_username';
   static const String selectedPersonIdKey = 'selected_person_id';
 
   // App Configuration
@@ -44,8 +44,8 @@ class ApiConstants {
   // Census Configuration
   static const String censusFilePath = 'assets/census/persons.csv';
 
-  // Document Types (must match Paperless configuration)
-  // ✅ VERIFIED IDs from Paperless database
+  // Document Types (must match Tejido configuration)
+  // ✅ VERIFIED IDs from Tejido database
   static const Map<String, int> documentTypeIds = {
     'CEDULA_CIUDADANIA': 1,
     'TARJETA_IDENTIDAD': 2,
@@ -57,8 +57,8 @@ class ApiConstants {
     'OTRO_DOCUMENTO': 1, // Default to Cédula de Ciudadanía
   };
 
-  // Tags (must match Paperless configuration)
-  // ✅ VERIFIED IDs from Paperless database
+  // Tags (must match Tejido configuration)
+  // ✅ VERIFIED IDs from Tejido database
   static const Map<String, int> tagIds = {
     'PENDIENTE': 17,
     'VERIFICADO': 18,
@@ -69,7 +69,7 @@ class ApiConstants {
     'INCOMPLETO': 23,
   };
 
-  // Document Type Tags (must match Paperless configuration)
+  // Document Type Tags (must match Tejido configuration)
   static const Map<String, int> documentTypeTagIds = {
     'Registro Civil de Nacimiento': 10,
     'Tarjeta de Identidad': 11,
@@ -80,7 +80,7 @@ class ApiConstants {
     'Árbol Genealógico': 16,
   };
 
-  // Custom Fields (must match Paperless configuration)
+  // Custom Fields (must match Tejido configuration)
   static const Map<String, int> customFieldIds = {
     'person_id': 1,
     'family_id': 2,

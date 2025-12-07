@@ -9,7 +9,7 @@
 
 ## RESUMEN EJECUTIVO
 
-**Problema Reportado:** Timeouts intermitentes al conectar con backend Paperless-ngx  
+**Problema Reportado:** Timeouts intermitentes al conectar con backend Tejido-ngx  
 **Root Cause:** IP incorrecta hardcodeada en código (192.168.40.17 no existe en red actual)  
 **Backend Status:** ✅ Funcionando perfectamente en localhost:8001  
 **Impacto:** 🔴 CRÍTICO - App no puede conectar con servidor desde dispositivos móviles  
@@ -23,10 +23,10 @@
 
 #### Docker Containers Status
 ```bash
-$ docker ps --filter "name=paperless"
+$ docker ps --filter "name=tejido"
 NAMES                   STATUS                PORTS
-paperless_webserver_1   Up 9 days (healthy)   0.0.0.0:8001->8000/tcp
-paperless_broker_1      Up 9 days             6379/tcp
+tejido_webserver_1   Up 9 days (healthy)   0.0.0.0:8001->8000/tcp
+tejido_broker_1      Up 9 days             6379/tcp
 ```
 
 **Resultado:** ✅ Contenedores operacionales, 9 días de uptime
@@ -34,7 +34,7 @@ paperless_broker_1      Up 9 days             6379/tcp
 #### Logs de Backend
 ```bash
 $ docker logs 4e58904b8162 --tail 50 | grep -i "error\|warning"
-[WARNING] [paperless.tasks] Classifier error: No training data available.
+[WARNING] [tejido.tasks] Classifier error: No training data available.
 ```
 
 **Resultado:** ✅ Solo 1 WARNING menor (esperado, no hay datos de training)  
@@ -99,7 +99,7 @@ class ApiConstants {
   static const String dockerInternalUrl = 'http://172.21.0.3:8000';
   
   // Storage key para configuración dinámica
-  static const String baseUrlKey = 'paperless_base_url';
+  static const String baseUrlKey = 'tejido_base_url';
 }
 ```
 
@@ -228,7 +228,7 @@ class ApiService {
 // Tejido (frontend web) genera QR:
 {
   "server_url": "http://192.168.110.149:8001",
-  "server_name": "Paperless Chía 2",
+  "server_name": "Tejido Chía 2",
   "timestamp": "2025-11-16T12:00:00Z"
 }
 
@@ -259,12 +259,12 @@ class ApiService {
 
 ```dart
 // Backend anuncia:
-paperless-chia2.local -> 192.168.110.149:8001
+tejido-chia2.local -> 192.168.110.149:8001
 
 // App Flutter descubre:
 import 'package:nsd/nsd.dart';
 
-final discovery = await startDiscovery('_paperless._tcp');
+final discovery = await startDiscovery('_tejido._tcp');
 // Encuentra automáticamente servidor en red local
 ```
 
@@ -392,13 +392,13 @@ curl -s http://NUEVA_IP:8001/api/ | python3 -m json.tool
 ### Verificar Contenedores Docker
 ```bash
 # Status de contenedores
-docker ps --filter "name=paperless"
+docker ps --filter "name=tejido"
 
 # Logs recientes
-docker logs paperless_webserver_1 --tail 50
+docker logs tejido_webserver_1 --tail 50
 
 # Django check
-docker exec paperless_webserver_1 python manage.py check
+docker exec tejido_webserver_1 python manage.py check
 ```
 
 ### Compilar APK con Nueva IP

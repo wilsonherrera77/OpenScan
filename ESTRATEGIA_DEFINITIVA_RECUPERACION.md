@@ -23,7 +23,7 @@
 #### 1. **AUSENCIA DE CONTROL DE VERSIONES REAL**
 ```bash
 # Estado actual Git:
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 git status
 # Resultado: "Not a git repository"
 ```
@@ -116,7 +116,7 @@ ls -lh ~/Descargas/Lumara_v5.7.0*.apk
 **Testing Protocol (OBLIGATORIO antes de declarar "funcional"):**
 ```bash
 # A. Desinstalar completamente
-adb uninstall com.ethereal.openscan
+adb uninstall com.ethereal.lumara
 
 # B. Instalar candidato
 adb install -r ~/Descargas/Lumara_v5.7.0_FINAL_20251103.apk
@@ -163,7 +163,7 @@ adb install -r ~/Descargas/Lumara_v5.5.0_UNIX_EOL_GARANTIZADO_20251012_113207.ap
 **CRÍTICO:** Sin Git, imposible avanzar de forma segura
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # 1. Verificar si hay .git oculto
 ls -la | grep .git
@@ -210,7 +210,7 @@ Features funcionando:
 - Login con token
 - Selección de persona con búsqueda
 - Captura de documentos
-- Upload a Paperless-ngx
+- Upload a Tejido-ngx
 
 Known issues:
 - Sin relaciones automáticas persona-documento
@@ -291,7 +291,7 @@ flutter pub get
 flutter build apk --release
 
 # PASO 5: Testing exhaustivo
-adb uninstall com.ethereal.openscan  # Limpio
+adb uninstall com.ethereal.lumara  # Limpio
 adb install -r build/app/outputs/flutter-apk/app-release.apk
 
 # Verificar feature específica:
@@ -377,7 +377,7 @@ git tag v5.7.2-instant-ip-config
 ```bash
 # 1. Branch
 git checkout main
-cd /home/smt/Escritorio/programacion_proyectos/paperless/paperless-ngx/paperless-ngx
+cd /home/smt/Escritorio/programacion_proyectos/tejido/tejido-ngx/tejido-ngx
 git status  # Verificar si hay .git
 
 # 2. Verificar cambios en app-frame.component.html
@@ -395,7 +395,7 @@ docker-compose up -d webserver
 docker-compose logs -f webserver | grep -i "webpack compiled"
 
 # 5. Verificar en archivos compilados
-docker exec paperless-webserver-1 grep -r "dashboard/qr-setup" /usr/src/paperless/static/frontend/
+docker exec tejido-webserver-1 grep -r "dashboard/qr-setup" /usr/src/tejido/static/frontend/
 
 # 6. CRÍTICO: Browser hard refresh
 # En navegador: Ctrl+Shift+R (Linux/Windows) o Cmd+Shift+R (Mac)
@@ -538,7 +538,7 @@ fi
 
 # 3. Uninstall anterior
 echo "🧹 Desinstalando versión anterior..."
-adb uninstall com.ethereal.openscan 2>/dev/null || true
+adb uninstall com.ethereal.lumara 2>/dev/null || true
 
 # 4. Install nueva
 echo "📦 Instalando $APK_PATH..."
@@ -555,7 +555,7 @@ LOGCAT_PID=$!
 
 # 7. Launch app
 echo "🚀 Lanzando app..."
-adb shell monkey -p com.ethereal.openscan 1
+adb shell monkey -p com.ethereal.lumara 1
 sleep 5
 
 # 8. Tests manuales
@@ -806,7 +806,7 @@ Task(
 ./verificar_baseline.sh
 
 # 2. Inicializar Git
-cd OpenScan && git init && git add . && git commit -m "baseline"
+cd Lumara && git init && git add . && git commit -m "baseline"
 
 # 3. Testing exhaustivo de baseline
 ./scripts/test_apk_before_release.sh ~/Descargas/Lumara_v5.7.0*.apk

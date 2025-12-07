@@ -4,20 +4,20 @@
 /// SECURITY NOTE: Sensitive data (tokens, passwords) must NEVER be stored here.
 /// Use SecureConfigManager for all sensitive configuration.
 class EnvConfig {
-  // Paperless Configuration (NON-SENSITIVE)
+  // Tejido Configuration (NON-SENSITIVE)
   // Default URLs for development/testing only
-  static const String defaultPaperlessBaseUrl = String.fromEnvironment(
-    'PAPERLESS_BASE_URL',
+  static const String defaultTejidoBaseUrl = String.fromEnvironment(
+    'TEJIDO_BASE_URL',
     defaultValue: 'http://10.0.2.2:8001', // Android emulator localhost
   );
 
   // SECURITY: API tokens MUST NOT be hardcoded
   // Tokens are managed by SecureConfigManager using encrypted storage
   @Deprecated('Use SecureConfigManager.getApiToken() instead')
-  static const String paperlessApiToken = '';
+  static const String tejidoApiToken = '';
 
   // App Configuration
-  static const String appName = 'OpenScan Indígenas';
+  static const String appName = 'Lumara Indígenas';
   static const String appVersion = '3.0.0';
 
   // Feature Flags
@@ -38,7 +38,7 @@ class EnvConfig {
   // Storage
   static const int maxImageSize = 1920;
   static const int imageQuality = 85;
-  static const String databaseName = 'openscan_indigenas.db';
+  static const String databaseName = 'lumara_indigenas.db';
 
   /// Check if running in production
   static bool get isProduction => const bool.fromEnvironment('dart.vm.product');
@@ -48,6 +48,6 @@ class EnvConfig {
 
   /// Get complete API URL
   static String getApiUrl(String endpoint) {
-    return '$defaultPaperlessBaseUrl$endpoint';
+    return '$defaultTejidoBaseUrl$endpoint';
   }
 }

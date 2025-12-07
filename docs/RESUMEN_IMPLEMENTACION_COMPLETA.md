@@ -18,9 +18,9 @@
 
 ## 📋 Archivos Modificados
 
-### Backend (Paperless)
+### Backend (Tejido)
 
-#### `/paperless-ngx/src/documents/views_census.py`
+#### `/tejido-ngx/src/documents/views_census.py`
 **Líneas**: 111-171 (61 líneas agregadas)
 
 **Cambios**:
@@ -135,7 +135,7 @@ File Path: /storage/emulated/0/...
 ═══════════════════════════════════════════════════════
 ```
 
-#### 3. `lib/data/datasources/paperless_api_client.dart`
+#### 3. `lib/data/datasources/tejido_api_client.dart`
 **Líneas modificadas**: 351-518 (168 líneas)
 
 **Logging agregado**:
@@ -243,7 +243,7 @@ Endpoint: POST /api/documents/upload_with_person/
 **Análisis**:
 - `upload_service.dart:455` → Llama `uploadDocumentForPerson()` ✓
 - `document_repository.dart:91` → Llama `uploadDocumentWithPerson()` ✓
-- `paperless_api_client.dart:381` → POST al endpoint correcto ✓
+- `tejido_api_client.dart:381` → POST al endpoint correcto ✓
 - Todos los parámetros se pasan correctamente ✓
 
 **Conclusión**: El flujo de código es correcto en teoría.
@@ -310,7 +310,7 @@ Cuando instales y uses el nuevo APK, los logs te dirán **EXACTAMENTE**:
    - DocumentCaptureScreen (captura)
    - upload_service (procesamiento)
    - document_repository (preparación)
-   - paperless_api_client (comunicación)
+   - tejido_api_client (comunicación)
 
 ### Diagnóstico Automatizado
 
@@ -330,7 +330,7 @@ El código ahora incluye **validaciones automáticas** que:
 |---------|-------------------|---------------|------------|
 | `upload_service.dart` | ~50 | ~180 | +260% |
 | `document_repository.dart` | ~40 | ~90 | +125% |
-| `paperless_api_client.dart` | ~50 | ~170 | +240% |
+| `tejido_api_client.dart` | ~50 | ~170 | +240% |
 | `views_census.py` (backend) | ~10 | ~65 | +550% |
 | **TOTAL** | ~150 | ~505 | +237% |
 
@@ -380,7 +380,7 @@ El código ahora incluye **validaciones automáticas** que:
 
 ```bash
 # El APK estará en:
-/home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/build/app/outputs/flutter-apk/app-release.apk
+/home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara/build/app/outputs/flutter-apk/app-release.apk
 
 # Copiar a nombre descriptivo
 cp app-release.apk ~/Descargas/Lumara_v4.5.2_LOGGING_DIAGNOSTICO_$(date +%Y%m%d_%H%M%S).apk
@@ -446,7 +446,7 @@ Error type: connectionTimeout / receiveTimeout
 
 ```bash
 # Opción 1: Script watch_logs.sh
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./scripts/watch_logs.sh
 
 # Opción 2: adb logcat directo
@@ -460,7 +460,7 @@ adb logcat | grep -E "❌|⚠️|ERROR|PROBLEMA"
 
 ```bash
 # Ver relaciones documento-persona
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import DocumentPersonRelation
 print(f'Total relaciones: {DocumentPersonRelation.objects.count()}')
 for rel in DocumentPersonRelation.objects.all()[:10]:
@@ -468,7 +468,7 @@ for rel in DocumentPersonRelation.objects.all()[:10]:
 "
 
 # Ver documentos sin asociación
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import Document, DocumentPersonRelation
 total_docs = Document.objects.count()
 docs_con_persona = DocumentPersonRelation.objects.values('document').distinct().count()
@@ -503,7 +503,7 @@ El código anti-duplicados en `views_census.py` no se refleja en el contenedor.
 ### Opción A: Reconstruir Imagen
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/paperless-ngx/paperless-ngx
+cd /home/smt/Escritorio/programacion_proyectos/tejido/tejido-ngx/tejido-ngx
 
 # Reconstruir imagen de webserver
 docker-compose build webserver
@@ -519,7 +519,7 @@ Editar `docker-compose.yml`:
 services:
   webserver:
     volumes:
-      - ./src:/usr/src/paperless/src:ro  # ← Agregar esta línea
+      - ./src:/usr/src/tejido/src:ro  # ← Agregar esta línea
 ```
 
 Luego:
@@ -531,13 +531,13 @@ docker-compose restart webserver
 
 ```bash
 # Copiar archivo directamente (temporal)
-docker cp src/documents/views_census.py paperless-webserver-1:/usr/src/paperless/src/documents/views_census.py
+docker cp src/documents/views_census.py tejido-webserver-1:/usr/src/tejido/src/documents/views_census.py
 
 # Reiniciar
 docker-compose restart webserver
 
 # Verificar contenido
-docker exec paperless-webserver-1 cat /usr/src/paperless/src/documents/views_census.py | grep "VALIDACIÓN DE DUPLICADOS"
+docker exec tejido-webserver-1 cat /usr/src/tejido/src/documents/views_census.py | grep "VALIDACIÓN DE DUPLICADOS"
 ```
 
 ---
@@ -563,7 +563,7 @@ docker exec paperless-webserver-1 cat /usr/src/paperless/src/documents/views_cen
 
 - [x] Logging exhaustivo en `upload_service.dart`
 - [x] Logging exhaustivo en `document_repository.dart`
-- [x] Logging exhaustivo en `paperless_api_client.dart`
+- [x] Logging exhaustivo en `tejido_api_client.dart`
 - [x] Validación anti-duplicados en `views_census.py`
 - [ ] APK compilado con logging (en progreso)
 

@@ -13,7 +13,7 @@
 ### Situación Anterior (v6.1.1)
 ❌ **Documentos se subían SIN asociación de metadata:**
 - Upload funcionaba → HTTP 200 OK
-- Documento creado en Paperless
+- Documento creado en Tejido
 - **PERO:** Sin asociación con persona del censo
 - **PERO:** Sin tipo de documento guardado
 - **PERO:** Búsqueda por persona NO funcionaba
@@ -29,7 +29,7 @@
 ### Solución Actual (v6.2.0)
 ✅ **Asociación COMPLETA de metadata persona-documento:**
 - Upload funciona → HTTP 201 Created
-- Documento creado en Paperless
+- Documento creado en Tejido
 - **✅ Asociado automáticamente con persona del censo**
 - **✅ Tipo de documento guardado**
 - **✅ Búsqueda por persona FUNCIONA en Tejido**
@@ -90,7 +90,7 @@ curl -X POST "http://192.168.40.17:8001/api/documents/upload_with_person/" \
 
 ## 📝 CAMBIOS IMPLEMENTADOS
 
-### 1. Endpoint Restaurado (paperless_api_client.dart)
+### 1. Endpoint Restaurado (tejido_api_client.dart)
 
 **ANTES (v6.1.1):**
 ```dart
@@ -306,13 +306,13 @@ result = consume_file.apply(  # .apply() = SÍNCRONO
 adb push ~/Descargas/Lumara_v6.2.0_MetadataFix_PersonDocAssociation.apk /sdcard/
 
 # Desinstalar versión anterior (limpio)
-adb uninstall com.ethereal.openscan
+adb uninstall com.ethereal.lumara
 
 # Instalar v6.2.0
 adb install ~/Descargas/Lumara_v6.2.0_MetadataFix_PersonDocAssociation.apk
 
 # Verificar versión instalada
-adb shell dumpsys package com.ethereal.openscan | grep versionName
+adb shell dumpsys package com.ethereal.lumara | grep versionName
 # Output: versionName=6.2.0
 ```
 
@@ -321,7 +321,7 @@ adb shell dumpsys package com.ethereal.openscan | grep versionName
 ## 📌 ARCHIVOS MODIFICADOS
 
 ```
-lib/data/datasources/paperless_api_client.dart
+lib/data/datasources/tejido_api_client.dart
   - Línea 411-422: Restaurar metadata en FormData
   - Línea 433-450: Cambiar a endpoint custom
   - Línea 461-516: Actualizar manejo de respuesta

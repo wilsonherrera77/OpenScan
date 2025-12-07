@@ -1,10 +1,10 @@
 #!/bin/bash
-# OpenScan Indigenous Communities Build Script
+# Lumara Indigenous Communities Build Script
 # Generates Drift database code and prepares app for build
 
 set -e
 
-echo "🔨 OpenScan Build Script"
+echo "🔨 Lumara Build Script"
 echo "========================"
 echo ""
 

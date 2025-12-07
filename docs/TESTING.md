@@ -1,4 +1,4 @@
-# Testing Guide - OpenScan Indígenas
+# Testing Guide - Lumara Indígenas
 
 ## 📋 Table of Contents
 
@@ -174,16 +174,16 @@ Target Coverage: ≥70%
 ```dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:openscan_indigenas/data/repositories/auth_repository.dart';
+import 'package:lumara_indigenas/data/repositories/auth_repository.dart';
 import '../../mocks/mock_api_client.mocks.dart';
 import '../../helpers/fixtures.dart';
 
 void main() {
   late AuthRepository repository;
-  late MockPaperlessApiClient mockApiClient;
+  late MockTejidoApiClient mockApiClient;
 
   setUp(() {
-    mockApiClient = MockPaperlessApiClient();
+    mockApiClient = MockTejidoApiClient();
     repository = AuthRepository(mockApiClient);
   });
 
@@ -219,7 +219,7 @@ void main() {
 
 ```dart
 import 'package:flutter_test/flutter_test.dart';
-import 'package:openscan_indigenas/presentation/widgets/upload_queue_indicator.dart';
+import 'package:lumara_indigenas/presentation/widgets/upload_queue_indicator.dart';
 import '../../helpers/test_helpers.dart';
 
 void main() {
@@ -245,7 +245,7 @@ void main() {
 ```dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:openscan_indigenas/main.dart' as app;
+import 'package:lumara_indigenas/main.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -274,7 +274,7 @@ void main() {
 **Fixtures for Test Data**
 
 ```dart
-import 'package:openscan_indigenas/domain/entities/person.dart';
+import 'package:lumara_indigenas/domain/entities/person.dart';
 import '../../helpers/fixtures.dart';
 
 // Create mock person
@@ -409,7 +409,7 @@ Always annotate mock classes:
 
 ```dart
 import 'package:mockito/annotations.dart';
-import 'package:openscan_indigenas/data/repositories/auth_repository.dart';
+import 'package:lumara_indigenas/data/repositories/auth_repository.dart';
 
 @GenerateMocks([AuthRepository])
 void main() {}

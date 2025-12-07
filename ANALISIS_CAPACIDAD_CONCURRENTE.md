@@ -20,9 +20,9 @@ Disco: Suficiente para operación (no es bottleneck)
 Red: LAN local (WiFi + Ethernet)
 ```
 
-### **Recursos Paperless (Actual):**
+### **Recursos Tejido (Actual):**
 ```
-Paperless Webserver:
+Tejido Webserver:
   - RAM: 544 MB (1.72% de 30 GB)
   - CPU: 0.50% (de 22 cores)
   - Procesos: 27 PIDs
@@ -49,7 +49,7 @@ Concurrency: 22 tareas simultáneas
 
 Configuración:
 - Pool: prefork (procesos independientes)
-- Task routes: documents.tasks.* → queue 'paperless'
+- Task routes: documents.tasks.* → queue 'tejido'
 - Broker: Redis (sin límite de memoria)
 - Result backend: Redis
 ```
@@ -126,8 +126,8 @@ Tiempo de respuesta:
   - OCR completa: 30-45 segundos (background)
 
 Recursos usados:
-  - CPU: ~10% (5% Paperless + 5% OCR)
-  - RAM: ~2 GB (Paperless + 5 workers activos)
+  - CPU: ~10% (5% Tejido + 5% OCR)
+  - RAM: ~2 GB (Tejido + 5 workers activos)
   - Red: ~1-2 MB/s
 
 RESULTADO: ✅ Sistema opera FLUIDAMENTE
@@ -153,7 +153,7 @@ Tiempo de respuesta:
 
 Recursos usados:
   - CPU: ~35% (10% Django + 25% OCR)
-  - RAM: ~4 GB (Paperless + 15 workers activos)
+  - RAM: ~4 GB (Tejido + 15 workers activos)
   - Red: ~3-5 MB/s
 
 RESULTADO: ✅ Sistema opera BIEN, con colas pequeñas
@@ -180,7 +180,7 @@ Tiempo de respuesta:
 
 Recursos usados:
   - CPU: ~60% (15% Django + 45% OCR)
-  - RAM: ~6 GB (Paperless + 22 workers activos + cola)
+  - RAM: ~6 GB (Tejido + 22 workers activos + cola)
   - Red: ~6-8 MB/s
 
 RESULTADO: ⚠️ Sistema opera, pero con COLA CRECIENTE
@@ -214,7 +214,7 @@ Tiempo de respuesta:
 
 Recursos usados:
   - CPU: ~85% (20% Django + 65% OCR)
-  - RAM: ~8 GB (Paperless + workers + cola Redis)
+  - RAM: ~8 GB (Tejido + workers + cola Redis)
   - Net: ~10-12 MB/s
 
 RESULTADO: ❌ Sistema SATURADO
@@ -234,7 +234,7 @@ Límite actual: 22 workers simultáneos
 Throughput máximo: 44 documentos/minuto
 
 Para aumentar:
-  - Agregar variable de entorno: PAPERLESS_TASK_WORKERS=44
+  - Agregar variable de entorno: TEJIDO_TASK_WORKERS=44
   - Duplicar workers → 88 docs/minuto
   - Requiere: CPUs suficientes (ya tenemos 22 cores)
 ```
@@ -257,7 +257,7 @@ Optimizaciones posibles:
 ```
 RAM disponible: 10 GB
 Uso proyectado (50 usuarios):
-  - Paperless: 1 GB
+  - Tejido: 1 GB
   - Celery workers (22): 4 GB
   - Redis cola (5000 docs): 2 GB
   - Total: ~7 GB
@@ -313,13 +313,13 @@ Uso proyectado (50 usuarios):
 ✅ Funciona bien con configuración actual
 ⚠️ Considerar aumentar workers a 30:
    docker-compose.yml:
-     PAPERLESS_TASK_WORKERS: 30
+     TEJIDO_TASK_WORKERS: 30
 ```
 
 ### **21-30 Usuarios (LÍMITE):**
 ```
 ⚠️ Aumentar workers OBLIGATORIO:
-   PAPERLESS_TASK_WORKERS: 44 (duplicar)
+   TEJIDO_TASK_WORKERS: 44 (duplicar)
 
 ⚠️ Considerar:
    - Múltiples workers en paralelo
@@ -357,7 +357,7 @@ Opción C: OCR externo
 services:
   webserver:
     environment:
-      - PAPERLESS_TASK_WORKERS=44  # Duplicar de 22 a 44
+      - TEJIDO_TASK_WORKERS=44  # Duplicar de 22 a 44
 ```
 
 **Efecto:**
@@ -369,12 +369,12 @@ services:
 
 ### **Mejora #2: Optimizar Tesseract**
 
-**Archivo:** Configuración de Paperless
+**Archivo:** Configuración de Tejido
 ```yaml
 environment:
-  - PAPERLESS_OCR_MODE=skip_noarchive  # Skip OCR para docs ya procesados
-  - PAPERLESS_OCR_LANGUAGE=spa  # Solo español (más rápido)
-  - PAPERLESS_OCR_PAGES=1  # Solo primera página para preview rápido
+  - TEJIDO_OCR_MODE=skip_noarchive  # Skip OCR para docs ya procesados
+  - TEJIDO_OCR_LANGUAGE=spa  # Solo español (más rápido)
+  - TEJIDO_OCR_PAGES=1  # Solo primera página para preview rápido
 ```
 
 **Efecto:**
@@ -513,7 +513,7 @@ Límite técnico: 30 usuarios (con colas largas) ❌
 ```
 
 **Para más usuarios, implementar:**
-1. Aumentar PAPERLESS_TASK_WORKERS a 44 → Soporta 30-40 usuarios
+1. Aumentar TEJIDO_TASK_WORKERS a 44 → Soporta 30-40 usuarios
 2. Optimizar OCR → Soporta 50-60 usuarios
 3. Arquitectura distribuida → Soporta 100+ usuarios
 

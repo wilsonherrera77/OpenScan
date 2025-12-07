@@ -72,7 +72,7 @@ Se ejecutó verificación E2E completa del sistema Lumara/Tejido siguiendo proto
 
 **Detalle de Errores en Tests**:
 - **Archivos faltantes**: 15+ tests referencian archivos eliminados/renombrados
-- **Imports rotos**: `openscan_indigenas` vs `lumara_scan` package name mismatch
+- **Imports rotos**: `lumara_indigenas` vs `lumara_scan` package name mismatch
 - **Mocks desactualizados**: 20+ archivos usan mocks de clases eliminadas
 - **Dependencias faltantes**: `flutter_driver`, `test` package no en pubspec.yaml
 
@@ -94,14 +94,14 @@ Archivo `ESTADO_ACTUAL_20251115.md` creado automáticamente con snapshot complet
 
 ---
 
-## 2. VERIFICACION BACKEND (Django/Paperless-ngx)
+## 2. VERIFICACION BACKEND (Django/Tejido-ngx)
 
 ### 2.1 Estado de Servicios Docker ✅ OPERACIONAL
 
 ```bash
 CONTAINER               STATUS              PUERTO
-paperless_webserver_1   Up 7 days (healthy) 0.0.0.0:8001->8000/tcp
-paperless_broker_1      Up 7 days           6379/tcp
+tejido_webserver_1   Up 7 days (healthy) 0.0.0.0:8001->8000/tcp
+tejido_broker_1      Up 7 days           6379/tcp
 censo-postgres          Up 7 days           0.0.0.0:15432->5432/tcp
 censo-redis             Up 7 days           0.0.0.0:16379->6379/tcp
 ns_postgres             Up 7 days (healthy) 0.0.0.0:5433->5432/tcp
@@ -129,7 +129,7 @@ ns_postgres             Up 7 days (healthy) 0.0.0.0:5433->5432/tcp
 - [PENDING] `/api/assignments/` - Asignaciones digitalizador
 
 **Acción Requerida**:
-1. Verificar logs de Docker: `docker logs paperless_webserver_1 --tail 100`
+1. Verificar logs de Docker: `docker logs tejido_webserver_1 --tail 100`
 2. Verificar performance red local
 3. Ejecutar healthcheck manual: `curl -v http://192.168.40.17:8001/api/`
 
@@ -340,9 +340,9 @@ return await Future.any([
 ]);
 
 // ✅ Connectivity validation robusta
-final serverCheck = await ConnectivityService.validatePaperlessConnection(baseUrl);
+final serverCheck = await ConnectivityService.validateTejidoConnection(baseUrl);
 if (serverCheck['error'] != null) {
-  _logger.e('❌ Paperless server validation failed: ${serverCheck['error']}');
+  _logger.e('❌ Tejido server validation failed: ${serverCheck['error']}');
   return false;
 }
 ```
@@ -411,7 +411,7 @@ try {
 | URI no existe | ~300 | Imports de archivos eliminados/renombrados |
 | Undefined identifier | ~400 | Clases/funciones eliminadas |
 | Undefined function | ~150 | Mocks desactualizados |
-| Package name mismatch | ~100 | `openscan_indigenas` vs `lumara_scan` |
+| Package name mismatch | ~100 | `lumara_indigenas` vs `lumara_scan` |
 
 **Archivos Más Afectados**:
 1. `test/services/upload_service_test.dart` - 50+ errores
@@ -514,7 +514,7 @@ Pendiente de refactor completo:
 
 ### 6.2 Package Name Inconsistente
 
-**Problema**: Código usa `lumara_scan`, tests usan `openscan_indigenas`.
+**Problema**: Código usa `lumara_scan`, tests usan `lumara_indigenas`.
 
 **Impacto**: Tests rotos, confusión en equipo.
 

@@ -222,7 +222,7 @@ final logFile = await auditLogger.exportLog();
 
 **Estado:** ✅ MEJORADO - Ya existía validación parcial
 
-**Ubicación:** `lib/data/datasources/paperless_api_client.dart`
+**Ubicación:** `lib/data/datasources/tejido_api_client.dart`
 
 **Implementación Existente:**
 ```dart
@@ -572,7 +572,7 @@ final apiKey = await secureData.getSecureString('openai_api_key');
 **API Keys Protegidas:**
 - ✅ OpenAI API Key (OCR cloud)
 - ✅ Tesseract Cloud API Key (fallback)
-- ✅ Paperless API Token
+- ✅ Tejido API Token
 - ✅ Custom API keys de usuario
 
 ---
@@ -777,7 +777,7 @@ flutter test test/security/rate_limiter_test.dart
 │  ┌──────────────────────────────────────────────────────────┐  │
 │  │              NETWORK LAYER (API Client)                  │  │
 │  │                                                          │  │
-│  │  PaperlessApiClient (Dio):                              │  │
+│  │  TejidoApiClient (Dio):                              │  │
 │  │    - HTTPS Enforcement (production)                     │  │
 │  │    - Security Headers:                                  │  │
 │  │      * X-Content-Type-Options: nosniff                  │  │
@@ -822,7 +822,7 @@ flutter test test/security/rate_limiter_test.dart
 
 - [ ] **Integrar FileEncryptionService en DocumentRepository**
   - Encriptar documentos capturados antes de almacenar localmente
-  - Desencriptar antes de upload a Paperless
+  - Desencriptar antes de upload a Tejido
   - Integrar en offline queue
 
 - [ ] **Integrar AuditLogger en todas las operaciones críticas**
@@ -830,7 +830,7 @@ flutter test test/security/rate_limiter_test.dart
   - UploadService: batch uploads, failures
   - ConfigurationService: cambios de settings
 
-- [ ] **Integrar ApiRateLimiter en PaperlessApiClient**
+- [ ] **Integrar ApiRateLimiter en TejidoApiClient**
   - Rate limiting por endpoint
   - Rate limiting por usuario
   - Logs cuando límite alcanzado
@@ -901,7 +901,7 @@ docs/
 
 ```
 lib/data/datasources/
-  └── paperless_api_client.dart         (MODIFICADO - Security headers)
+  └── tejido_api_client.dart         (MODIFICADO - Security headers)
 
 lib/data/repositories/
   └── auth_repository.dart               (MODIFICADO - Audit logging integration)

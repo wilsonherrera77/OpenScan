@@ -1,6 +1,6 @@
 # 📋 Guía Rápida de Campo
 
-**OpenScan Indígenas** - Referencia rápida para operadores de campo
+**Lumara Indígenas** - Referencia rápida para operadores de campo
 
 ---
 
@@ -111,7 +111,7 @@ Menú → Reportes → Ver estadísticas
 
 ## 📞 Soporte de Emergencia
 
-**Contacto:** support@openscan-indigenas.org
+**Contacto:** support@lumara-indigenas.org
 
 **En caso de:**
 - App no funciona después de reiniciar

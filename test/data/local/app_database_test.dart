@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:drift/drift.dart' hide isNull, isNotNull;
 import 'package:drift/native.dart';
-import 'package:openscan_indigenas/data/local/database/app_database.dart';
+import 'package:lumara_indigenas/data/local/database/app_database.dart';
 
 void main() {
   late AppDatabase database;
@@ -162,7 +162,7 @@ void main() {
         personId: 'P001',
         personName: 'Juan Pérez',
         documentType: 'CEDULA_CIUDADANIA',
-        paperlessDocumentId: 123,
+        tejidoDocumentId: 123,
         fileSize: 1024000, // 1MB
         uploadDurationMs: 2500, // 2.5 seconds
         wasOffline: true,
@@ -173,7 +173,7 @@ void main() {
       expect(history.length, 1);
       expect(history[0].personId, 'P001');
       expect(history[0].documentType, 'CEDULA_CIUDADANIA');
-      expect(history[0].paperlessDocumentId, 123);
+      expect(history[0].tejidoDocumentId, 123);
       expect(history[0].fileSize, 1024000);
       expect(history[0].uploadDurationMs, 2500);
       expect(history[0].wasOffline, true);

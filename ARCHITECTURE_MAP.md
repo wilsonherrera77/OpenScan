@@ -15,14 +15,14 @@
 |--------|-------|---------------|----------------|-----------|
 | **LoginScreen** | `/login` | JWT authentication with username/password. Supports custom base URL configuration. Rate limiting (5 attempts). | AuthProvider | → PersonSelectionScreen (on success) |
 | **OnboardingScreen** | `/onboarding` | First-time user introduction (4 pages). Covers: benefits, offline mode, privacy, security | None (SharedPreferences) | → LoginScreen |
-| **ServerConfigScreen** | `/server-config` | Configure and test Paperless API connection. Connection status validation | AuthProvider | Settings/Config |
+| **ServerConfigScreen** | `/server-config` | Configure and test Tejido API connection. Connection status validation | AuthProvider | Settings/Config |
 
 ### 1.2 Census & Document Selection
 
 | Screen | Route | Functionality | Providers Used | Navigation |
 |--------|-------|---------------|----------------|-----------|
 | **PersonSelectionScreen** | `/person-selection` | Search/select persons from census data. Shows statistics. Logout option | AuthProvider, CensusProvider | → DocumentMetadataScreen (on selection) |
-| **DocumentMetadataScreen** | `/document-metadata` | Select document type and enter document number after person selection | CensusProvider | → HomeScreen (OpenScan camera flow) |
+| **DocumentMetadataScreen** | `/document-metadata` | Select document type and enter document number after person selection | CensusProvider | → HomeScreen (Lumara camera flow) |
 
 ### 1.3 Document Management
 
@@ -70,7 +70,7 @@
 | **Key Methods** | login(), logout(), updateBaseUrl(), getBaseUrl(), _checkAuthStatus() |
 | **Key Getters** | isAuthenticated, isLoading, error, currentToken, username, baseUrl |
 | **Screens Using It** | LoginScreen, PersonSelectionScreen, all dashboards |
-| **Data Flow** | User credentials → AuthRepository → Paperless API → JWT token storage |
+| **Data Flow** | User credentials → AuthRepository → Tejido API → JWT token storage |
 
 **Key Features:**
 - JWT authentication with access + refresh tokens
@@ -131,7 +131,7 @@
 
 | Aspect | Details |
 |--------|---------|
-| **API Client** | PaperlessApiClient (Dio HTTP) |
+| **API Client** | TejidoApiClient (Dio HTTP) |
 | **Storage** | FlutterSecureStorage (encrypted) |
 | **Key Methods** | login(username, password, baseUrl), logout(), isAuthenticated(), refreshToken() |
 | **Key Features** | Rate limiting, token caching, base URL configuration |
@@ -156,7 +156,7 @@
 
 | Aspect | Details |
 |--------|---------|
-| **API Client** | PaperlessApiClient (Dio HTTP) |
+| **API Client** | TejidoApiClient (Dio HTTP) |
 | **Database** | AppDatabase (SQLite with Drift) |
 | **Key Methods** | uploadDocumentForPerson(), uploadGenericDocument(), checkDocumentExists(), getDocumentHistory() |
 | **Key Features** | Anti-duplicate detection, document replacement support (isReplacement param), metadata caching (1-hour TTL) |
@@ -233,7 +233,7 @@ User Input (Login Screen)
     ↓
 [AuthRepository.login()]
     ├→ Rate limit check (5 attempts)
-    ├→ PaperlessApiClient.login() [HTTP POST /api/auth/login/]
+    ├→ TejidoApiClient.login() [HTTP POST /api/auth/login/]
     └→ JWT Token response
          ↓
     FlutterSecureStorage.save(token)
@@ -297,7 +297,7 @@ DocumentPreviewScreen
     │   └→ Compress to 60-80% quality
     │
     ├→ DocumentRepository.uploadDocumentForPerson()
-    │   └→ PaperlessApiClient.uploadDocument()
+    │   └→ TejidoApiClient.uploadDocument()
     │       └→ HTTP POST /api/documents/ (multipart)
     │           ├─ image file
     │           ├─ person_id
@@ -552,7 +552,7 @@ START
   │        ├─ Enter document number (textfield)
   │        ├─ Confirm → CensusProvider.setDocumentMetadata()
   │        │
-  │        └─→ [HomeScreen - OpenScan Camera]
+  │        └─→ [HomeScreen - Lumara Camera]
   │            │
   │            ├─ Capture → Image from camera
   │            │
@@ -693,7 +693,7 @@ START
 │  └─ AssignmentRepository             ├─ LocalOcrService              │
 │                                      ├─ ImageOptimizer (Phase 2)     │
 │  Data Sources                        ├─ DocumentScannerService       │
-│  ├─ PaperlessApiClient               ├─ ImageQualityChecker          │
+│  ├─ TejidoApiClient               ├─ ImageQualityChecker          │
 │  ├─ CensusDataSource                 ├─ ReportingService             │
 │  └─ AppDatabase (SQLite)             ├─ GapAnalysisService           │
 │                                      ├─ CSVExportService             │
@@ -846,7 +846,7 @@ Domain Layer
 lib/
 ├── main.dart (🔑 Entry point, Provider setup)
 ├── presentation/
-│   ├── screens/ (legacy OpenScan screens)
+│   ├── screens/ (legacy Lumara screens)
 │   ├── auth/
 │   │   └── login_screen.dart (🔑 Authentication)
 │   ├── census/
@@ -878,7 +878,7 @@ lib/
 │   └── widgets/ (Reusable UI components)
 ├── data/
 │   ├── datasources/
-│   │   ├── paperless_api_client.dart (🔑 API communication)
+│   │   ├── tejido_api_client.dart (🔑 API communication)
 │   │   └── census_data_source.dart (Census loading)
 │   ├── repositories/
 │   │   ├── auth_repository.dart (🔑 Auth logic)

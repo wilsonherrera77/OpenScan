@@ -62,7 +62,7 @@ curl -v http://192.168.40.17:8001/api/
 
 ### PASO 2: Verificar Código Fuente
 
-**File:** `lib/data/datasources/paperless_api_client.dart:330-339`
+**File:** `lib/data/datasources/tejido_api_client.dart:330-339`
 
 ```dart
 Future<bool> testConnection() async {
@@ -165,10 +165,10 @@ curl -v -H "Accept: application/json" http://192.168.40.17:8001/api/schema/view/
 
 ### Fix: Deshabilitar followRedirects
 
-**File:** `lib/data/datasources/paperless_api_client.dart:329-352`
+**File:** `lib/data/datasources/tejido_api_client.dart:329-352`
 
 ```dart
-/// Test connection to Paperless
+/// Test connection to Tejido
 Future<bool> testConnection() async {
   try {
     // ⚠️ IMPORTANT: Disable followRedirects to get the actual 302 response
@@ -239,7 +239,7 @@ Future<bool> testConnection() async {
 
 **Esperado:**
 - ✅ Internet: Conectado
-- ✅ Servidor Paperless: http://192.168.40.17:8001
+- ✅ Servidor Tejido: http://192.168.40.17:8001
 - ✅ Servidor alcanzable: Sí
 - ✅ Latencia: ~13 ms
 
@@ -323,7 +323,7 @@ curl -s -H "Authorization: Token YOUR_TOKEN" \
 
 | File | Lines | Change |
 |------|-------|--------|
-| `lib/data/datasources/paperless_api_client.dart` | 329-352 | followRedirects: false + validateStatus |
+| `lib/data/datasources/tejido_api_client.dart` | 329-352 | followRedirects: false + validateStatus |
 | `pubspec.yaml` | 7 | version: 6.0.4+67 |
 
 **Total:** 2 files, ~30 lines modified
@@ -348,7 +348,7 @@ curl -s -H "Authorization: Token YOUR_TOKEN" \
 4. Token de auth inválido (pero testConnection no usa token)
 
 **Próximos pasos si falla:**
-1. Verificar APK instalado: `adb shell dumpsys package com.ethereal.openscan | grep version`
+1. Verificar APK instalado: `adb shell dumpsys package com.ethereal.lumara | grep version`
 2. Capturar logs: `adb logcat | grep "testConnection"`
 3. Ver status code recibido: Buscar "🔍 testConnection response: XXX"
 4. Si no hay logs, el APK instalado es viejo

@@ -1,6 +1,6 @@
 # 📊 Estado de Preparación para Producción
 
-**OpenScan Indígenas v3.0.0**
+**Lumara Indígenas v3.0.0**
 **Fecha de Reporte:** 2025-10-07
 **Estado General:** ✅ Desarrollo Completo | ⏳ Bloqueadores Pendientes
 
@@ -8,10 +8,10 @@
 
 ## 🎯 Resumen Ejecutivo
 
-**OpenScan Indígenas** ha completado exitosamente **100% del desarrollo** incluyendo:
+**Lumara Indígenas** ha completado exitosamente **100% del desarrollo** incluyendo:
 - ✅ Sprint 1: Infraestructura base
 - ✅ Sprint 2: Funcionalidades core
-- ✅ Sprint 3: Integración con Paperless
+- ✅ Sprint 3: Integración con Tejido
 - ✅ Sprint 4: Características avanzadas
 
 **Estado actual:** Listo para producción desde perspectiva de desarrollo. Existen **4 bloqueadores externos** (no de código) que requieren resolución antes del despliegue.
@@ -63,8 +63,8 @@
 - [x] Clasificación de documentos
 - [x] Interfaz de usuario intuitiva
 
-### Sprint 3: Integración Paperless (100%)
-- [x] Cliente API de Paperless-ngx
+### Sprint 3: Integración Tejido (100%)
+- [x] Cliente API de Tejido-ngx
 - [x] Subida de documentos con progreso
 - [x] Gestión de metadatos
 - [x] Cola de subida offline
@@ -166,14 +166,14 @@ static const List<String> certificateFingerprints = [
 
 **Problema:**
 ```dart
-static const String paperlessProductionUrl = 'https://paperless.example.com';
-static const String paperlessStagingUrl = 'https://paperless-staging.example.com';
-static const String privacyPolicyUrl = 'https://openscan-indigenas.org/privacy';
-static const String termsOfServiceUrl = 'https://openscan-indigenas.org/terms';
+static const String tejidoProductionUrl = 'https://tejido.example.com';
+static const String tejidoStagingUrl = 'https://tejido-staging.example.com';
+static const String privacyPolicyUrl = 'https://lumara-indigenas.org/privacy';
+static const String termsOfServiceUrl = 'https://lumara-indigenas.org/terms';
 ```
 
 **Qué se necesita:**
-1. Servidor Paperless-ngx desplegado
+1. Servidor Tejido-ngx desplegado
 2. DNS configurado
 3. Páginas legales publicadas (Privacy Policy, Terms)
 4. Actualizar URLs con valores reales
@@ -192,7 +192,7 @@ static const String termsOfServiceUrl = 'https://openscan-indigenas.org/terms';
 
 **Problema:**
 ```dart
-static const String supportEmail = 'support@openscan-indigenas.org';
+static const String supportEmail = 'support@lumara-indigenas.org';
 ```
 
 **Qué se necesita:**
@@ -266,7 +266,7 @@ Se han creado los siguientes documentos para facilitar la resolución de bloquea
 
 **Semana 1: Infraestructura**
 ```
-Día 1-2: Configurar servidor Paperless-ngx
+Día 1-2: Configurar servidor Tejido-ngx
 Día 2-3: Instalar certificado SSL y configurar DNS
 Día 3: Generar fingerprints y actualizar código
 Día 4: Crear email de soporte
@@ -309,7 +309,7 @@ Día 35: 🚀 LANZAMIENTO A PRODUCCIÓN
 |------------|------------|-------|-------------|
 | Infraestructura base | ✅ 100% | ✅ 85% | ✅ |
 | Funcionalidades core | ✅ 100% | ✅ 87% | ✅ |
-| Integración Paperless | ✅ 100% | ✅ 83% | ✅ |
+| Integración Tejido | ✅ 100% | ✅ 83% | ✅ |
 | Características avanzadas | ✅ 100% | ✅ 88% | ✅ |
 | Seguridad | ✅ 100% | ✅ 90% | ✅ |
 
@@ -317,7 +317,7 @@ Día 35: 🚀 LANZAMIENTO A PRODUCCIÓN
 
 | Componente | Estado | Responsable |
 |------------|--------|-------------|
-| Servidor Paperless | ⏳ Pendiente | DevOps |
+| Servidor Tejido | ⏳ Pendiente | DevOps |
 | Certificado SSL | ⏳ Pendiente | DevOps |
 | DNS configurado | ⏳ Pendiente | DevOps |
 | Email de soporte | ⏳ Pendiente | Admin |
@@ -354,7 +354,7 @@ Día 35: 🚀 LANZAMIENTO A PRODUCCIÓN
 
 1. **Crear Email de Soporte** (2-4 horas)
    ```
-   - Crear: soporte@openscan-indigenas.org
+   - Crear: soporte@lumara-indigenas.org
    - Asignar responsable de monitoreo
    - Actualizar código en production_config.dart:245
    ```
@@ -366,7 +366,7 @@ Día 35: 🚀 LANZAMIENTO A PRODUCCIÓN
    - Solicitar timeline y presupuesto
    ```
 
-3. **Verificar Servidor Paperless** (1 hora)
+3. **Verificar Servidor Tejido** (1 hora)
    ```
    - Confirmar que está desplegado
    - Probar endpoint: curl https://tu-servidor/api/
@@ -385,8 +385,8 @@ Día 35: 🚀 LANZAMIENTO A PRODUCCIÓN
 
 5. **Actualizar URLs de Producción** (2-3 horas)
    ```
-   - Actualizar paperlessProductionUrl (línea 42)
-   - Actualizar paperlessStagingUrl (línea 50)
+   - Actualizar tejidoProductionUrl (línea 42)
+   - Actualizar tejidoStagingUrl (línea 50)
    - Crear y publicar Privacy Policy
    - Crear y publicar Terms of Service
    - Actualizar URLs en código
@@ -417,7 +417,7 @@ Sprint 2 (Completado): Funcionalidades Core
 ├── Entregables: 38 archivos, 2,850 líneas
 └── Estado: ✅ 100%
 
-Sprint 3 (Completado): Integración Paperless
+Sprint 3 (Completado): Integración Tejido
 ├── Duración: 2 semanas
 ├── Entregables: 52 archivos, 4,100 líneas
 └── Estado: ✅ 100%
@@ -466,7 +466,7 @@ La aplicación estará lista para producción cuando:
 - [x] Code review completado (100%)
 
 **Infraestructura:**
-- [ ] Servidor Paperless-ngx desplegado y accesible
+- [ ] Servidor Tejido-ngx desplegado y accesible
 - [ ] Certificado SSL instalado y funcional
 - [ ] DNS configurado correctamente
 - [ ] Certificate pinning configurado
@@ -556,7 +556,7 @@ flutter build apk --release --obfuscate --split-debug-info=build/debug-info
 
 ### Equipo de Infraestructura
 **Responsabilidades pendientes:**
-- [ ] Desplegar servidor Paperless-ngx
+- [ ] Desplegar servidor Tejido-ngx
 - [ ] Configurar DNS
 - [ ] Instalar certificado SSL
 - [ ] Generar fingerprints

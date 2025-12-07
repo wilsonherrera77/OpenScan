@@ -2,7 +2,7 @@
 
 **Fecha**: 27 de octubre de 2025
 **Ejecutado por**: Sistema de Testing Automatizado
-**Objetivo**: Verificar sincronización documento-persona en el backend de Paperless
+**Objetivo**: Verificar sincronización documento-persona en el backend de Tejido
 
 ---
 
@@ -19,10 +19,10 @@
 
 ### Veredicto Final
 
-**🟢 Backend Paperless FUNCIONA CORRECTAMENTE**
+**🟢 Backend Tejido FUNCIONA CORRECTAMENTE**
 
 El endpoint `/api/documents/upload_with_person/` está completamente operativo y crea correctamente:
-- ✅ Documentos en Paperless
+- ✅ Documentos en Tejido
 - ✅ Relaciones documento-persona (DocumentPersonRelation)
 - ✅ Metadata completa (person_id, NUIP, document_type, association_method)
 
@@ -34,7 +34,7 @@ El problema de sincronización reportado ("lumara no se está sincronizando y am
 
 ## 📋 Precondiciones Verificadas
 
-### ✅ Backend Paperless
+### ✅ Backend Tejido
 
 ```
 Estado del servidor: Up 3 days (healthy)
@@ -339,7 +339,7 @@ GET /api/census/3998/documents/
 ```
 IP anterior (en código): 172.20.10.3
 IP actual (DHCP): 172.20.10.13
-IP del contenedor: 172.21.0.3 (red paperless_default)
+IP del contenedor: 172.21.0.3 (red tejido_default)
 ```
 
 **Impacto**: Las pruebas fallaron inicialmente hasta usar `localhost:8001`
@@ -409,7 +409,7 @@ Persona 7019 (JUANITA ACERO):
 ### ✅ Lo Que Funciona
 
 1. **Endpoint Principal**: `/api/documents/upload_with_person/` funciona perfectamente
-2. **Creación de Documentos**: Se crean documentos en Paperless correctamente
+2. **Creación de Documentos**: Se crean documentos en Tejido correctamente
 3. **Creación de Relaciones**: Se crean relaciones DocumentPersonRelation correctamente
 4. **Metadata**: Toda la metadata se guarda correctamente (person_id, NUIP, document_type, etc.)
 5. **Consulta por Persona**: El endpoint `/api/census/{person_id}/documents/` funciona perfectamente
@@ -430,12 +430,12 @@ El reporte inicial del usuario fue:
 > "lumara no se está sincronizando y amarrando los documentos con la base de datos"
 
 **Hallazgos**:
-- ✅ El backend Paperless funciona PERFECTAMENTE
+- ✅ El backend Tejido funciona PERFECTAMENTE
 - ✅ El endpoint de upload crea documentos Y relaciones correctamente
 - ❌ Antes de las pruebas había 0 relaciones en la base de datos
 - ✅ Después de las pruebas se crearon 6 relaciones exitosamente
 
-**Conclusión**: El problema está en **Lumara**, NO en Paperless.
+**Conclusión**: El problema está en **Lumara**, NO en Tejido.
 
 **Hipótesis**:
 1. Lumara está usando el endpoint incorrecto (`/api/documents/post_document/` en lugar de `/api/documents/upload_with_person/`)
@@ -470,7 +470,7 @@ El reporte inicial del usuario fue:
 
 4. **Configurar IP Estática o Usar DNS**:
    - Evitar problemas de conectividad por cambios de IP DHCP
-   - Considerar usar `http://paperless.local:8001` con mDNS
+   - Considerar usar `http://tejido.local:8001` con mDNS
 
 ### Prioridad MEDIA
 
@@ -507,7 +507,7 @@ Total relaciones creadas: 6
 
 3. **Mediano Plazo**: Crear script de testing end-to-end que incluya:
    - Upload desde Lumara (app móvil)
-   - Verificación en Paperless (backend)
+   - Verificación en Tejido (backend)
    - Reporte automático de discrepancias
 
 ---
@@ -518,11 +518,11 @@ Para verificar el estado actual de la base de datos:
 
 ```bash
 # Total de relaciones
-docker exec paperless-webserver-1 python3 manage.py shell -c \
+docker exec tejido-webserver-1 python3 manage.py shell -c \
   "from documents.models import DocumentPersonRelation; print(DocumentPersonRelation.objects.count())"
 
 # Documentos por persona
-docker exec paperless-webserver-1 python3 manage.py shell -c \
+docker exec tejido-webserver-1 python3 manage.py shell -c \
   "from documents.models import DocumentPersonRelation; \
    relations = DocumentPersonRelation.objects.filter(person_id=3998); \
    print(f'Persona 3998: {relations.count()} documentos'); \
@@ -537,5 +537,5 @@ curl -s -X GET "http://localhost:8001/api/census/3998/documents/" \
 
 **Generado**: 27 de octubre de 2025
 **Duración de pruebas**: ~15 minutos
-**Ambiente**: Paperless-NGX en Docker (localhost:8001)
+**Ambiente**: Tejido-NGX en Docker (localhost:8001)
 **Versión Lumara**: v4.5.2 FASE 1+2+3 CENSO ACTUALIZADO

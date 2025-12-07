@@ -8,7 +8,7 @@
 
 ## 📋 Overview
 
-Sistema de cola offline que permite a la aplicación OpenScan continuar digitalizando documentos sin conexión a internet. Los documentos se almacenan localmente y se sincronizan automáticamente con Paperless-ngx cuando se restaura la conectividad.
+Sistema de cola offline que permite a la aplicación Lumara continuar digitalizando documentos sin conexión a internet. Los documentos se almacenan localmente y se sincronizan automáticamente con Tejido-ngx cuando se restaura la conectividad.
 
 ### Características Principales
 
@@ -27,7 +27,7 @@ Sistema de cola offline que permite a la aplicación OpenScan continuar digitali
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                     OpenScan App                         │
+│                     Lumara App                         │
 ├─────────────────────────────────────────────────────────┤
 │                                                          │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
@@ -42,7 +42,7 @@ Sistema de cola offline que permite a la aplicación OpenScan continuar digitali
 │                           ↓                   ↓          │
 │                    ┌──────────────────────────┐         │
 │                    │   Drift SQLite DB        │         │
-│                    │ openscan_indigenas.db    │         │
+│                    │ lumara_indigenas.db    │         │
 │                    └──────────────────────────┘         │
 │                                                          │
 └─────────────────────────────────────────────────────────┘
@@ -52,7 +52,7 @@ Sistema de cola offline que permite a la aplicación OpenScan continuar digitali
           ┌────────────────┴────────────────┐
           ↓                                 ↓
     ┌──────────┐                      ┌──────────┐
-    │ Paperless│                      │  Local   │
+    │ Tejido│                      │  Local   │
     │   API    │                      │  Queue   │
     └──────────┘                      └──────────┘
 ```
@@ -64,7 +64,7 @@ Sistema de cola offline que permite a la aplicación OpenScan continuar digitali
 ### Tables
 
 #### PendingUploads
-Documentos esperando ser subidos a Paperless.
+Documentos esperando ser subidos a Tejido.
 
 | Column          | Type      | Description                    |
 |-----------------|-----------|--------------------------------|
@@ -79,7 +79,7 @@ Documentos esperando ser subidos a Paperless.
 | digitizedBy     | TEXT?     | Usuario que digitalizó         |
 | **metadata**    | TEXT      | **JSON con metadata adicional**|
 | **tags**        | TEXT      | **IDs de tags separados por ,**|
-| **documentTypeId**| INTEGER?| **ID del tipo en Paperless**   |
+| **documentTypeId**| INTEGER?| **ID del tipo en Tejido**   |
 | createdAt       | DATETIME  | Timestamp de creación          |
 | retryCount      | INTEGER   | Número de reintentos           |
 | status          | TEXT      | pending/uploading/failed       |
@@ -95,7 +95,7 @@ Historial de documentos subidos exitosamente.
 | personId            | TEXT      | ID de la persona               |
 | personName          | TEXT      | Nombre completo                |
 | documentType        | TEXT      | Tipo de documento              |
-| paperlessDocumentId | INTEGER?  | ID en Paperless-ngx            |
+| tejidoDocumentId | INTEGER?  | ID en Tejido-ngx            |
 | uploadedAt          | DATETIME  | Timestamp de subida            |
 | status              | TEXT      | success/failed                 |
 | **fileSize**        | INTEGER   | **Tamaño del archivo (bytes)** |
@@ -117,20 +117,20 @@ Cache local del censo de personas.
 | syncedAt    | DATETIME | Última sincronización          |
 
 #### DocumentTypes
-Cache de tipos de documento de Paperless.
+Cache de tipos de documento de Tejido.
 
 | Column    | Type     | Description                    |
 |-----------|----------|--------------------------------|
-| id        | INTEGER  | Primary key - ID Paperless     |
+| id        | INTEGER  | Primary key - ID Tejido     |
 | name      | TEXT     | Nombre del tipo                |
 | cachedAt  | DATETIME | Timestamp del cache            |
 
 #### Tags
-Cache de tags de Paperless.
+Cache de tags de Tejido.
 
 | Column    | Type     | Description                    |
 |-----------|----------|--------------------------------|
-| id        | INTEGER  | Primary key - ID Paperless     |
+| id        | INTEGER  | Primary key - ID Tejido     |
 | name      | TEXT     | Nombre del tag                 |
 | color     | TEXT?    | Color hex del tag              |
 | cachedAt  | DATETIME | Timestamp del cache            |
@@ -248,7 +248,7 @@ Después de 3 intentos, el upload se marca como `failed` y requiere intervenció
 
 2. **Upload Duration** (`uploadDurationMs`)
    - Tiempo desde inicio hasta fin de subida
-   - Incluye tiempo de red + procesamiento Paperless
+   - Incluye tiempo de red + procesamiento Tejido
 
 3. **Offline Flag** (`wasOffline`)
    - `true` si el upload tuvo `retryCount > 0`
@@ -535,7 +535,7 @@ final uploadId = await uploadService.enqueueUploadEnhanced(
   documentNumber: '1234567890',
   digitizedBy: 'admin',
   documentTypeId: 1,
-  tagIds: [10, 20, 30], // Paperless tag IDs
+  tagIds: [10, 20, 30], // Tejido tag IDs
   metadata: {
     'location': 'Comunidad A',
     'notes': 'Documento escaneado en campo',
@@ -617,7 +617,7 @@ static const Duration retryDelayBase = Duration(seconds: 5); // Base delay
 ```dart
 // lib/data/local/database/app_database.dart
 return driftDatabase(
-  name: 'openscan_indigenas.db', // Change here
+  name: 'lumara_indigenas.db', // Change here
 );
 ```
 
@@ -673,7 +673,7 @@ MigrationStrategy get migration => MigrationStrategy(
 ### Issue: Background sync not working
 
 **Cause**: Battery optimization blocking WorkManager
-**Solution**: Disable battery optimization for OpenScan in device settings
+**Solution**: Disable battery optimization for Lumara in device settings
 
 ### Issue: Network monitor not triggering sync
 
@@ -697,7 +697,7 @@ MigrationStrategy get migration => MigrationStrategy(
 
 ## 📜 License
 
-Part of OpenScan Indigenas project
+Part of Lumara Indigenas project
 See [LICENSE](../LICENSE) for details
 
 ---

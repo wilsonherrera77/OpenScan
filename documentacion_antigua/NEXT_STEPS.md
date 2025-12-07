@@ -1,6 +1,6 @@
 # 🚀 Próximos Pasos - Plan de Acción
 
-**OpenScan Indígenas v3.0.0**
+**Lumara Indígenas v3.0.0**
 **Fecha:** 2025-10-07
 **Para:** Todo el equipo
 
@@ -32,7 +32,7 @@
 
 **Pasos:**
 ```bash
-1. Crear cuenta: soporte@openscan-indigenas.org
+1. Crear cuenta: soporte@lumara-indigenas.org
    - Opción A: Google Workspace ($6/mes)
    - Opción B: Email corporativo propio
 
@@ -48,7 +48,7 @@
 
 4. Actualizar código:
    Archivo: lib/core/config/production_config.dart
-   Línea 245: static const String supportEmail = 'soporte@openscan-indigenas.org';
+   Línea 245: static const String supportEmail = 'soporte@lumara-indigenas.org';
 ```
 
 **Checklist:**
@@ -132,16 +132,16 @@ Saludos,
 
 **Responsable:** Equipo DevOps
 
-**Tarea 1: Desplegar Servidor Paperless-ngx**
+**Tarea 1: Desplegar Servidor Tejido-ngx**
 ```bash
 # Opción A: Docker (recomendado)
 docker run -d \
-  --name paperless-ngx \
+  --name tejido-ngx \
   -p 8000:8000 \
-  -v paperless_data:/usr/src/paperless/data \
-  -v paperless_media:/usr/src/paperless/media \
-  -e PAPERLESS_URL=https://paperless.openscan-indigenas.org \
-  ghcr.io/paperless-ngx/paperless-ngx:latest
+  -v tejido_data:/usr/src/tejido/data \
+  -v tejido_media:/usr/src/tejido/media \
+  -e TEJIDO_URL=https://tejido.lumara-indigenas.org \
+  ghcr.io/tejido-ngx/tejido-ngx:latest
 
 # Verificar
 curl http://localhost:8000/api/
@@ -151,11 +151,11 @@ curl http://localhost:8000/api/
 ```bash
 # Apuntar dominio a IP del servidor
 # Ejemplo en Cloudflare/Route53:
-A     paperless.openscan-indigenas.org     -> 123.456.789.10
-CNAME staging.openscan-indigenas.org       -> paperless.openscan-indigenas.org
+A     tejido.lumara-indigenas.org     -> 123.456.789.10
+CNAME staging.lumara-indigenas.org       -> tejido.lumara-indigenas.org
 
 # Verificar DNS propagado
-nslookup paperless.openscan-indigenas.org
+nslookup tejido.lumara-indigenas.org
 ```
 
 **Tarea 3: Instalar SSL Certificate**
@@ -166,15 +166,15 @@ sudo apt-get install certbot
 
 # Generar certificado
 sudo certbot certonly --standalone \
-  -d paperless.openscan-indigenas.org \
-  -d staging.openscan-indigenas.org
+  -d tejido.lumara-indigenas.org \
+  -d staging.lumara-indigenas.org
 
 # Verificar
-curl -I https://paperless.openscan-indigenas.org
+curl -I https://tejido.lumara-indigenas.org
 ```
 
 **Checklist:**
-- [ ] Servidor Paperless desplegado
+- [ ] Servidor Tejido desplegado
 - [ ] DNS configurado y propagado
 - [ ] SSL instalado y funcionando
 - [ ] Firewall configurado (puerto 443 abierto)
@@ -186,17 +186,17 @@ curl -I https://paperless.openscan-indigenas.org
 
 ```bash
 # En tu máquina de desarrollo
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Generar fingerprints
-./scripts/generate_cert_fingerprint.sh paperless.openscan-indigenas.org
+./scripts/generate_cert_fingerprint.sh tejido.lumara-indigenas.org
 
 # Output esperado:
 # SHA-256 Fingerprint:
 # sha256/r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E=
 
 # Guardar en archivo
-# El script crea: cert_pinning_paperless.openscan-indigenas.org.txt
+# El script crea: cert_pinning_tejido.lumara-indigenas.org.txt
 ```
 
 **Actualizar código:**
@@ -227,7 +227,7 @@ static const List<String> certificateFingerprints = [
   - Cómo se usan y almacenan
   - Derechos de los usuarios
   - Contacto para privacidad
-- Publicar en: https://openscan-indigenas.org/politica-privacidad
+- Publicar en: https://lumara-indigenas.org/politica-privacidad
 
 **2. Terms of Service (Términos de Servicio)**
 - Contenido mínimo:
@@ -235,23 +235,23 @@ static const List<String> certificateFingerprints = [
   - Limitaciones de responsabilidad
   - Derechos de propiedad
   - Jurisdicción aplicable
-- Publicar en: https://openscan-indigenas.org/terminos-servicio
+- Publicar en: https://lumara-indigenas.org/terminos-servicio
 
 **Actualizar código:**
 ```dart
 // Editar: lib/core/config/production_config.dart
 
 // Línea 42
-static const String paperlessProductionUrl = 'https://paperless.openscan-indigenas.org';
+static const String tejidoProductionUrl = 'https://tejido.lumara-indigenas.org';
 
 // Línea 50
-static const String paperlessStagingUrl = 'https://staging.openscan-indigenas.org';
+static const String tejidoStagingUrl = 'https://staging.lumara-indigenas.org';
 
 // Línea 254
-static const String privacyPolicyUrl = 'https://openscan-indigenas.org/politica-privacidad';
+static const String privacyPolicyUrl = 'https://lumara-indigenas.org/politica-privacidad';
 
 // Línea 262
-static const String termsOfServiceUrl = 'https://openscan-indigenas.org/terminos-servicio';
+static const String termsOfServiceUrl = 'https://lumara-indigenas.org/terminos-servicio';
 ```
 
 **Checklist:**
@@ -303,7 +303,7 @@ static const String termsOfServiceUrl = 'https://openscan-indigenas.org/terminos
 
 ```bash
 # Ejecutar script de validación
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./scripts/validate_production.sh
 
 # Debe mostrar:
@@ -515,17 +515,17 @@ ls -lh build/app/outputs/flutter-apk/app-release.apk
 ```bash
 # Generar keystore (solo primera vez)
 keytool -genkey -v \
-  -keystore openscan-release-key.jks \
+  -keystore lumara-release-key.jks \
   -keyalg RSA -keysize 2048 -validity 10000 \
-  -alias openscan
+  -alias lumara
 
 # Firmar APK
 jarsigner -verbose \
   -sigalg SHA256withRSA \
   -digestalg SHA-256 \
-  -keystore openscan-release-key.jks \
+  -keystore lumara-release-key.jks \
   build/app/outputs/flutter-apk/app-release.apk \
-  openscan
+  lumara
 
 # Verificar firma
 jarsigner -verify -verbose -certs \
@@ -555,14 +555,14 @@ jarsigner -verify -verbose -certs \
 **Crear aplicación:**
 ```
 1. New application
-2. Nombre: OpenScan Indígenas
+2. Nombre: Lumara Indígenas
 3. Idioma: Español
 4. Tipo: App
 5. Gratis/Pago: Gratis
 ```
 
 **Completar Store Listing:**
-- Título (30 chars): "OpenScan Indígenas"
+- Título (30 chars): "Lumara Indígenas"
 - Descripción corta (80 chars): "Digitaliza documentos de comunidades indígenas"
 - Descripción completa (4000 chars): Ver docs/USER_MANUAL_ES.md
 - Screenshots: Mínimo 2 por categoría (phone, tablet)
@@ -755,7 +755,7 @@ Cada hora revisar:
 
 **Soporte:**
 - Support Lead: [nombre] - [phone]
-- Email: soporte@openscan-indigenas.org
+- Email: soporte@lumara-indigenas.org
 
 **Management:**
 - PM: [nombre] - [phone]

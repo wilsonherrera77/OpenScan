@@ -8,16 +8,16 @@ Validate the complete offline-first document upload queue system with background
 
 ### Prerequisites
 
-1. **Paperless-ngx Backend Running:**
+1. **Tejido-ngx Backend Running:**
    ```bash
-   cd /home/smt/Escritorio/programacion_proyectos/paperless/paperless-ngx
+   cd /home/smt/Escritorio/programacion_proyectos/tejido/tejido-ngx
    docker compose up -d
    # Verify: http://localhost:8001
    ```
 
 2. **Flutter Environment:**
    ```bash
-   cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+   cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
    ./build.sh  # Generates Drift code
    ```
 
@@ -107,19 +107,19 @@ Validate the complete offline-first document upload queue system with background
 2. Immediate upload attempted
 3. Success message: "✅ Documento agregado a cola de sincronización"
 4. Upload completes in background
-5. Document appears in Paperless-ngx
+5. Document appears in Tejido-ngx
 6. Local file deleted after successful upload
 7. Entry added to upload_history
 8. Entry removed from pending_uploads
 
 **Verification:**
 ```bash
-# Check Paperless has document
+# Check Tejido has document
 curl -H "Authorization: Token e0282ce5e8fe0d64aee117cfba27b4082e32ce01" \
   http://localhost:8001/api/documents/ | jq
 ```
 
-**Pass Criteria:** Document visible in Paperless within 5 seconds
+**Pass Criteria:** Document visible in Tejido within 5 seconds
 
 ---
 
@@ -176,7 +176,7 @@ print(pending); // Should show queued document
 4. Logs show: `✅ Background task completed successfully`
 5. Documents removed from pending_uploads
 6. Entries added to upload_history
-7. Documents visible in Paperless
+7. Documents visible in Tejido
 
 **Pass Criteria:** All queued documents uploaded within 2 minutes
 
@@ -448,7 +448,7 @@ print(pending); // Should show queued document
 **Objective:** Handle 500-level errors
 
 **Steps:**
-1. Stop Paperless backend
+1. Stop Tejido backend
 2. Attempt upload
 
 **Expected Results:**
@@ -468,7 +468,7 @@ Date: __________
 Tester: __________
 Device: __________
 Flutter Version: __________
-Paperless Version: __________
+Tejido Version: __________
 
 | Test Case | Status | Notes |
 |-----------|--------|-------|

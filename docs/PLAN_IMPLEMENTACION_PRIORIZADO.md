@@ -42,7 +42,7 @@ Establecer baseline funcional verificado y proceso de desarrollo sostenible.
 
 - [ ] **0-R.1: Inicializar Git Repository** (1 hora)
   ```bash
-  cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+  cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
   # Inicializar Git
   git init
@@ -121,7 +121,7 @@ Establecer baseline funcional verificado y proceso de desarrollo sostenible.
   # Verificar metadata correcta
 
   # Test 6: Capturar logs
-  adb shell "tail -200 /storage/emulated/0/Android/data/com.ethereal.openscan/files/logs/app_*.log" > /tmp/v6.3.9_baseline_test.log
+  adb shell "tail -200 /storage/emulated/0/Android/data/com.ethereal.lumara/files/logs/app_*.log" > /tmp/v6.3.9_baseline_test.log
 
   # Analizar logs
   grep -E "ERROR|WARN|Exception" /tmp/v6.3.9_baseline_test.log
@@ -160,7 +160,7 @@ Establecer baseline funcional verificado y proceso de desarrollo sostenible.
 
   # Test 1: Install
   echo "TEST 1: Installing APK..."
-  adb uninstall com.ethereal.openscan 2>/dev/null || true
+  adb uninstall com.ethereal.lumara 2>/dev/null || true
   adb install -r "$APK_PATH"
   echo "✅ Install successful"
   echo ""
@@ -210,7 +210,7 @@ Establecer baseline funcional verificado y proceso de desarrollo sostenible.
   # Capture logs
   LOG_FILE="/tmp/lumara_test_$(date +%Y%m%d_%H%M%S).log"
   echo "Capturing logs to: $LOG_FILE"
-  adb shell "tail -500 /storage/emulated/0/Android/data/com.ethereal.openscan/files/logs/app_*.log" > "$LOG_FILE"
+  adb shell "tail -500 /storage/emulated/0/Android/data/com.ethereal.lumara/files/logs/app_*.log" > "$LOG_FILE"
 
   echo ""
   echo "════════════════════════════════════════"
@@ -244,7 +244,7 @@ Establecer baseline funcional verificado y proceso de desarrollo sostenible.
   ## ¿Qué es Lumara?
 
   Sistema de digitalización inteligente de documentos para comunidades indígenas,
-  integrado con Paperless-ngx (Tejido by WH).
+  integrado con Tejido-ngx (Tejido by WH).
 
   ## Características Implementadas
 
@@ -435,7 +435,7 @@ Validar que features implementadas funcionan en dispositivos reales con datos re
 
   **Logs a capturar**:
   ```bash
-  adb shell "tail -500 /storage/emulated/0/Android/data/com.ethereal.openscan/files/logs/app_*.log" | \
+  adb shell "tail -500 /storage/emulated/0/Android/data/com.ethereal.lumara/files/logs/app_*.log" | \
   grep -E "check_exists|DUPLICATE|existsWithGoodQuality"
   ```
 
@@ -456,7 +456,7 @@ Validar que features implementadas funcionan en dispositivos reales con datos re
 
   **Logs a capturar**:
   ```bash
-  adb shell "tail -1000 /storage/emulated/0/Android/data/com.ethereal.openscan/files/logs/app_*.log" | \
+  adb shell "tail -1000 /storage/emulated/0/Android/data/com.ethereal.lumara/files/logs/app_*.log" | \
   grep -E "enqueueUpload|processAllPending|Upload enqueued|successfully uploaded"
   ```
 
@@ -597,7 +597,7 @@ Resolver vulnerabilidades críticas identificadas en auditoría antes de uso en 
 
 - [ ] **2.1: Forzar HTTPS en Producción** (1 hora)
 
-  **Frontend** (`lib/data/datasources/paperless_api_client.dart`):
+  **Frontend** (`lib/data/datasources/tejido_api_client.dart`):
   ```dart
   // Agregar después de línea 50
   void _validateBaseUrl(String url) {
@@ -611,7 +611,7 @@ Resolver vulnerabilidades críticas identificadas en auditoría antes de uso en 
   }
 
   // Llamar en constructor
-  PaperlessApiClient() {
+  TejidoApiClient() {
     _validateBaseUrl(_baseUrl);
     // ... resto del código
   }
@@ -784,7 +784,7 @@ Resolver vulnerabilidades críticas identificadas en auditoría antes de uso en 
   ```bash
   # Capturar documento
   # Verificar en SQLite que imagen está encriptada (no legible)
-  adb shell "sqlite3 /data/data/com.ethereal.openscan/databases/app_database.db 'SELECT length(image_data) FROM pending_uploads LIMIT 1;'"
+  adb shell "sqlite3 /data/data/com.ethereal.lumara/databases/app_database.db 'SELECT length(image_data) FROM pending_uploads LIMIT 1;'"
 
   # Abrir archivo con editor hexadecimal
   # Verificar que NO se ve la imagen (debe ser ruido)
@@ -799,7 +799,7 @@ Resolver vulnerabilidades críticas identificadas en auditoría antes de uso en 
 
   **Backend Django** - Crear modelo:
   ```python
-  # paperless_auth/models.py
+  # tejido_auth/models.py
   from django.db import models
   from django.contrib.auth.models import User
 
@@ -835,7 +835,7 @@ Resolver vulnerabilidades críticas identificadas en auditoría antes de uso en 
 
   **Middleware para logging automático**:
   ```python
-  # paperless_auth/middleware.py
+  # tejido_auth/middleware.py
   import logging
   from .models import AuditLog
 
@@ -904,13 +904,13 @@ Resolver vulnerabilidades críticas identificadas en auditoría antes de uso en 
   # Agregar a settings.py
   MIDDLEWARE = [
       # ... otros middleware
-      'paperless_auth.middleware.AuditMiddleware',
+      'tejido_auth.middleware.AuditMiddleware',
   ]
   ```
 
   **Endpoint para Admin ver auditoría**:
   ```python
-  # paperless_auth/views.py
+  # tejido_auth/views.py
   from rest_framework.decorators import api_view, permission_classes
   from rest_framework.permissions import IsAuthenticated, IsAdminUser
   from rest_framework.response import Response

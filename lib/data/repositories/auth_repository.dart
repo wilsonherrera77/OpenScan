@@ -4,12 +4,12 @@ import '../../core/constants/api_constants.dart';
 import '../../core/security/rate_limiter.dart';
 import '../../core/security/audit_logger.dart';
 import '../../domain/entities/auth_token.dart';
-import '../datasources/paperless_api_client.dart';
+import '../datasources/tejido_api_client.dart';
 
 /// Authentication Repository
 /// Manages authentication state and token storage with rate limiting
 class AuthRepository {
-  final PaperlessApiClient _apiClient;
+  final TejidoApiClient _apiClient;
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   final LoggerAdapter _logger = LoggerAdapter();
   final LoginRateLimiter _rateLimiter = LoginRateLimiter();

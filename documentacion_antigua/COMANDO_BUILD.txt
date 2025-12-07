@@ -1,12 +1,12 @@
 ╔══════════════════════════════════════════════════════════════════════╗
 ║                                                                      ║
-║                    🚀 OPENSCAN - BUILD APK                           ║
+║                    🚀 LUMARA - BUILD APK                           ║
 ║                                                                      ║
 ╚══════════════════════════════════════════════════════════════════════╝
 
 
 📍 UBICACIÓN DEL PROYECTO:
-/home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+/home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 
 🎯 COMANDO A EJECUTAR:
@@ -43,7 +43,7 @@
   ✓ Background sync (cada 15 min)
   ✓ 3,997 personas del censo
   ✓ Smart retry logic
-  ✓ Upload automático a Paperless
+  ✓ Upload automático a Tejido
 
 ═══════════════════════════════════════════════════════════════════════
 
@@ -59,7 +59,7 @@
 
 🚀 COPIA Y PEGA EN TU TERMINAL:
 
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan && ./build_apk.sh
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara && ./build_apk.sh
 
 
 ═══════════════════════════════════════════════════════════════════════

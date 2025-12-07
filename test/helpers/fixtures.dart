@@ -1,5 +1,5 @@
-import 'package:openscan_indigenas/domain/entities/person.dart';
-import 'package:openscan_indigenas/domain/entities/auth_token.dart';
+import 'package:lumara_indigenas/domain/entities/person.dart';
+import 'package:lumara_indigenas/domain/entities/auth_token.dart';
 
 /// Test Fixtures
 /// Predefined test data
@@ -47,7 +47,7 @@ class Fixtures {
     return AuthToken(
       token: token ?? 'mock-token-123456789',
       username: username ?? 'testuser',
-      baseUrl: baseUrl ?? 'https://paperless.example.com',
+      baseUrl: baseUrl ?? 'https://tejido.example.com',
       expiresAt: DateTime.now().add(const Duration(days: 30)),
     );
   }

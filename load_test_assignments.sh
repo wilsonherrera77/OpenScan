@@ -39,9 +39,9 @@ echo ""
 # Obtener IDs de usuarios
 echo -e "${YELLOW}2️⃣  Obteniendo IDs de digitalizadores...${NC}"
 
-docker exec paperless_webserver_1 python3 manage.py shell -c "
+docker exec tejido_webserver_1 python3 manage.py shell -c "
 from django.contrib.auth.models import User
-from paperless_auth.models import UserProfile
+from tejido_auth.models import UserProfile
 
 digitadores = User.objects.filter(userprofile__role='DIGITALIZADOR')
 
@@ -76,7 +76,7 @@ fi
 echo ""
 
 # Verificar IDs de digitalizador1 y digitalizador2
-DIGITALIZADOR1_ID=$(docker exec paperless_webserver_1 python3 manage.py shell -c "
+DIGITALIZADOR1_ID=$(docker exec tejido_webserver_1 python3 manage.py shell -c "
 from django.contrib.auth.models import User
 try:
     user = User.objects.get(username='digitalizador1')
@@ -85,7 +85,7 @@ except:
     print('0')
 " 2>&1 | tail -1)
 
-DIGITALIZADOR2_ID=$(docker exec paperless_webserver_1 python3 manage.py shell -c "
+DIGITALIZADOR2_ID=$(docker exec tejido_webserver_1 python3 manage.py shell -c "
 from django.contrib.auth.models import User
 try:
     user = User.objects.get(username='digitalizador2')
@@ -147,8 +147,8 @@ echo ""
 # Resumen final
 echo -e "${YELLOW}6️⃣  Verificando total de asignaciones...${NC}"
 
-docker exec paperless_webserver_1 python3 manage.py shell -c "
-from paperless_auth.models import PersonAssignment
+docker exec tejido_webserver_1 python3 manage.py shell -c "
+from tejido_auth.models import PersonAssignment
 
 total = PersonAssignment.objects.count()
 by_status = {}

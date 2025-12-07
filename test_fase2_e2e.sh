@@ -55,7 +55,7 @@ else
     echo ""
     echo "Por favor:"
     echo "  1. Verifica que Docker está corriendo: docker ps"
-    echo "  2. Inicia backend si es necesario: cd paperless-ngx && docker-compose up -d"
+    echo "  2. Inicia backend si es necesario: cd tejido-ngx && docker-compose up -d"
     echo "  3. Verifica IP del backend: ip addr | grep 192.168"
     echo ""
     exit 1

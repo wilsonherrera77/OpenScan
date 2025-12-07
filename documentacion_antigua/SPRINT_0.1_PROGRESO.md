@@ -78,7 +78,7 @@ $ sdkmanager --version
 
 **Errores identificados:**
 
-1. ❌ **Missing Package** `package:openscan/Utilities/Classes.dart`
+1. ❌ **Missing Package** `package:lumara/Utilities/Classes.dart`
    - Archivo no existe en el proyecto
 
 2. ❌ **Drift toJson** signatures incorrectas
@@ -86,7 +86,7 @@ $ sdkmanager --version
    - `UploadHistoryData.toJson()` needs `{ValueSerializer? serializer}`
 
 3. ❌ **DirectoryOS** no definido
-   - Método `DirectoryOS()` no existe en clase OpenScan
+   - Método `DirectoryOS()` no existe en clase Lumara
 
 4. ❌ **Type mismatch** en custom fields
    - `person.personId` es `int` pero se espera `String`

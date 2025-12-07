@@ -23,9 +23,9 @@ echo ""
 echo -e "${YELLOW}Reseteando passwords para 5 usuarios...${NC}"
 echo ""
 
-docker exec paperless_webserver_1 python3 manage.py shell -c "
+docker exec tejido_webserver_1 python3 manage.py shell -c "
 from django.contrib.auth.models import User
-from paperless_auth.models import UserProfile
+from tejido_auth.models import UserProfile
 
 users_passwords = {
     'digitalizador1': 'Indigena123',

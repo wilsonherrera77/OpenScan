@@ -1,6 +1,6 @@
 # 🚀 Production Deployment Guide
 
-**OpenScan Indígenas - Document Digitization System**
+**Lumara Indígenas - Document Digitization System**
 
 **Version:** 3.0.0
 **Last Updated:** 2025-10-07
@@ -12,7 +12,7 @@
 
 1. [Pre-Deployment Checklist](#pre-deployment-checklist)
 2. [Infrastructure Requirements](#infrastructure-requirements)
-3. [Backend Deployment (Paperless-ngx)](#backend-deployment)
+3. [Backend Deployment (Tejido-ngx)](#backend-deployment)
 4. [Mobile App Build & Release](#mobile-app-build--release)
 5. [Security Configuration](#security-configuration)
 6. [Database Setup](#database-setup)
@@ -29,7 +29,7 @@
 
 - [ ] **Production URLs Configured**
   - Update `lib/core/config/production_config.dart`
-  - Set `paperlessProductionUrl` to actual domain
+  - Set `tejidoProductionUrl` to actual domain
   - Update `supportEmail` with real email address
 
 - [ ] **SSL Certificate Obtained**
@@ -69,7 +69,7 @@
 
 ## 🏗️ Infrastructure Requirements
 
-### Backend Server (Paperless-ngx)
+### Backend Server (Tejido-ngx)
 
 **Minimum Specifications:**
 - **CPU:** 4 cores (8 recommended for OCR)
@@ -83,7 +83,7 @@
 - **Ports:** 443 (HTTPS), 80 (HTTP redirect)
 
 **Software Stack:**
-- Paperless-ngx v2.0+
+- Tejido-ngx v2.0+
 - PostgreSQL 15+
 - Redis 7+
 - Nginx (reverse proxy)
@@ -104,7 +104,7 @@
 
 **PostgreSQL Configuration:**
 ```sql
--- Recommended settings for Paperless-ngx
+-- Recommended settings for Tejido-ngx
 shared_buffers = 2GB
 effective_cache_size = 6GB
 maintenance_work_mem = 512MB
@@ -123,7 +123,7 @@ max_parallel_workers = 4
 
 ---
 
-## 🖥️ Backend Deployment (Paperless-ngx)
+## 🖥️ Backend Deployment (Tejido-ngx)
 
 ### Option 1: Docker Deployment (Recommended)
 
@@ -159,22 +159,22 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: paperless
-      POSTGRES_USER: paperless
+      POSTGRES_DB: tejido
+      POSTGRES_USER: tejido
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
-      - paperless
+      - tejido
 
   # Redis Cache
   redis:
     image: redis:7-alpine
     restart: unless-stopped
     networks:
-      - paperless
+      - tejido
 
-  # Paperless-ngx Application
-  paperless:
-    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+  # Tejido-ngx Application
+  tejido:
+    image: ghcr.io/tejido-ngx/tejido-ngx:latest
     restart: unless-stopped
     depends_on:
       - postgres
@@ -182,31 +182,31 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - data:/usr/src/paperless/data
-      - media:/usr/src/paperless/media
-      - export:/usr/src/paperless/export
-      - consume:/usr/src/paperless/consume
+      - data:/usr/src/tejido/data
+      - media:/usr/src/tejido/media
+      - export:/usr/src/tejido/export
+      - consume:/usr/src/tejido/consume
     environment:
-      PAPERLESS_REDIS: redis://redis:6379
-      PAPERLESS_DBHOST: postgres
-      PAPERLESS_DBNAME: paperless
-      PAPERLESS_DBUSER: paperless
-      PAPERLESS_DBPASS: ${POSTGRES_PASSWORD}
-      PAPERLESS_SECRET_KEY: ${SECRET_KEY}
-      PAPERLESS_URL: https://paperless.your-domain.com
-      PAPERLESS_OCR_LANGUAGE: spa+eng
-      PAPERLESS_TIME_ZONE: America/Bogota
-      PAPERLESS_ALLOWED_HOSTS: paperless.your-domain.com
-      PAPERLESS_CORS_ALLOWED_HOSTS: https://paperless.your-domain.com
-      PAPERLESS_CSRF_TRUSTED_ORIGINS: https://paperless.your-domain.com
+      TEJIDO_REDIS: redis://redis:6379
+      TEJIDO_DBHOST: postgres
+      TEJIDO_DBNAME: tejido
+      TEJIDO_DBUSER: tejido
+      TEJIDO_DBPASS: ${POSTGRES_PASSWORD}
+      TEJIDO_SECRET_KEY: ${SECRET_KEY}
+      TEJIDO_URL: https://tejido.your-domain.com
+      TEJIDO_OCR_LANGUAGE: spa+eng
+      TEJIDO_TIME_ZONE: America/Bogota
+      TEJIDO_ALLOWED_HOSTS: tejido.your-domain.com
+      TEJIDO_CORS_ALLOWED_HOSTS: https://tejido.your-domain.com
+      TEJIDO_CSRF_TRUSTED_ORIGINS: https://tejido.your-domain.com
       # Security
-      PAPERLESS_ENABLE_HTTP_REMOTE_USER: false
-      PAPERLESS_HTTP_REMOTE_USER_HEADER_NAME: ''
+      TEJIDO_ENABLE_HTTP_REMOTE_USER: false
+      TEJIDO_HTTP_REMOTE_USER_HEADER_NAME: ''
       # Performance
-      PAPERLESS_TASK_WORKERS: 4
-      PAPERLESS_THREADS_PER_WORKER: 2
+      TEJIDO_TASK_WORKERS: 4
+      TEJIDO_THREADS_PER_WORKER: 2
     networks:
-      - paperless
+      - tejido
 
 volumes:
   pgdata:
@@ -216,7 +216,7 @@ volumes:
   consume:
 
 networks:
-  paperless:
+  tejido:
     driver: bridge
 ```
 
@@ -239,15 +239,15 @@ SECRET_KEY=your_secret_key_here
 docker-compose up -d
 
 # Check logs
-docker-compose logs -f paperless
+docker-compose logs -f tejido
 
 # Create superuser
-docker-compose exec paperless python3 manage.py createsuperuser
+docker-compose exec tejido python3 manage.py createsuperuser
 ```
 
 ### Option 2: Bare Metal Deployment
 
-See [Paperless-ngx Documentation](https://docs.paperless-ngx.com/setup/) for detailed instructions.
+See [Tejido-ngx Documentation](https://docs.tejido-ngx.com/setup/) for detailed instructions.
 
 ---
 
@@ -272,7 +272,7 @@ flutter pub get
 Edit `lib/core/config/production_config.dart`:
 
 ```dart
-static const String paperlessProductionUrl = 'https://paperless.your-domain.com';
+static const String tejidoProductionUrl = 'https://tejido.your-domain.com';
 static const String supportEmail = 'support@your-domain.com';
 static const List<String> certificateFingerprints = [
   'sha256/YOUR_CERTIFICATE_FINGERPRINT_HERE',
@@ -284,7 +284,7 @@ static const List<String> certificateFingerprints = [
 
 ```bash
 # Extract from your server
-./scripts/generate_cert_fingerprint.sh paperless.your-domain.com
+./scripts/generate_cert_fingerprint.sh tejido.your-domain.com
 
 # Copy fingerprints to production_config.dart
 ```
@@ -310,16 +310,16 @@ flutter build appbundle --release
 
 ```bash
 # Create keystore (first time only)
-keytool -genkey -v -keystore openscan-release-key.jks \
+keytool -genkey -v -keystore lumara-release-key.jks \
   -keyalg RSA -keysize 2048 -validity 10000 \
-  -alias openscan
+  -alias lumara
 
 # Create key.properties
 cat > android/key.properties <<EOF
 storePassword=your_store_password
 keyPassword=your_key_password
-keyAlias=openscan
-storeFile=../../openscan-release-key.jks
+keyAlias=lumara
+storeFile=../../lumara-release-key.jks
 EOF
 
 # Build signed APK
@@ -348,7 +348,7 @@ flutter build apk --release --shrink --obfuscate
 sudo apt install certbot python3-certbot-nginx -y
 
 # Obtain certificate
-sudo certbot --nginx -d paperless.your-domain.com
+sudo certbot --nginx -d tejido.your-domain.com
 
 # Auto-renewal (runs twice daily)
 sudo systemctl enable certbot.timer
@@ -373,24 +373,24 @@ sudo systemctl start certbot.timer
 
 ### Nginx Configuration
 
-Create `/etc/nginx/sites-available/paperless`:
+Create `/etc/nginx/sites-available/tejido`:
 
 ```nginx
 # HTTP -> HTTPS redirect
 server {
     listen 80;
-    server_name paperless.your-domain.com;
+    server_name tejido.your-domain.com;
     return 301 https://$server_name$request_uri;
 }
 
 # HTTPS
 server {
     listen 443 ssl http2;
-    server_name paperless.your-domain.com;
+    server_name tejido.your-domain.com;
 
     # SSL Configuration
-    ssl_certificate /etc/letsencrypt/live/paperless.your-domain.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/paperless.your-domain.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/tejido.your-domain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/tejido.your-domain.com/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
@@ -404,7 +404,7 @@ server {
     # File Upload Limits
     client_max_body_size 100M;
 
-    # Proxy to Paperless
+    # Proxy to Tejido
     location / {
         proxy_pass http://localhost:8000;
         proxy_set_header Host $host;
@@ -423,7 +423,7 @@ server {
 Enable site:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/paperless /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/tejido /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -452,24 +452,24 @@ sudo systemctl enable fail2ban
 
 ```bash
 # Enter PostgreSQL
-docker-compose exec postgres psql -U paperless
+docker-compose exec postgres psql -U tejido
 
 # Create additional users (read-only for analytics)
 CREATE USER analytics_readonly WITH PASSWORD 'secure_password';
-GRANT CONNECT ON DATABASE paperless TO analytics_readonly;
+GRANT CONNECT ON DATABASE tejido TO analytics_readonly;
 GRANT USAGE ON SCHEMA public TO analytics_readonly;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO analytics_readonly;
 ```
 
 ### Backup Configuration
 
-Create backup script `/usr/local/bin/backup-paperless.sh`:
+Create backup script `/usr/local/bin/backup-tejido.sh`:
 
 ```bash
 #!/bin/bash
 
 # Configuration
-BACKUP_DIR="/backups/paperless"
+BACKUP_DIR="/backups/tejido"
 RETENTION_DAYS=30
 DATE=$(date +%Y%m%d_%H%M%S)
 
@@ -477,11 +477,11 @@ DATE=$(date +%Y%m%d_%H%M%S)
 mkdir -p "$BACKUP_DIR"
 
 # Backup database
-docker-compose exec -T postgres pg_dump -U paperless paperless | \
+docker-compose exec -T postgres pg_dump -U tejido tejido | \
   gzip > "$BACKUP_DIR/db_$DATE.sql.gz"
 
 # Backup media files
-tar -czf "$BACKUP_DIR/media_$DATE.tar.gz" -C /var/lib/docker/volumes paperless_media
+tar -czf "$BACKUP_DIR/media_$DATE.tar.gz" -C /var/lib/docker/volumes tejido_media
 
 # Backup configuration
 cp docker-compose.yml "$BACKUP_DIR/config_$DATE.yml"
@@ -497,7 +497,7 @@ Schedule with cron:
 
 ```bash
 # Run daily at 2 AM
-0 2 * * * /usr/local/bin/backup-paperless.sh >> /var/log/paperless-backup.log 2>&1
+0 2 * * * /usr/local/bin/backup-tejido.sh >> /var/log/tejido-backup.log 2>&1
 ```
 
 ---
@@ -506,9 +506,9 @@ Schedule with cron:
 
 ### Application Monitoring
 
-**Paperless-ngx Built-in:**
+**Tejido-ngx Built-in:**
 
-Access admin panel: `https://paperless.your-domain.com/admin/`
+Access admin panel: `https://tejido.your-domain.com/admin/`
 
 - View document processing queue
 - Check failed tasks
@@ -595,7 +595,7 @@ sudo apt install awscli -y
 aws configure
 
 # Sync backups to S3
-aws s3 sync /backups/paperless s3://your-bucket/paperless-backups/ \
+aws s3 sync /backups/tejido s3://your-bucket/tejido-backups/ \
   --storage-class GLACIER_IR \
   --exclude "*.tmp"
 ```
@@ -611,11 +611,11 @@ aws s3 sync /backups/paperless s3://your-bucket/paperless-backups/ \
 2. **Install Docker + dependencies** (15 min)
 3. **Restore database** (60 min)
    ```bash
-   gunzip -c db_backup.sql.gz | docker-compose exec -T postgres psql -U paperless
+   gunzip -c db_backup.sql.gz | docker-compose exec -T postgres psql -U tejido
    ```
 4. **Restore media files** (90 min)
    ```bash
-   tar -xzf media_backup.tar.gz -C /var/lib/docker/volumes/paperless_media
+   tar -xzf media_backup.tar.gz -C /var/lib/docker/volumes/tejido_media
    ```
 5. **Restore configuration** (15 min)
 6. **Verify application** (30 min)
@@ -638,20 +638,20 @@ echo "🔍 Validating Production Deployment..."
 
 # 1. Check HTTPS
 echo "1. Checking HTTPS..."
-curl -sS https://paperless.your-domain.com > /dev/null && echo "✅ HTTPS OK" || echo "❌ HTTPS FAILED"
+curl -sS https://tejido.your-domain.com > /dev/null && echo "✅ HTTPS OK" || echo "❌ HTTPS FAILED"
 
 # 2. Check SSL Certificate
 echo "2. Checking SSL Certificate..."
-echo | openssl s_client -connect paperless.your-domain.com:443 2>/dev/null | \
+echo | openssl s_client -connect tejido.your-domain.com:443 2>/dev/null | \
   openssl x509 -noout -dates
 
 # 3. Check API endpoint
 echo "3. Checking API..."
-curl -sS https://paperless.your-domain.com/api/ > /dev/null && echo "✅ API OK" || echo "❌ API FAILED"
+curl -sS https://tejido.your-domain.com/api/ > /dev/null && echo "✅ API OK" || echo "❌ API FAILED"
 
 # 4. Check database connectivity
 echo "4. Checking Database..."
-docker-compose exec -T postgres pg_isready -U paperless && echo "✅ DB OK" || echo "❌ DB FAILED"
+docker-compose exec -T postgres pg_isready -U tejido && echo "✅ DB OK" || echo "❌ DB FAILED"
 
 # 5. Check disk space
 echo "5. Checking Disk Space..."
@@ -693,7 +693,7 @@ echo "✅ Validation complete!"
 **Solution:**
 ```dart
 // Verify production_config.dart
-static const String paperlessProductionUrl = 'https://...'; // Must start with https://
+static const String tejidoProductionUrl = 'https://...'; // Must start with https://
 ```
 
 #### Issue: "Certificate Validation Failed"
@@ -714,10 +714,10 @@ static const String paperlessProductionUrl = 'https://...'; // Must start with h
 **Diagnosis:**
 ```bash
 # Check server logs
-docker-compose logs paperless | tail -100
+docker-compose logs tejido | tail -100
 
 # Check network connectivity
-curl -v https://paperless.your-domain.com/api/
+curl -v https://tejido.your-domain.com/api/
 
 # Check firewall
 sudo ufw status
@@ -742,13 +742,13 @@ docker-compose logs postgres
 **Solution:**
 ```bash
 # Check OCR queue
-docker-compose exec paperless python3 manage.py document_consumption_status
+docker-compose exec tejido python3 manage.py document_consumption_status
 
 # Reduce worker count in docker-compose.yml
-PAPERLESS_TASK_WORKERS: 2  # Reduce from 4
+TEJIDO_TASK_WORKERS: 2  # Reduce from 4
 
 # Restart
-docker-compose restart paperless
+docker-compose restart tejido
 ```
 
 ### Emergency Contacts
@@ -762,7 +762,7 @@ docker-compose restart paperless
 
 ## 📚 Additional Resources
 
-- [Paperless-ngx Documentation](https://docs.paperless-ngx.com/)
+- [Tejido-ngx Documentation](https://docs.tejido-ngx.com/)
 - [Flutter Deployment Guide](https://docs.flutter.dev/deployment)
 - [OWASP Mobile Security](https://owasp.org/www-project-mobile-security/)
 - [Project Security Audit](./SECURITY_AUDIT.md)

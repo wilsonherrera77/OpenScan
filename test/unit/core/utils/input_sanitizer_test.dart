@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:openscan_indigenas/core/utils/input_sanitizer.dart';
+import 'package:lumara_indigenas/core/utils/input_sanitizer.dart';
 
 void main() {
   group('InputSanitizer', () {

@@ -28,7 +28,7 @@ Se implementó logging diagnóstico completo en 3 archivos críticos para rastre
    - ✅ Logging de parámetros que se envían al API
    - ✅ Manejo detallado de errores con stack traces
 
-3. **`lib/data/datasources/paperless_api_client.dart`** (+168 líneas de logging)
+3. **`lib/data/datasources/tejido_api_client.dart`** (+168 líneas de logging)
    - ✅ Logging completo de requests HTTP (endpoint, parámetros, headers)
    - ✅ Logging de responses HTTP (status code, duración, body)
    - ✅ Manejo especial de HTTP 409 (duplicados)
@@ -57,7 +57,7 @@ Compilación: Exitosa (100.3s)
 #### TAREA 2: Validación Anti-Duplicados en Backend (Pausada por problema Docker)
 
 **Código Implementado** (no aplicado):
-- Archivo: `/paperless-ngx/src/documents/views_census.py`
+- Archivo: `/tejido-ngx/src/documents/views_census.py`
 - Líneas modificadas: 111-171 (+61 líneas)
 - Funcionalidad:
   - Detección de documentos duplicados del mismo tipo
@@ -83,7 +83,7 @@ Compilación: Exitosa (100.3s)
 ```
 lib/services/upload_service.dart:           +180 líneas
 lib/data/repositories/document_repository:   +89 líneas
-lib/data/datasources/paperless_api_client:  +168 líneas
+lib/data/datasources/tejido_api_client:  +168 líneas
 views_census.py (no aplicado):               +61 líneas
 -----------------------------------------------------------
 TOTAL:                                       +498 líneas
@@ -174,14 +174,14 @@ Este upload NO se podrá asociar con ninguna persona
 
 **Si person_id llega al backend pero backend no crea relación**:
 - Problema: Backend tiene un bug
-- Revisar: Logs del backend Paperless
+- Revisar: Logs del backend Tejido
 - Fix: Modificar lógica en `views_census.py`
 
 ### 3. Resolver Problema Docker para TAREA 2
 
 **Opción A: Reconstruir Imagen**
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/paperless-ngx/paperless-ngx
+cd /home/smt/Escritorio/programacion_proyectos/tejido/tejido-ngx/tejido-ngx
 docker-compose build webserver
 docker-compose up -d webserver
 ```
@@ -190,7 +190,7 @@ docker-compose up -d webserver
 ```yaml
 # Agregar en docker-compose.yml, servicio webserver:
 volumes:
-  - ./src:/usr/src/paperless/src:ro  # Read-only mount
+  - ./src:/usr/src/tejido/src:ro  # Read-only mount
 ```
 
 Luego:
@@ -202,7 +202,7 @@ docker-compose up -d
 **Verificar Cambios Aplicados**:
 ```bash
 # Opción 1: Entrar al contenedor y verificar código
-docker exec -it paperless-webserver-1 cat /usr/src/paperless/src/documents/views_census.py | grep -A5 "VALIDACIÓN DE DUPLICADOS"
+docker exec -it tejido-webserver-1 cat /usr/src/tejido/src/documents/views_census.py | grep -A5 "VALIDACIÓN DE DUPLICADOS"
 
 # Opción 2: Probar endpoint con documento duplicado
 curl -X POST http://192.168.40.17:8001/api/documents/upload_with_person/ \
@@ -294,7 +294,7 @@ Los logs revelarán:
 
 ### Verificar Estado del Sistema
 ```bash
-# Backend Paperless
+# Backend Tejido
 curl -s http://192.168.40.17:8001/api/ | jq .
 
 # Census data
@@ -302,7 +302,7 @@ curl -s "http://192.168.40.17:8001/api/census/persons/?limit=1" \
   -H "Authorization: Token e0282ce5e8fe0d64aee117cfba27b4082e32ce01" | jq .
 
 # Relaciones existentes
-docker exec -it paperless-webserver-1 python3 manage.py shell -c "
+docker exec -it tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import DocumentPersonRelation
 print(f'Total relaciones: {DocumentPersonRelation.objects.count()}')
 for rel in DocumentPersonRelation.objects.all()[:10]:
@@ -312,7 +312,7 @@ for rel in DocumentPersonRelation.objects.all()[:10]:
 
 ### Limpiar y Recompilar
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Clean completo
 flutter clean

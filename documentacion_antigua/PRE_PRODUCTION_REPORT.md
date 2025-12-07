@@ -1,6 +1,6 @@
 # 🚀 PRE-PRODUCTION READINESS REPORT
 
-**Project:** OpenScan Indígenas - Document Digitization System
+**Project:** Lumara Indígenas - Document Digitization System
 **Version:** 3.0.0
 **Report Date:** 2025-10-07
 **Status:** ✅ PRODUCTION READY (Pending External Configuration)
@@ -11,7 +11,7 @@
 
 ### Achievement Summary
 
-The OpenScan Indígenas project has successfully completed the pre-production phase, delivering a production-ready mobile application with comprehensive security hardening, deployment automation, and quality assurance processes.
+The Lumara Indígenas project has successfully completed the pre-production phase, delivering a production-ready mobile application with comprehensive security hardening, deployment automation, and quality assurance processes.
 
 **Key Accomplishments:**
 - ✅ **100% of pre-production tasks completed**
@@ -50,7 +50,7 @@ The OpenScan Indígenas project has successfully completed the pre-production ph
 **Usage:**
 ```bash
 # Generate production fingerprint
-./scripts/generate_cert_fingerprint.sh paperless.your-domain.com
+./scripts/generate_cert_fingerprint.sh tejido.your-domain.com
 
 # Output: SHA-256 fingerprint ready to paste into config
 ```
@@ -202,7 +202,7 @@ final encrypted = await service.encryptFiles([file1, file2, file3]);
 services:
   postgres:  # Database
   redis:     # Cache
-  paperless: # Application
+  tejido: # Application
   nginx:     # Reverse proxy
   loki:      # Log aggregation
   promtail:  # Log collection
@@ -447,7 +447,7 @@ Pre-Prod: 92/100 (92%) - Security hardening ⬆️ +10 points
 1. **Obtain SSL Certificate** (Priority: 🔴 Critical)
    ```bash
    # Let's Encrypt (Free)
-   sudo certbot --nginx -d paperless.your-domain.com
+   sudo certbot --nginx -d tejido.your-domain.com
 
    # Or purchase from CA
    openssl req -new -newkey rsa:2048 -nodes -keyout server.key -out server.csr
@@ -455,14 +455,14 @@ Pre-Prod: 92/100 (92%) - Security hardening ⬆️ +10 points
 
 2. **Generate Certificate Fingerprints** (Priority: 🔴 Critical)
    ```bash
-   ./scripts/generate_cert_fingerprint.sh paperless.your-domain.com
+   ./scripts/generate_cert_fingerprint.sh tejido.your-domain.com
    # Copy output to production_config.dart
    ```
 
 3. **Update Production URLs** (Priority: 🔴 Critical)
    ```dart
    // lib/core/config/production_config.dart
-   static const String paperlessProductionUrl = 'https://paperless.YOUR-DOMAIN.com';
+   static const String tejidoProductionUrl = 'https://tejido.YOUR-DOMAIN.com';
    static const String supportEmail = 'support@YOUR-DOMAIN.com';
    ```
 
@@ -490,7 +490,7 @@ Pre-Prod: 92/100 (92%) - Security hardening ⬆️ +10 points
    ```bash
    # Schedule daily backups
    crontab -e
-   # Add: 0 2 * * * /usr/local/bin/backup-paperless.sh
+   # Add: 0 2 * * * /usr/local/bin/backup-tejido.sh
    ```
 
 ### Week 3 Actions
@@ -786,4 +786,4 @@ flutter build apk --release --shrink --obfuscate
 
 ---
 
-🎉 **Congratulations! OpenScan Indígenas is production-ready!** 🎉
+🎉 **Congratulations! Lumara Indígenas is production-ready!** 🎉

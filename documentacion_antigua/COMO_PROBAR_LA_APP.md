@@ -1,4 +1,4 @@
-# 📱 Cómo Probar la Aplicación OpenScan Indígenas
+# 📱 Cómo Probar la Aplicación Lumara Indígenas
 
 **Guía rápida para compilar, instalar y probar la aplicación**
 
@@ -97,18 +97,18 @@ flutter emulators
 flutter emulators --launch <emulator_id>
 ```
 
-### 4. Servidor Paperless para Testing
+### 4. Servidor Tejido para Testing
 
 **Opción A: Servidor de desarrollo local**
 ```bash
 # Si tienes Docker:
 docker run -d -p 8001:8000 \
-  -e PAPERLESS_SECRET_KEY=test123 \
-  ghcr.io/paperless-ngx/paperless-ngx:latest
+  -e TEJIDO_SECRET_KEY=test123 \
+  ghcr.io/tejido-ngx/tejido-ngx:latest
 ```
 
 **Opción B: Servidor staging**
-- URL: `https://staging.openscan-indigenas.org` (si existe)
+- URL: `https://staging.lumara-indigenas.org` (si existe)
 - Usuario: `test`
 - Password: `test123`
 
@@ -123,7 +123,7 @@ docker run -d -p 8001:8000 \
 
 ### Paso 1: Navegar al proyecto
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ```
 
 ### Paso 2: Verificar que todo está OK
@@ -147,7 +147,7 @@ flutter pub get
 
 **Esperado:**
 ```
-Running "flutter pub get" in OpenScan...
+Running "flutter pub get" in Lumara...
 Got dependencies!
 ```
 
@@ -205,7 +205,7 @@ Success
 flutter run --dart-define=STAGING=true
 
 # O abrir desde el dispositivo:
-# Buscar icono "OpenScan Indígenas"
+# Buscar icono "Lumara Indígenas"
 ```
 
 ---
@@ -214,7 +214,7 @@ flutter run --dart-define=STAGING=true
 
 ### Paso 1: Compilar APK (solo una vez)
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Compilar APK debug
 flutter build apk --debug --dart-define=STAGING=true
@@ -223,9 +223,9 @@ flutter build apk --debug --dart-define=STAGING=true
 ### Paso 2: Copiar APK a carpeta compartida
 ```bash
 # Copiar APK a carpeta accesible
-cp build/app/outputs/flutter-apk/app-debug.apk ~/Escritorio/openscan-staging.apk
+cp build/app/outputs/flutter-apk/app-debug.apk ~/Escritorio/lumara-staging.apk
 
-echo "APK disponible en: ~/Escritorio/openscan-staging.apk"
+echo "APK disponible en: ~/Escritorio/lumara-staging.apk"
 ```
 
 ### Paso 3: Transferir a dispositivo
@@ -236,7 +236,7 @@ echo "APK disponible en: ~/Escritorio/openscan-staging.apk"
 # Habilitar "USB Debugging" en el teléfono
 
 # Instalar
-adb install ~/Escritorio/openscan-staging.apk
+adb install ~/Escritorio/lumara-staging.apk
 ```
 
 **Opción B: Via Email/WhatsApp**
@@ -256,7 +256,7 @@ adb install ~/Escritorio/openscan-staging.apk
 
 ### Paso 4: Instalar en dispositivo
 ```
-1. Abrir openscan-staging.apk en el teléfono
+1. Abrir lumara-staging.apk en el teléfono
 2. Android mostrará: "¿Instalar esta aplicación?"
 3. Tap en "Configuración" → Habilitar "Fuentes desconocidas"
 4. Volver y tap en "Instalar"
@@ -271,7 +271,7 @@ adb install ~/Escritorio/openscan-staging.apk
 ### Primera Ejecución
 
 1. **Abrir app**
-   - Buscar icono "OpenScan Indígenas"
+   - Buscar icono "Lumara Indígenas"
    - Tap para abrir
 
 2. **Onboarding (primera vez)**
@@ -319,7 +319,7 @@ adb install ~/Escritorio/openscan-staging.apk
 14. App muestra "Subiendo documento..."
 15. Progreso: 0% → 50% → 100%
 16. Notificación: "✅ Documento sincronizado"
-17. Check: Ir al servidor Paperless en navegador
+17. Check: Ir al servidor Tejido en navegador
 18. Verificar que documento aparece en lista
 ```
 
@@ -387,7 +387,7 @@ adb install ~/Escritorio/openscan-staging.apk
 
 ```dart
 // Staging URL (línea 50)
-static const String paperlessStagingUrl =
+static const String tejidoStagingUrl =
   'http://10.0.2.2:8001'; // ← CAMBIAR a tu servidor de prueba
 ```
 
@@ -402,7 +402,7 @@ flutter build apk --debug --dart-define=STAGING=true
 
 ```dart
 // Development URL (línea 58)
-static const String paperlessDevelopmentUrl =
+static const String tejidoDevelopmentUrl =
   'http://10.0.2.2:8001'; // Emulador
   // 'http://192.168.1.100:8001'; // Dispositivo físico (usar IP de tu PC)
 ```
@@ -486,13 +486,13 @@ flutter build apk --debug
 
 ```bash
 # Desinstalar versión anterior
-adb uninstall com.openscan.indigenas
+adb uninstall com.lumara.indigenas
 
 # Instalar nueva versión
 adb install build/app/outputs/flutter-apk/app-debug.apk
 ```
 
-### Error: "Cannot connect to Paperless"
+### Error: "Cannot connect to Tejido"
 
 **Verificar servidor:**
 ```bash
@@ -520,7 +520,7 @@ ip addr show | grep inet
 **Actualizar URL en app:**
 ```dart
 // lib/core/config/production_config.dart
-static const String paperlessDevelopmentUrl =
+static const String tejidoDevelopmentUrl =
   'http://192.168.1.100:8001'; // ← Tu IP
 ```
 
@@ -622,7 +622,7 @@ adb logcat | grep flutter
 ### Escenario 4: Múltiples Usuarios (Concurrencia)
 ```
 1. 5 operadores digitalizan simultáneamente
-2. Todos suben a mismo servidor Paperless
+2. Todos suben a mismo servidor Tejido
 3. No hay conflictos
 4. Cada documento tiene person_id único
 5. Reportes agregados muestran datos correctos
@@ -688,8 +688,8 @@ adb logcat | grep flutter
 ## 📞 Soporte
 
 **Problemas durante testing:**
-- **Email:** dev@openscan-indigenas.org
-- **GitHub:** [Issues](https://github.com/yourusername/openscan-indigenas/issues)
+- **Email:** dev@lumara-indigenas.org
+- **GitHub:** [Issues](https://github.com/yourusername/lumara-indigenas/issues)
 
 **Bugs encontrados:**
 - Crear issue en GitHub con:
@@ -704,7 +704,7 @@ adb logcat | grep flutter
 
 ```bash
 # 1. Clonar/navegar al proyecto
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # 2. Instalar dependencias
 flutter pub get

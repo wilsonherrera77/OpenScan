@@ -2,7 +2,7 @@
 # BACKEND MONITOR: Logs de Tejido durante sincronización
 
 echo "═══════════════════════════════════════════════════════"
-echo "🔍 MONITOR BACKEND (Tejido/Paperless)"
+echo "🔍 MONITOR BACKEND (Tejido/Tejido)"
 echo "═══════════════════════════════════════════════════════"
 echo ""
 
@@ -20,7 +20,7 @@ echo "--- LOGS BACKEND -------------------------------------------"
 echo ""
 
 # Monitor Docker logs in real-time
-docker logs -f paperless_webserver_1 2>&1 | while IFS= read -r line; do
+docker logs -f tejido_webserver_1 2>&1 | while IFS= read -r line; do
     # Highlight POST requests (uploads)
     if echo "$line" | grep -qi "POST.*documents"; then
         echo -e "${GREEN}$line${NC}"

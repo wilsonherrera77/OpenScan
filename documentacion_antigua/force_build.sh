@@ -1,10 +1,10 @@
 #!/bin/bash
 # Force Build Script - Bypass git issues
-# OpenScan Indigenous Communities
+# Lumara Indigenous Communities
 
 set -e
 
-echo "🔧 OpenScan Force Build Script"
+echo "🔧 Lumara Force Build Script"
 echo "================================"
 echo ""
 

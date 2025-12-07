@@ -1,6 +1,6 @@
 # 🛡️ Penetration Testing Requirements
 
-**Project:** OpenScan Indígenas
+**Project:** Lumara Indígenas
 **Version:** 3.0.0
 **Engagement Type:** Black Box / Grey Box Testing
 **Last Updated:** 2025-10-07
@@ -9,7 +9,7 @@
 
 ## 📋 Executive Summary
 
-This document outlines the requirements, scope, and methodology for penetration testing of the OpenScan Indígenas mobile application and backend infrastructure. The goal is to identify security vulnerabilities before production deployment and ensure compliance with OWASP Mobile Security standards.
+This document outlines the requirements, scope, and methodology for penetration testing of the Lumara Indígenas mobile application and backend infrastructure. The goal is to identify security vulnerabilities before production deployment and ensure compliance with OWASP Mobile Security standards.
 
 ---
 
@@ -50,7 +50,7 @@ This document outlines the requirements, scope, and methodology for penetration 
 #### Mobile Application
 
 **Platform:** Android (iOS future consideration)
-**Package Name:** `com.openscan.indigenas`
+**Package Name:** `com.lumara.indigenas`
 **Version:** 3.0.0
 
 **Features to Test:**
@@ -64,8 +64,8 @@ This document outlines the requirements, scope, and methodology for penetration 
 
 #### Backend API
 
-**Endpoint:** `https://paperless.your-domain.com/api/`
-**Technology:** Paperless-ngx REST API
+**Endpoint:** `https://tejido.your-domain.com/api/`
+**Technology:** Tejido-ngx REST API
 **Authentication:** Token-based (Bearer)
 
 **Endpoints to Test:**
@@ -86,7 +86,7 @@ This document outlines the requirements, scope, and methodology for penetration 
 - **Physical security** testing
 - **Social engineering** attacks on staff
 - **Denial of Service** attacks (without approval)
-- **Third-party services** (Paperless-ngx core, Google Play Services)
+- **Third-party services** (Tejido-ngx core, Google Play Services)
 - **Source code review** (provided separately if needed)
 
 ---
@@ -232,7 +232,7 @@ adb shell "chmod 755 /data/local/tmp/frida-server"
 adb shell "/data/local/tmp/frida-server &"
 
 # Hook certificate pinning
-frida -U -f com.openscan.indigenas -l disable-pinning.js
+frida -U -f com.lumara.indigenas -l disable-pinning.js
 ```
 
 ---
@@ -287,17 +287,17 @@ frida -U -f com.openscan.indigenas -l disable-pinning.js
 **Commands:**
 ```bash
 # Check app data directory
-adb shell "run-as com.openscan.indigenas ls -laR /data/data/com.openscan.indigenas/"
+adb shell "run-as com.lumara.indigenas ls -laR /data/data/com.lumara.indigenas/"
 
 # Pull database
-adb shell "run-as com.openscan.indigenas cp /data/data/.../databases/app.db /sdcard/"
+adb shell "run-as com.lumara.indigenas cp /data/data/.../databases/app.db /sdcard/"
 adb pull /sdcard/app.db
 
 # Check for sensitive data
 strings app.db | grep -i "password\|token\|secret"
 
 # Check SharedPreferences
-adb shell "run-as com.openscan.indigenas cat /data/data/.../shared_prefs/*.xml"
+adb shell "run-as com.lumara.indigenas cat /data/data/.../shared_prefs/*.xml"
 ```
 
 ---
@@ -316,7 +316,7 @@ adb shell "run-as com.openscan.indigenas cat /data/data/.../shared_prefs/*.xml"
 mitmproxy --mode transparent --showhost
 
 # Test certificate pinning
-objection -g com.openscan.indigenas explore
+objection -g com.lumara.indigenas explore
 android sslpinning disable
 
 # Check for cleartext
@@ -422,7 +422,7 @@ curl -H "Authorization: Bearer $REGULAR_USER_TOKEN" \
 **Commands:**
 ```bash
 # Check if debuggable
-adb shell "dumpsys package com.openscan.indigenas | grep debuggable"
+adb shell "dumpsys package com.lumara.indigenas | grep debuggable"
 # Expected: debuggable=false
 
 # Check obfuscation

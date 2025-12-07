@@ -11,7 +11,7 @@
 ### Capa 1: Frontend (Lumara) - Prevención Proactiva
 **Objetivo**: Evitar capturas innecesarias
 
-### Capa 2: Backend (Paperless) - Validación Obligatoria
+### Capa 2: Backend (Tejido) - Validación Obligatoria
 **Objetivo**: Rechazar duplicados como última línea de defensa
 
 ---
@@ -147,7 +147,7 @@ void initState() {
 }
 ```
 
-**Modificar `paperless_api_client.dart`**:
+**Modificar `tejido_api_client.dart`**:
 
 ```dart
 Future<Map<String, dynamic>> checkDocumentExists({
@@ -209,7 +209,7 @@ En `views_census.py`, línea 110-152:
 
 Agregar validación OBLIGATORIA después de verificar que la persona existe.
 
-**Ubicación**: `/paperless-ngx/src/documents/views_census.py` después de línea 110
+**Ubicación**: `/tejido-ngx/src/documents/views_census.py` después de línea 110
 
 ```python
 # Después de verificar que la persona existe (línea 110)
@@ -544,7 +544,7 @@ Resultado: Persona tiene 1 cédula (la más reciente)
 **Prioridad**: 🔴 CRÍTICA
 
 ### Fase 2: Frontend (ALTA)
-- [ ] Implementar `checkDocumentExists()` en `paperless_api_client.dart`
+- [ ] Implementar `checkDocumentExists()` en `tejido_api_client.dart`
 - [ ] Modificar `DocumentCaptureScreen` para verificar antes de capturar
 - [ ] Agregar diálogos de confirmación
 - [ ] Manejar respuesta HTTP 409 en caso de error

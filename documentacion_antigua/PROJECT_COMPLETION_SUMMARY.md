@@ -1,6 +1,6 @@
 # ✅ Resumen de Finalización del Proyecto
 
-**OpenScan Indígenas v3.0.0**
+**Lumara Indígenas v3.0.0**
 **Fecha de Finalización:** 2025-10-07
 **Estado:** DESARROLLO COMPLETO ✅
 
@@ -16,7 +16,7 @@ Todos los sprints de desarrollo han sido completados exitosamente. La aplicació
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                  OPENSCAN INDÍGENAS v3.0.0                  │
+│                  LUMARA INDÍGENAS v3.0.0                  │
 │         Sistema de Digitalización de Documentos             │
 │            para Comunidades Indígenas                       │
 │                                                             │
@@ -51,8 +51,8 @@ Todos los sprints de desarrollo han sido completados exitosamente. La aplicació
 
 **Entregado:** 38 archivos, 2,850 líneas de código
 
-### Sprint 3: Integración Paperless ✅
-- Cliente API de Paperless-ngx
+### Sprint 3: Integración Tejido ✅
+- Cliente API de Tejido-ngx
 - Subida de documentos con progreso
 - Cola de subida offline
 - Sincronización automática en background
@@ -152,7 +152,7 @@ Todos los sprints de desarrollo han sido completados exitosamente. La aplicació
 ### Reportes de Sprints
 14. ✅ **SPRINT_1_REPORT.md** - Infraestructura base
 15. ✅ **SPRINT_2_REPORT.md** - Funcionalidades core
-16. ✅ **SPRINT_3_REPORT.md** - Integración Paperless
+16. ✅ **SPRINT_3_REPORT.md** - Integración Tejido
 17. ✅ **SPRINT_4_REPORT.md** - Características avanzadas
 
 ### Scripts y Utilidades
@@ -237,7 +237,7 @@ Ver: [PRODUCTION_BLOCKERS_RESOLUTION.md](PRODUCTION_BLOCKERS_RESOLUTION.md)
 ## 📂 Estructura de Archivos Entregados
 
 ```
-OpenScan/
+Lumara/
 ├── lib/                           # 15,410 líneas de código
 │   ├── core/                     # Configuración y utilidades
 │   ├── data/                     # Capa de datos
@@ -317,22 +317,22 @@ OpenScan/
 Por entregar código de alta calidad con excelente cobertura de tests y documentación exhaustiva.
 
 ### Adaptación del Proyecto Original
-Basado en [OpenScan](https://github.com/Ethereal-Developers-Inc/OpenScan) por Ethereal Developers Inc, extendido significativamente para comunidades indígenas.
+Basado en [Lumara](https://github.com/Ethereal-Developers-Inc/Lumara) por Ethereal Developers Inc, extendido significativamente para comunidades indígenas.
 
 ---
 
 ## 📞 Información de Contacto
 
 ### Soporte Técnico
-- **Email:** dev@openscan-indigenas.org
-- **Issues:** https://github.com/yourusername/openscan-indigenas/issues
+- **Email:** dev@lumara-indigenas.org
+- **Issues:** https://github.com/yourusername/lumara-indigenas/issues
 
 ### Soporte a Usuarios
-- **Email:** soporte@openscan-indigenas.org (pendiente configuración)
+- **Email:** soporte@lumara-indigenas.org (pendiente configuración)
 - **Manual:** docs/USER_MANUAL_ES.md
 
 ### Seguridad
-- **Email:** security@openscan-indigenas.org
+- **Email:** security@lumara-indigenas.org
 - **Política:** SECURITY.md
 
 ---
@@ -448,4 +448,4 @@ El proyecto está **TÉCNICAMENTE COMPLETO**. Los bloqueadores son **operacional
 **Versión:** 3.0.0
 **Estado:** ✅ DESARROLLO COMPLETO | ⏳ BLOQUEADORES PENDIENTES
 
-**Equipo de Desarrollo - OpenScan Indígenas**
+**Equipo de Desarrollo - Lumara Indígenas**

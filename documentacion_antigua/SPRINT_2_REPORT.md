@@ -1,6 +1,6 @@
 # 🚀 SPRINT 2 - UX ENHANCEMENT - REPORTE FINAL
 
-**Proyecto:** OpenScan Indígenas - Sistema de Digitalización Documental
+**Proyecto:** Lumara Indígenas - Sistema de Digitalización Documental
 **Sprint:** 2 de 4 (UX Enhancement)
 **Duración:** 6 horas
 **Fecha:** 2025-10-07

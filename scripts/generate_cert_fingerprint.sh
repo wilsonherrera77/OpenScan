@@ -34,7 +34,7 @@ print_warning() {
 # Validate input
 if [ -z "$HOSTNAME" ]; then
     print_error "Usage: $0 <hostname> [port]"
-    echo "Example: $0 paperless.example.com 443"
+    echo "Example: $0 tejido.example.com 443"
     exit 1
 fi
 

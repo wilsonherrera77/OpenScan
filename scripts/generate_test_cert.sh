@@ -12,7 +12,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-DOMAIN="${1:-paperless-staging.local}"
+DOMAIN="${1:-tejido-staging.local}"
 OUTPUT_DIR="./certs"
 DAYS_VALID=365
 
@@ -38,7 +38,7 @@ openssl genrsa -out "${OUTPUT_DIR}/${DOMAIN}.key" 2048
 print_info "Generating CSR..."
 openssl req -new -key "${OUTPUT_DIR}/${DOMAIN}.key" \
     -out "${OUTPUT_DIR}/${DOMAIN}.csr" \
-    -subj "/C=CO/ST=Test/L=Test/O=OpenScan Test/CN=${DOMAIN}"
+    -subj "/C=CO/ST=Test/L=Test/O=Lumara Test/CN=${DOMAIN}"
 
 # Generate self-signed certificate
 print_info "Generating self-signed certificate..."

@@ -243,7 +243,7 @@ static Future<bool> startPeriodicSync({
 ### Test #4: Backend Logs Monitoring
 ```bash
 # Comando:
-docker logs -f paperless_webserver_1 | grep -i "upload\|document"
+docker logs -f tejido_webserver_1 | grep -i "upload\|document"
 
 # Resultado Esperado:
 ✅ Ver actividad de uploads cada 1 minuto

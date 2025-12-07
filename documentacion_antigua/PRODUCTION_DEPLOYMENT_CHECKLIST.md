@@ -1,6 +1,6 @@
 # 🚀 Lista de Verificación - Despliegue a Producción
 
-**OpenScan Indígenas v3.0.0**
+**Lumara Indígenas v3.0.0**
 
 **Estado Actual:** Pre-Producción (Bloqueadores pendientes)
 **Última actualización:** 2025-10-07
@@ -33,7 +33,7 @@ Estos items DEBEN resolverse antes del despliegue a producción:
 - Sin SSL certificate, la app no puede conectarse de forma segura en producción
 
 **Requiere:**
-1. **Dominio de producción configurado** (ejemplo: `paperless.openscan-indigenas.org`)
+1. **Dominio de producción configurado** (ejemplo: `tejido.lumara-indigenas.org`)
 2. **Certificado SSL instalado** en el servidor (Let's Encrypt recomendado)
 3. **Servidor accesible** públicamente en puerto 443 (HTTPS)
 
@@ -42,15 +42,15 @@ Estos items DEBEN resolverse antes del despliegue a producción:
 ```bash
 # Paso 1: Obtener certificado SSL para tu dominio
 # Opción A: Let's Encrypt (gratis, recomendado)
-sudo certbot certonly --standalone -d paperless.openscan-indigenas.org
+sudo certbot certonly --standalone -d tejido.lumara-indigenas.org
 
 # Opción B: Certificado comercial (DigiCert, Sectigo, etc.)
 # Seguir instrucciones del proveedor
 
 # Paso 2: Generar fingerprint del certificado
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 chmod +x scripts/generate_cert_fingerprint.sh
-./scripts/generate_cert_fingerprint.sh paperless.openscan-indigenas.org
+./scripts/generate_cert_fingerprint.sh tejido.lumara-indigenas.org
 
 # Paso 3: Copiar el fingerprint generado
 # El script mostrará algo como:
@@ -84,23 +84,23 @@ static const List<String> certificateFingerprints = [
 **Estado:** ❌ BLOQUEADO - Requiere configuración
 
 **Problema:**
-- `paperlessProductionUrl` apunta a "paperless.example.com" (línea 42)
-- `paperlessStagingUrl` apunta a "paperless-staging.example.com" (línea 50)
+- `tejidoProductionUrl` apunta a "tejido.example.com" (línea 42)
+- `tejidoStagingUrl` apunta a "tejido-staging.example.com" (línea 50)
 - URLs de políticas usan dominio placeholder
 
 **Requiere:**
-1. **Servidor Paperless-ngx** desplegado y accesible
+1. **Servidor Tejido-ngx** desplegado y accesible
 2. **Dominio registrado** y configurado
 3. **DNS configurado** apuntando al servidor
 
 **Pasos para resolver:**
 
 ```bash
-# Paso 1: Verificar que el servidor Paperless está funcionando
+# Paso 1: Verificar que el servidor Tejido está funcionando
 curl https://tu-dominio-real.org/api/
 
 # Paso 2: Verificar DNS configurado
-nslookup paperless.openscan-indigenas.org
+nslookup tejido.lumara-indigenas.org
 
 # Paso 3: Actualizar URLs en production_config.dart
 ```
@@ -110,23 +110,23 @@ nslookup paperless.openscan-indigenas.org
 // lib/core/config/production_config.dart
 
 // Línea 42: URL de producción
-static const String paperlessProductionUrl = 'https://paperless.openscan-indigenas.org';
+static const String tejidoProductionUrl = 'https://tejido.lumara-indigenas.org';
 
 // Línea 50: URL de staging (opcional pero recomendado)
-static const String paperlessStagingUrl = 'https://staging.openscan-indigenas.org';
+static const String tejidoStagingUrl = 'https://staging.lumara-indigenas.org';
 
 // Línea 254: Privacy policy
-static const String privacyPolicyUrl = 'https://openscan-indigenas.org/privacy';
+static const String privacyPolicyUrl = 'https://lumara-indigenas.org/privacy';
 
 // Línea 262: Terms of service
-static const String termsOfServiceUrl = 'https://openscan-indigenas.org/terms';
+static const String termsOfServiceUrl = 'https://lumara-indigenas.org/terms';
 ```
 
 **Criterio de aceptación:**
-- [ ] Servidor Paperless-ngx desplegado y funcionando
+- [ ] Servidor Tejido-ngx desplegado y funcionando
 - [ ] Dominio registrado y DNS configurado
-- [ ] `paperlessProductionUrl` actualizado con dominio real
-- [ ] `paperlessStagingUrl` actualizado (opcional)
+- [ ] `tejidoProductionUrl` actualizado con dominio real
+- [ ] `tejidoStagingUrl` actualizado (opcional)
 - [ ] Privacy policy publicada y URL actualizada
 - [ ] Terms of service publicados y URL actualizada
 - [ ] Todas las URLs usan HTTPS
@@ -139,7 +139,7 @@ static const String termsOfServiceUrl = 'https://openscan-indigenas.org/terms';
 **Estado:** ❌ BLOQUEADO - Requiere configuración
 
 **Problema:**
-- `supportEmail` usa email placeholder "support@openscan-indigenas.org" (línea 245)
+- `supportEmail` usa email placeholder "support@lumara-indigenas.org" (línea 245)
 - Email debe ser real y monitoreado
 
 **Requiere:**
@@ -151,7 +151,7 @@ static const String termsOfServiceUrl = 'https://openscan-indigenas.org/terms';
 
 ```bash
 # Paso 1: Crear cuenta de email
-# - Opción A: Google Workspace (soporte@openscan-indigenas.org)
+# - Opción A: Google Workspace (soporte@lumara-indigenas.org)
 # - Opción B: Email corporativo propio
 # - Opción C: Servicio de email transaccional
 
@@ -245,7 +245,7 @@ Estos items ya están listos:
 ### Desarrollo
 - [x] Sprint 1: Infraestructura base (100%)
 - [x] Sprint 2: Funcionalidades core (100%)
-- [x] Sprint 3: Integración con Paperless (100%)
+- [x] Sprint 3: Integración con Tejido (100%)
 - [x] Sprint 4: Características avanzadas (100%)
   - [x] Dashboard de reportes y analytics
   - [x] Sistema de análisis de brechas
@@ -286,7 +286,7 @@ Estos items ya están listos:
 **Infraestructura:**
 - [ ] Registrar dominio de producción
 - [ ] Configurar DNS apuntando a servidor
-- [ ] Instalar Paperless-ngx en servidor de producción
+- [ ] Instalar Tejido-ngx en servidor de producción
 - [ ] Configurar firewall (puerto 443 abierto)
 - [ ] Instalar certificado SSL (Let's Encrypt)
 - [ ] Verificar SSL con: `curl https://tu-dominio.org`
@@ -294,7 +294,7 @@ Estos items ya están listos:
 **Configuración de Código:**
 - [ ] Generar certificado fingerprint con script
 - [ ] Actualizar `certificateFingerprints` en production_config.dart
-- [ ] Actualizar `paperlessProductionUrl` con dominio real
+- [ ] Actualizar `tejidoProductionUrl` con dominio real
 - [ ] Actualizar `supportEmail` con email real
 - [ ] Crear páginas de privacy policy y terms
 - [ ] Actualizar URLs de privacy/terms
@@ -377,7 +377,7 @@ flutter build apk \
 - [ ] Monitorear ANRs (Application Not Responding)
 - [ ] Verificar tasa de instalación vs. desinstalación
 - [ ] Revisar reviews de usuarios
-- [ ] Monitorear uso de servidor Paperless
+- [ ] Monitorear uso de servidor Tejido
 
 **Primeras 48h:**
 - [ ] Analizar métricas de uso
@@ -499,7 +499,7 @@ flutter build apk \
 4. Re-pentesting de la vulnerabilidad
 5. Re-despliegue con fix
 
-**Escenario 3: Servidor Paperless caído**
+**Escenario 3: Servidor Tejido caído**
 1. Modo offline automático se activa
 2. Comunicar a usuarios (in-app message)
 3. Restaurar servidor desde backup

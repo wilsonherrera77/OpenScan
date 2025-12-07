@@ -26,7 +26,7 @@ El script automáticamente:
 adb devices
 
 # Desinstalar versión anterior (opcional)
-adb uninstall com.ethereal.openscan
+adb uninstall com.ethereal.lumara
 
 # Instalar APK
 adb install -r LumaraScan_v4.0.0_debug.apk
@@ -43,7 +43,7 @@ adb install -r LumaraScan_v4.0.0_debug.apk
 ## 📍 UBICACIÓN DEL APK
 
 ```
-/home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/LumaraScan_v4.0.0_debug.apk
+/home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara/LumaraScan_v4.0.0_debug.apk
 ```
 
 ### Verificación de integridad:
@@ -61,9 +61,9 @@ md5sum LumaraScan_v4.0.0_debug.apk
 ### 1. Primer inicio
 - Abrir Lumara Scan
 - Completar onboarding (si es primera vez)
-- Iniciar sesión con credenciales Paperless
+- Iniciar sesión con credenciales Tejido
 
-### 2. Configurar servidor Paperless
+### 2. Configurar servidor Tejido
 - **URL del servidor:** `http://192.168.40.17:8001`
 - **Usuario:** admin
 - **Contraseña:** [tu contraseña]
@@ -78,7 +78,7 @@ La app solicitará los siguientes permisos:
 
 - ✅ **Almacenamiento** (leer/escribir documentos)
 - ✅ **Cámara** (escanear documentos)
-- ✅ **Internet** (conectar a Paperless)
+- ✅ **Internet** (conectar a Tejido)
 - ✅ **Notificaciones** (estado de sincronización)
 - ✅ **Foreground service** (sync en background)
 
@@ -107,7 +107,7 @@ La app solicitará los siguientes permisos:
 **Causa:** Versión anterior corrupta
 **Solución:**
 ```bash
-adb uninstall com.ethereal.openscan
+adb uninstall com.ethereal.lumara
 adb install -r LumaraScan_v4.0.0_debug.apk
 ```
 
@@ -128,17 +128,17 @@ adb install -r LumaraScan_v4.0.0_debug.apk
 2. Conceder todos los permisos solicitados
 
 ### Sincronización no funciona
-**Causa:** Servidor Paperless no accesible
+**Causa:** Servidor Tejido no accesible
 **Solución:**
 1. Verificar IP del servidor: `ping 192.168.40.17`
-2. Verificar Paperless activo: `http://192.168.40.17:8001` en navegador
+2. Verificar Tejido activo: `http://192.168.40.17:8001` en navegador
 3. En app, ir a Configuración y actualizar URL si es necesario
 
 ### Notificación "Esperando conexión a Internet"
 **Causa:** Sin conectividad o servidor no accesible
 **Solución:**
 1. Verificar WiFi/datos móviles activos
-2. Verificar conectividad al servidor Paperless
+2. Verificar conectividad al servidor Tejido
 3. La app reintentar automáticamente al recuperar conexión
 
 ---
@@ -147,14 +147,14 @@ adb install -r LumaraScan_v4.0.0_debug.apk
 
 ### Comprobar versión instalada:
 ```bash
-adb shell dumpsys package com.ethereal.openscan | grep versionName
+adb shell dumpsys package com.ethereal.lumara | grep versionName
 ```
 
 **Output esperado:** `versionName=4.0.0`
 
 ### Comprobar permisos concedidos:
 ```bash
-adb shell dumpsys package com.ethereal.openscan | grep "granted=true"
+adb shell dumpsys package com.ethereal.lumara | grep "granted=true"
 ```
 
 ### Ver logs en tiempo real:
@@ -170,7 +170,7 @@ adb logcat -s flutter:V
 
 1. **Desinstalar versión anterior:**
    ```bash
-   adb uninstall com.ethereal.openscan
+   adb uninstall com.ethereal.lumara
    ```
 
 2. **Instalar v4.0.0:**
@@ -230,7 +230,7 @@ Incluir la siguiente información:
 - Compresión automática de imágenes
 - Compartir PDF/imágenes
 - Base de datos: 3,997 personas
-- Integración Paperless-ngx completa
+- Integración Tejido-ngx completa
 
 ---
 

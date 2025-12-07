@@ -106,7 +106,7 @@ Después de una auditoría E2E exhaustiva, se identificó un **círculo vicioso*
 
 **Causas Raíz:**
 
-1. ❌ **NO hay repositorio Git en OpenScan/**
+1. ❌ **NO hay repositorio Git en Lumara/**
    - Imposible rastrear qué cambió entre versiones
    - No hay forma de hacer rollback seguro
    - Cada build es un "salto al vacío"
@@ -151,12 +151,12 @@ Después de una auditoría E2E exhaustiva, se identificó un **círculo vicioso*
 # Candidato: v5.7.0 (nov 3) o v5.5.0 (oct 12)
 
 # 2. Testing exhaustivo en dispositivo
-adb uninstall com.ethereal.openscan
+adb uninstall com.ethereal.lumara
 adb install -r ~/Descargas/Lumara_v5.7.0_FINAL_20251103.apk
 # Verificar: censo, login, captura, upload
 
 # 3. Inicializar Git
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 git init
 git add .
 git commit -m "baseline: v5.7.0 última versión funcional verificada"

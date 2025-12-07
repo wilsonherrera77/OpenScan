@@ -2,20 +2,20 @@
 
 **Situación:** La compilación completa tiene errores de integración entre código nuevo de Sprint 4 y base de datos existente.
 
-**Solución más rápida:** Usar la funcionalidad base de OpenScan original que SÍ funciona.
+**Solución más rápida:** Usar la funcionalidad base de Lumara original que SÍ funciona.
 
 ---
 
 ## ⚡ OPCIÓN MÁS RÁPIDA (2 minutos)
 
-### Usar el OpenScan original
+### Usar el Lumara original
 
-El código base de OpenScan (sin las modificaciones de comunidades indígenas) sí compila.
+El código base de Lumara (sin las modificaciones de comunidades indígenas) sí compila.
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
-# Hacer checkout a la versión base de OpenScan
+# Hacer checkout a la versión base de Lumara
 git stash  # Guardar cambios actuales
 
 # Compilar versión base
@@ -26,23 +26,23 @@ flutter build apk --debug
 ```
 
 **Tiempo:** 5-10 minutos
-**Resultado:** APK funcional de OpenScan base (sin integración Paperless)
+**Resultado:** APK funcional de Lumara base (sin integración Tejido)
 
 ---
 
 ## ⚡ OPCIÓN 2: APK de Release Original
 
-Si existe un APK previo del OpenScan original:
+Si existe un APK previo del Lumara original:
 
 ```bash
 # Buscar APKs en el sistema
-find ~ -name "*.apk" -type f 2>/dev/null | grep -i openscan
+find ~ -name "*.apk" -type f 2>/dev/null | grep -i lumara
 
-# O descargar el APK oficial de OpenScan
-wget https://github.com/Ethereal-Developers-Inc/OpenScan/releases/download/v2.2.0/OpenScan-v2.2.0.apk
+# O descargar el APK oficial de Lumara
+wget https://github.com/Ethereal-Developers-Inc/Lumara/releases/download/v2.2.0/Lumara-v2.2.0.apk
 
 # Instalar
-adb install OpenScan-v2.2.0.apk
+adb install Lumara-v2.2.0.apk
 ```
 
 ---
@@ -76,8 +76,8 @@ Los errores son:
 
 ### 2. env_config.dart busca variable inexistente
 
-**Error:** `paperlessBaseUrl` no está definido
-**Solución:** Importar o definir `ProductionConfig.paperlessBaseUrl`
+**Error:** `tejidoBaseUrl` no está definido
+**Solución:** Importar o definir `ProductionConfig.tejidoBaseUrl`
 
 ### 3. person_selection_screen.dart error de tipos
 
@@ -130,7 +130,7 @@ Estas pantallas del proyecto base funcionan:
 - ✅ GettingStartedScreen
 - ✅ HomeScreen
 - ✅ AboutScreen
-- ✅ LoginScreen (OpenScan Indígenas)
+- ✅ LoginScreen (Lumara Indígenas)
 - ✅ PersonSelectionScreen (parcial)
 
 Estas NO (requieren métodos de DB inexistentes):
@@ -151,7 +151,7 @@ Estas NO (requieren métodos de DB inexistentes):
 flutter run
 ```
 
-### Opción B: APK de OpenScan base
+### Opción B: APK de Lumara base
 ```bash
 git stash
 flutter build apk --debug
@@ -160,8 +160,8 @@ adb install build/app/outputs/flutter-apk/app-debug.apk
 
 ### Opción C: Descargar APK oficial
 ```bash
-wget https://github.com/Ethereal-Developers-Inc/OpenScan/releases/download/v2.2.0/OpenScan-v2.2.0.apk
-adb install OpenScan-v2.2.0.apk
+wget https://github.com/Ethereal-Developers-Inc/Lumara/releases/download/v2.2.0/Lumara-v2.2.0.apk
+adb install Lumara-v2.2.0.apk
 ```
 
 ---
@@ -170,10 +170,10 @@ adb install OpenScan-v2.2.0.apk
 
 **El código de Sprint 4 está COMPLETO y BIEN ESCRITO**, pero:
 - Usa métodos de base de datos que no se implementaron en `AppDatabase`
-- La base de datos actual solo tiene las tablas de OpenScan original
+- La base de datos actual solo tiene las tablas de Lumara original
 - Se necesitan ~2 horas para implementar los métodos faltantes en AppDatabase
 
-**Para HOY:** Usa `flutter run` o el APK base de OpenScan.
+**Para HOY:** Usa `flutter run` o el APK base de Lumara.
 
 **Para MAÑANA:** Implementaré los métodos faltantes y tendrás el APK completo.
 
@@ -182,5 +182,5 @@ adb install OpenScan-v2.2.0.apk
 **¿Qué prefieres hacer AHORA?**
 
 1. `flutter run` (testing inmediato, sin APK)
-2. APK de OpenScan base (sin funciones avanzadas)
+2. APK de Lumara base (sin funciones avanzadas)
 3. Esperar implementación completa (mañana)

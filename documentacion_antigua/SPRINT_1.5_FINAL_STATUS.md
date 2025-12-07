@@ -72,9 +72,9 @@ Se generó manualmente `app_database.g.dart` (1,072 líneas) basado en:
 ## 🏗️ Arquitectura Completa
 
 ```
-OpenScan Indigenous Communities
+Lumara Indigenous Communities
 ├── Presentation Layer
-│   ├── login_screen.dart (Login con Paperless)
+│   ├── login_screen.dart (Login con Tejido)
 │   ├── person_selection_screen.dart (3,997 personas)
 │   ├── upload_screen.dart (Captura + metadata)
 │   └── providers/
@@ -88,7 +88,7 @@ OpenScan Indigenous Communities
 │
 ├── Data Layer
 │   ├── datasources/
-│   │   ├── paperless_api_client.dart (API HTTP)
+│   │   ├── tejido_api_client.dart (API HTTP)
 │   │   └── census_data_source.dart (CSV parser)
 │   ├── repositories/
 │   │   ├── auth_repository.dart
@@ -119,7 +119,7 @@ OpenScan Indigenous Communities
 5. Documento guardado en SQLite (pending_uploads)
    ↓
 6. Intento de upload inmediato
-   ├─→ ✅ ONLINE: Upload a Paperless
+   ├─→ ✅ ONLINE: Upload a Tejido
    │   ├─→ Success: Mover a upload_history
    │   ├─→ Borrar de pending_uploads
    │   └─→ Eliminar archivo local
@@ -159,7 +159,7 @@ OpenScan Indigenous Communities
 
 5. **Upload History**
    - Registro de uploads exitosos
-   - Link a documento en Paperless (paperlessDocumentId)
+   - Link a documento en Tejido (tejidoDocumentId)
    - Mantenimiento: máximo 1,000 registros
 
 6. **Statistics & Monitoring**
@@ -198,7 +198,7 @@ OpenScan Indigenous Communities
 | person_id | TEXT | NOT NULL |
 | person_name | TEXT | NOT NULL |
 | document_type | TEXT | NOT NULL |
-| paperless_document_id | INTEGER | NULLABLE |
+| tejido_document_id | INTEGER | NULLABLE |
 | uploaded_at | DATETIME | DEFAULT CURRENT_TIMESTAMP |
 | status | TEXT | NOT NULL |
 
@@ -222,11 +222,11 @@ OpenScan Indigenous Communities
 **Requiere:**
 1. Flutter SDK funcional
 2. Dispositivo Android o emulador
-3. Paperless backend corriendo (`docker compose up`)
+3. Tejido backend corriendo (`docker compose up`)
 
 **Comando:**
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter run
 # Seguir TESTING_PLAN.md paso a paso
 ```

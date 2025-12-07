@@ -1,5 +1,5 @@
 # ✅ FASE 2 COMPLETADA: LUMARA - SISTEMA ANTI-DUPLICADOS
-## OpenScan v4.5.0 - Verificación Pre-Captura con Reemplazo de Documentos
+## Lumara v4.5.0 - Verificación Pre-Captura con Reemplazo de Documentos
 
 **Fecha:** 11 de Octubre de 2025
 **Versión:** v4.5.0
@@ -9,7 +9,7 @@
 
 ## 📋 RESUMEN EJECUTIVO
 
-La Fase 2 del sistema anti-duplicados ha sido implementada completamente en la aplicación móvil Lumara (OpenScan). El sistema ahora verifica ANTES de capturar si un documento ya existe, evitando transferencias innecesarias de datos y duplicados durante jornadas masivas de digitalización.
+La Fase 2 del sistema anti-duplicados ha sido implementada completamente en la aplicación móvil Lumara (Lumara). El sistema ahora verifica ANTES de capturar si un documento ya existe, evitando transferencias innecesarias de datos y duplicados durante jornadas masivas de digitalización.
 
 **Características implementadas:**
 - ✅ Verificación de existencia ANTES de abrir cámara
@@ -90,7 +90,7 @@ if (check.existsWithGoodQuality) {
 
 ## 📝 ARCHIVOS MODIFICADOS
 
-### 1. `lib/data/datasources/paperless_api_client.dart`
+### 1. `lib/data/datasources/tejido_api_client.dart`
 
 **Cambios realizados:**
 
@@ -551,7 +551,7 @@ Row(
 ### Inmediatos (Antes de Jornada)
 1. **Compilar APK:**
    ```bash
-   cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+   cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
    flutter clean
    flutter pub get
    flutter build apk --release
@@ -667,7 +667,7 @@ Body:
 
 ## 🎯 CONCLUSIÓN
 
-La **Fase 2** del sistema anti-duplicados ha sido implementada exitosamente en Lumara (OpenScan). El sistema está listo para ser compilado, instalado y testeado en dispositivos reales antes de su uso en jornadas masivas de digitalización.
+La **Fase 2** del sistema anti-duplicados ha sido implementada exitosamente en Lumara (Lumara). El sistema está listo para ser compilado, instalado y testeado en dispositivos reales antes de su uso en jornadas masivas de digitalización.
 
 **Estado del proyecto:**
 - ✅ Backend (Tejido) - Fase 1: COMPLETO

@@ -100,7 +100,7 @@
             │    └─→ [Upload Flow]
             │        ├─ ImageOptimizer (Phase 2: compress 60-80%)
             │        ├─ DocumentRepository.uploadDocumentForPerson()
-            │        │   └─ PaperlessApiClient.uploadDocument()
+            │        │   └─ TejidoApiClient.uploadDocument()
             │        │       └─ HTTP POST /api/documents/
             │        │
             │        ├─ Online → Direct upload
@@ -140,7 +140,7 @@
 │                                   └─ exportAssignmentsCSV() ⭐             │
 │                                                                             │
 │  Data Sources:                                                              │
-│  ├─ PaperlessApiClient (Dio HTTP) → Backend API                           │
+│  ├─ TejidoApiClient (Dio HTTP) → Backend API                           │
 │  ├─ CensusDataSource (CSV/API)    → Census data                           │
 │  └─ AppDatabase (SQLite/Drift)    → Local storage                         │
 │                                                                             │

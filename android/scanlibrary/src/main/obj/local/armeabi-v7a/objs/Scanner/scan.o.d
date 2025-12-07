@@ -1,6 +1,6 @@
-D:/bruh/git/flutter/OpenScan/android/scanlibrary/src/main/obj/local/armeabi-v7a/objs/Scanner/scan.o: \
-  D:\bruh\git\flutter\OpenScan\android\scanlibrary\src\main\jni\scan.cpp \
-  D:\bruh\git\flutter\OpenScan\android\scanlibrary\src\main\jni\com_scanlibrary_ScanActivity.h \
+D:/bruh/git/flutter/Lumara/android/scanlibrary/src/main/obj/local/armeabi-v7a/objs/Scanner/scan.o: \
+  D:\bruh\git\flutter\Lumara\android\scanlibrary\src\main\jni\scan.cpp \
+  D:\bruh\git\flutter\Lumara\android\scanlibrary\src\main\jni\com_scanlibrary_ScanActivity.h \
   sdk\native\jni\include\opencv2\opencv.hpp \
   sdk\native\jni\include\opencv2\core.hpp \
   sdk\native\jni\include\opencv2\core\cvdef.h \
@@ -132,7 +132,7 @@ D:/bruh/git/flutter/OpenScan/android/scanlibrary/src/main/obj/local/armeabi-v7a/
   C:\Users\tsvij\AppData\Local\Android\sdk\ndk\21.0.6113669\build\\..\sources\cxx-stl\llvm-libc++\include\iostream \
   sdk\native\jni\include\opencv2\core\core.hpp
 
-D:\bruh\git\flutter\OpenScan\android\scanlibrary\src\main\jni\com_scanlibrary_ScanActivity.h:
+D:\bruh\git\flutter\Lumara\android\scanlibrary\src\main\jni\com_scanlibrary_ScanActivity.h:
 
 sdk\native\jni\include\opencv2\opencv.hpp:
 

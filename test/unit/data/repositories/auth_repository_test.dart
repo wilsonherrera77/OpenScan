@@ -1,17 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:openscan_indigenas/core/constants/api_constants.dart';
-import 'package:openscan_indigenas/data/repositories/auth_repository.dart';
-import 'package:openscan_indigenas/domain/entities/auth_token.dart';
+import 'package:lumara_indigenas/core/constants/api_constants.dart';
+import 'package:lumara_indigenas/data/repositories/auth_repository.dart';
+import 'package:lumara_indigenas/domain/entities/auth_token.dart';
 import '../../../mocks/mock_api_client.mocks.dart';
 
 void main() {
   late AuthRepository repository;
-  late MockPaperlessApiClient mockApiClient;
+  late MockTejidoApiClient mockApiClient;
 
   setUp(() {
-    mockApiClient = MockPaperlessApiClient();
+    mockApiClient = MockTejidoApiClient();
     repository = AuthRepository(mockApiClient);
 
     // Mock FlutterSecureStorage for testing
@@ -22,7 +22,7 @@ void main() {
     const testUsername = 'testuser';
     const testPassword = 'testpass';
     const testToken = 'test-token-123';
-    const testBaseUrl = 'https://test.paperless.com';
+    const testBaseUrl = 'https://test.tejido.com';
 
     final mockLoginResponse = {
       'token': testToken,
@@ -208,7 +208,7 @@ void main() {
   group('AuthRepository - updateBaseUrl', () {
     test('should update base URL and persist to storage', () async {
       // Arrange
-      const newUrl = 'https://new.paperless.com';
+      const newUrl = 'https://new.tejido.com';
       when(mockApiClient.setBaseUrl(newUrl)).thenReturn(null);
 
       // Act

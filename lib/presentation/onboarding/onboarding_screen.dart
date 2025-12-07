@@ -17,7 +17,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<OnboardingPage> _pages = [
     OnboardingPage(
-      title: 'Bienvenido a OpenScan Indígenas',
+      title: 'Bienvenido a Lumara Indígenas',
       description:
           'Digitaliza documentos de tu comunidad de forma fácil, segura y gratuita.',
       icon: Icons.document_scanner,

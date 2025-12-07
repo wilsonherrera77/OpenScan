@@ -7,16 +7,16 @@ import '../../core/constants/api_constants.dart';
 import '../../core/security/secure_config_manager.dart';
 import '../../core/utils/input_sanitizer.dart';
 
-/// Paperless API Client
-/// Handles all HTTP communication with Paperless-ngx REST API
-class PaperlessApiClient {
+/// Tejido API Client
+/// Handles all HTTP communication with Tejido-ngx REST API
+class TejidoApiClient {
   late final Dio _dio;
   final LoggerAdapter _logger = LoggerAdapter();
   final SecureConfigManager _configManager = SecureConfigManager();
   String? _authToken;
   String _baseUrl = ApiConstants.defaultBaseUrl;
 
-  PaperlessApiClient({String? baseUrl}) {
+  TejidoApiClient({String? baseUrl}) {
     if (baseUrl != null) _baseUrl = baseUrl;
     _initializeDio();
   }
@@ -181,7 +181,7 @@ class PaperlessApiClient {
     _logger.i('🌐 Base URL updated: $sanitized');
   }
 
-  /// Login to Paperless
+  /// Login to Tejido
   /// Returns auth token on success
   Future<Map<String, dynamic>> login({
     required String username,
@@ -227,7 +227,7 @@ class PaperlessApiClient {
     }
   }
 
-  /// Upload document to Paperless
+  /// Upload document to Tejido
   Future<Map<String, dynamic>> uploadDocument({
     required String filePath,
     required String fileName,
@@ -247,7 +247,7 @@ class PaperlessApiClient {
         if (documentType != null) 'document_type': documentType,
       });
 
-      // Add tags (Paperless expects multiple 'tags' fields, one per tag ID)
+      // Add tags (Tejido expects multiple 'tags' fields, one per tag ID)
       if (tags != null && tags.isNotEmpty) {
         for (final tagId in tags) {
           formData.fields.add(MapEntry('tags', tagId.toString()));
@@ -269,7 +269,7 @@ class PaperlessApiClient {
         ),
       );
 
-      // Paperless returns the task UUID as data
+      // Tejido returns the task UUID as data
       // This can be either a String (just the UUID) or a Map
       if (response.data is String) {
         // UUID returned as plain string
@@ -332,7 +332,7 @@ class PaperlessApiClient {
     }
   }
 
-  /// Test connection to Paperless
+  /// Test connection to Tejido
   Future<bool> testConnection() async {
     try {
       // ⚠️ IMPORTANT: Disable followRedirects to get the actual 302 response
@@ -534,7 +534,7 @@ class PaperlessApiClient {
         );
       } else if (e.response?.statusCode == 500) {
         _logger.e('⚠️ HTTP 500: Internal Server Error - Error en el backend');
-        _logger.e('   Revisa los logs del servidor Paperless');
+        _logger.e('   Revisa los logs del servidor Tejido');
       }
 
       rethrow;

@@ -20,7 +20,7 @@
   - Tracks upload state and error history
 
 - `UploadHistory` - Successful upload records
-  - 6 columns including paperlessDocumentId, uploadedAt, status
+  - 6 columns including tejidoDocumentId, uploadedAt, status
   - Maintains audit trail
 
 **CRUD Operations:**
@@ -170,7 +170,7 @@ void main() async {
   final database = AppDatabase();
 
   // 3. Create services
-  final apiClient = PaperlessApiClient();
+  final apiClient = TejidoApiClient();
   final documentRepository = DocumentRepository(apiClient);
   final uploadService = UploadService(database, documentRepository);
 
@@ -182,7 +182,7 @@ void main() async {
         Provider.value(value: database),
         // ... other providers
       ],
-      child: OpenScan(),
+      child: Lumara(),
     ),
   );
 }
@@ -258,9 +258,9 @@ chmod +x build.sh
                 ↓                           ↓
 ┌───────────────────────────┐   ┌───────────────────────────┐
 │   Local Database          │   │  Document Repository      │
-│   (Drift ORM)             │   │  (Paperless API)          │
+│   (Drift ORM)             │   │  (Tejido API)          │
 │                           │   │                           │
-│  • PendingUploads         │   │  • Upload to Paperless    │
+│  • PendingUploads         │   │  • Upload to Tejido    │
 │  • UploadHistory          │   │  • REST API calls         │
 │  • Statistics             │   │  • Token auth             │
 └───────────────────────────┘   └───────────────────────────┘
@@ -344,7 +344,7 @@ CREATE TABLE upload_history (
   person_id TEXT NOT NULL,
   person_name TEXT NOT NULL,
   document_type TEXT NOT NULL,
-  paperless_document_id INTEGER,
+  tejido_document_id INTEGER,
   uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   status TEXT NOT NULL
 );
@@ -430,7 +430,7 @@ dev_dependencies:
 
 2. **Generate Drift Code**
    ```bash
-   cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+   cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
    ./build.sh
    ```
 

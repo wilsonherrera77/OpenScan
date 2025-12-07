@@ -20,7 +20,7 @@ class ProductionConfig {
   // API CONFIGURATION
   // ============================================
 
-  /// Paperless API Base URL (production)
+  /// Tejido API Base URL (production)
   ///
   /// CRITICAL: Update this before production release!
   ///
@@ -31,37 +31,37 @@ class ProductionConfig {
   ///   - Should have CDN for optimal performance
   ///
   /// Setup Instructions:
-  ///   1. Deploy Paperless-ngx to production server
+  ///   1. Deploy Tejido-ngx to production server
   ///   2. Configure SSL certificate (Let's Encrypt recommended)
   ///   3. Update DNS records to point to server
   ///   4. Generate certificate fingerprint (see scripts/)
   ///   5. Update this URL with your domain
   ///   6. Test connectivity from mobile device
   ///
-  /// Example: 'https://paperless.openscan-indigenas.org'
-  static const String paperlessProductionUrl = 'http://127.0.0.1:8001'; // ✅ DEV: localhost via ADB reverse
+  /// Example: 'https://tejido.lumara-indigenas.org'
+  static const String tejidoProductionUrl = 'http://127.0.0.1:8001'; // ✅ DEV: localhost via ADB reverse
 
-  /// Paperless API Base URL (staging)
+  /// Tejido API Base URL (staging)
   ///
   /// Used for pre-production testing with --dart-define=STAGING=true
   /// Should mirror production environment as closely as possible
   ///
-  /// Example: 'https://staging.openscan-indigenas.org'
-  static const String paperlessStagingUrl = 'https://paperless-staging.example.com';
+  /// Example: 'https://staging.lumara-indigenas.org'
+  static const String tejidoStagingUrl = 'https://tejido-staging.example.com';
 
-  /// Paperless API Base URL (development)
+  /// Tejido API Base URL (development)
   ///
   /// For local development and testing
   /// 10.0.2.2 is the Android emulator's host machine
   /// For iOS simulator, use: 'http://localhost:8001'
   /// For physical device, use your machine's IP: 'http://192.168.x.x:8001'
-  static const String paperlessDevelopmentUrl = 'http://10.0.2.2:8001';
+  static const String tejidoDevelopmentUrl = 'http://10.0.2.2:8001';
 
   /// Get current API base URL based on environment
-  static String get paperlessBaseUrl {
-    if (isProduction) return paperlessProductionUrl;
-    if (const bool.fromEnvironment('STAGING')) return paperlessStagingUrl;
-    return paperlessDevelopmentUrl;
+  static String get tejidoBaseUrl {
+    if (isProduction) return tejidoProductionUrl;
+    if (const bool.fromEnvironment('STAGING')) return tejidoStagingUrl;
+    return tejidoDevelopmentUrl;
   }
 
   // ============================================
@@ -228,7 +228,7 @@ class ProductionConfig {
   // ============================================
 
   /// App name
-  static const String appName = 'OpenScan Indígenas';
+  static const String appName = 'Lumara Indígenas';
 
   /// App version
   static const String appVersion = '3.0.0';
@@ -241,8 +241,8 @@ class ProductionConfig {
   /// IMPORTANT: Update before production release
   /// This email is shown to users for support inquiries
   ///
-  /// Example: 'soporte@openscan-indigenas.org'
-  static const String supportEmail = 'support@openscan-indigenas.org';
+  /// Example: 'soporte@lumara-indigenas.org'
+  static const String supportEmail = 'support@lumara-indigenas.org';
 
   /// Privacy policy URL
   ///
@@ -250,16 +250,16 @@ class ProductionConfig {
   /// Should explain data collection, storage, and usage
   /// Must comply with local data protection laws
   ///
-  /// Example: 'https://openscan-indigenas.org/privacy'
-  static const String privacyPolicyUrl = 'https://openscan-indigenas.org/privacy';
+  /// Example: 'https://lumara-indigenas.org/privacy'
+  static const String privacyPolicyUrl = 'https://lumara-indigenas.org/privacy';
 
   /// Terms of service URL
   ///
   /// REQUIRED: Terms of use for the application
   /// Should include acceptable use, limitations, and legal disclaimers
   ///
-  /// Example: 'https://openscan-indigenas.org/terms'
-  static const String termsOfServiceUrl = 'https://openscan-indigenas.org/terms';
+  /// Example: 'https://lumara-indigenas.org/terms'
+  static const String termsOfServiceUrl = 'https://lumara-indigenas.org/terms';
 
   // ============================================
   // VALIDATION
@@ -282,13 +282,13 @@ class ProductionConfig {
     // ============================================
 
     // Check API URL configured
-    if (paperlessProductionUrl.contains('example.com')) {
+    if (tejidoProductionUrl.contains('example.com')) {
       criticalIssues.add('❌ Production API URL not configured (still using example.com)');
     }
 
     // Check HTTPS enforced (DISABLED for local network deployment)
-    // if (!paperlessProductionUrl.startsWith('https://')) {
-    //   criticalIssues.add('❌ Production API must use HTTPS (found: ${paperlessProductionUrl.split(':')[0]})');
+    // if (!tejidoProductionUrl.startsWith('https://')) {
+    //   criticalIssues.add('❌ Production API must use HTTPS (found: ${tejidoProductionUrl.split(':')[0]})');
     // }
 
     // Check certificate pinning (DISABLED for local HTTP deployment)
@@ -321,13 +321,13 @@ class ProductionConfig {
     }
 
     // Check privacy policy URL
-    if (privacyPolicyUrl.contains('openscan-indigenas.org') &&
-        privacyPolicyUrl.contains('openscan-indigenas.org')) {
+    if (privacyPolicyUrl.contains('lumara-indigenas.org') &&
+        privacyPolicyUrl.contains('lumara-indigenas.org')) {
       warnings.add('⚠️  Privacy policy URL not updated (still using default)');
     }
 
     // Check terms of service URL
-    if (termsOfServiceUrl.contains('openscan-indigenas.org')) {
+    if (termsOfServiceUrl.contains('lumara-indigenas.org')) {
       warnings.add('⚠️  Terms of service URL not updated (still using default)');
     }
 
@@ -385,7 +385,7 @@ ${criticalIssues.map((issue) => '  $issue').join('\n')}
 
 1. Update Production URLs:
    - Edit: lib/core/config/production_config.dart
-   - Set paperlessProductionUrl to your domain
+   - Set tejidoProductionUrl to your domain
    - Set supportEmail to real email address
 
 2. Configure Certificate Pinning:
@@ -413,7 +413,7 @@ ${criticalIssues.map((issue) => '  $issue').join('\n')}
 
     // Success!
     print('✅ Production configuration validated successfully');
-    print('   - API URL: $paperlessBaseUrl');
+    print('   - API URL: $tejidoBaseUrl');
     print('   - Certificate pinning: ${certificateFingerprints.length} fingerprint(s)');
     print('   - Support email: $supportEmail');
     print('');
@@ -432,7 +432,7 @@ ${criticalIssues.map((issue) => '  $issue').join('\n')}
   static Map<String, dynamic> getConfigSummary() {
     return {
       'environment': environmentName,
-      'api_url': paperlessBaseUrl,
+      'api_url': tejidoBaseUrl,
       'certificate_pinning': enableCertificatePinning,
       'https_required': requireHttps,
       'rate_limiting': enableRateLimiting,

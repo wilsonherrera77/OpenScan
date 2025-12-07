@@ -342,11 +342,11 @@ Las requests y responses HTTP se transmitían sin compresión:
 - JSON responses de API (ej: lista de 500 personas) → 200-500KB
 - JSON requests (ej: metadata de documento) → 2-5KB
 - Upload de metadata pesada → desperdicio de ancho de banda
-- Sin aprovechamiento de compresión del servidor Paperless
+- Sin aprovechamiento de compresión del servidor Tejido
 
 ### Solución Implementada
 
-**Archivo**: `lib/data/datasources/paperless_api_client.dart`
+**Archivo**: `lib/data/datasources/tejido_api_client.dart`
 
 #### 1. **Compresión de Responses (Accept-Encoding)**
 ```dart
@@ -358,7 +358,7 @@ headers: {
 },
 ```
 
-**Beneficio**: El servidor Paperless comprime las responses automáticamente cuando ve este header. Dio descomprime transparentemente.
+**Beneficio**: El servidor Tejido comprime las responses automáticamente cuando ve este header. Dio descomprime transparentemente.
 
 **Impacto**:
 - GET /api/persons/ (500 personas) → 350KB sin compresión → 80KB con gzip (**77% reducción**)
@@ -462,7 +462,7 @@ El interceptor registra automáticamente cada compresión para debugging.
 
 ### Código Agregado
 
-- **108 líneas nuevas** en `paperless_api_client.dart`
+- **108 líneas nuevas** en `tejido_api_client.dart`
 - Clase `_CompressionInterceptor` con lógica inteligente
 - Imports: `dart:convert` (json) y `dart:io` (gzip)
 - Header `Accept-Encoding` en BaseOptions
@@ -511,7 +511,7 @@ FASE 3 implementó **compresión de JSON** (60-80% reducción).
 
 #### Eficiencia
 - ✅ 70-80% menos consumo de datos móviles (crítico en zonas rurales)
-- ✅ Menos carga en servidor Paperless (circuit breaker + compresión)
+- ✅ Menos carga en servidor Tejido (circuit breaker + compresión)
 - ✅ Menor consumo de batería (menos tiempo de radio activo)
 
 ---
@@ -555,7 +555,7 @@ FASE 3 implementó **compresión de JSON** (60-80% reducción).
 - No requiere migración de datos
 - Usuarios existentes obtienen índices en próxima apertura de DB
 
-### 3. `lib/data/datasources/paperless_api_client.dart` (+111 líneas)
+### 3. `lib/data/datasources/tejido_api_client.dart` (+111 líneas)
 
 **Cambios**:
 - Imports: `dart:convert`, `dart:io`
@@ -728,7 +728,7 @@ print('Mejora: ${(durationNoIndex.inMilliseconds / durationWithIndex.inMilliseco
 **Objetivo**: Verificar que requests grandes se comprimen automáticamente.
 
 ```dart
-final apiClient = PaperlessApiClient();
+final apiClient = TejidoApiClient();
 
 // Request pequeño (<1KB) - no debería comprimir
 final smallPayload = {'title': 'Test', 'type': 1};
@@ -885,7 +885,7 @@ Las siguientes 5 optimizaciones se identificaron pero no se implementaron en FAS
 **Impacto Estimado**:
 - 30-40% más rápido para múltiples documentos
 - Menos carga en servidor (menos connections)
-- Complejidad: Alta (cambios en backend Paperless)
+- Complejidad: Alta (cambios en backend Tejido)
 
 ### 7. Prefetching de Metadatos en Background
 
@@ -1010,7 +1010,7 @@ Las siguientes 5 optimizaciones se identificaron pero no se implementaron en FAS
 
 **Recomendaciones Pre-Deploy**:
 1. ✅ Ejecutar rotación de API keys (documentado)
-2. ✅ Validar conexión con servidor Paperless real
+2. ✅ Validar conexión con servidor Tejido real
 3. ⚠️ Probar en red 3G/Edge real (zona rural)
 4. ⚠️ Monitorear métricas de retry y circuit breaker
 
@@ -1084,12 +1084,12 @@ Las siguientes 5 optimizaciones se identificaron pero no se implementaron en FAS
 
 ### Verificar Índices SQLite
 ```bash
-sqlite3 ~/openscan_indigenas.db "SELECT * FROM sqlite_master WHERE type='index';"
+sqlite3 ~/lumara_indigenas.db "SELECT * FROM sqlite_master WHERE type='index';"
 ```
 
 ### Analizar Query Plan
 ```bash
-sqlite3 ~/openscan_indigenas.db "EXPLAIN QUERY PLAN SELECT * FROM pending_uploads WHERE status='pending' ORDER BY created_at;"
+sqlite3 ~/lumara_indigenas.db "EXPLAIN QUERY PLAN SELECT * FROM pending_uploads WHERE status='pending' ORDER BY created_at;"
 ```
 
 ### Monitorear Circuit Breaker

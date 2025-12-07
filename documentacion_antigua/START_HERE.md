@@ -1,6 +1,6 @@
-# 🚀 START HERE - OpenScan Indígenas v3.0.0
+# 🚀 START HERE - Lumara Indígenas v3.0.0
 
-**Proyecto:** OpenScan Indígenas - Sistema de Digitalización de Documentos
+**Proyecto:** Lumara Indígenas - Sistema de Digitalización de Documentos
 **Versión:** 3.0.0
 **Fecha:** 2025-10-07
 **Estado:** ✅ DESARROLLO COMPLETO | ⏳ BLOQUEADORES PENDIENTES
@@ -117,13 +117,13 @@
 ⏳ Asignar responsables a cada bloqueador
 
 # 3. Acciones críticas (4 horas)
-⏳ Crear email: soporte@openscan-indigenas.org
+⏳ Crear email: soporte@lumara-indigenas.org
 ⏳ Solicitar cotizaciones pentesting (3 firmas)
 ```
 
 ### ESTA SEMANA
 
-- Configurar servidor Paperless + SSL + DNS
+- Configurar servidor Tejido + SSL + DNS
 - Generar fingerprints SSL
 - Actualizar configuración de producción
 - Contratar firma de pentesting
@@ -233,9 +233,9 @@ flutter build apk --release --obfuscate --split-debug-info=build/debug-info
 
 ## 📞 Contacto
 
-**Técnico:** dev@openscan-indigenas.org
-**Soporte:** soporte@openscan-indigenas.org (pendiente configuración)
-**Seguridad:** security@openscan-indigenas.org
+**Técnico:** dev@lumara-indigenas.org
+**Soporte:** soporte@lumara-indigenas.org (pendiente configuración)
+**Seguridad:** security@lumara-indigenas.org
 
 ---
 

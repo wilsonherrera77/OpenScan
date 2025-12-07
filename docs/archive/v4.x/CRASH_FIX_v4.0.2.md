@@ -118,7 +118,7 @@ Future<File?> openCamera() async {
 ## 📱 **APK v4.0.2 STABLE**
 
 ```
-/home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/LumaraScan_v4.0.2_STABLE.apk
+/home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara/LumaraScan_v4.0.2_STABLE.apk
 ```
 
 **MD5:** `caba3991b60352675bd71ad99f21b13b`
@@ -190,7 +190,7 @@ Stack trace: [full stack trace]
 
 Al tocarlo, verifica:
 - ✅ Estado de internet
-- ✅ URL del servidor Paperless
+- ✅ URL del servidor Tejido
 - ✅ Servidor alcanzable desde celular
 - ✅ Latencia en ms
 - ✅ Error detallado si falla
@@ -198,7 +198,7 @@ Al tocarlo, verifica:
 ### Si celular y PC están en misma WiFi:
 
 **Requisitos:**
-1. PC ejecutando Paperless en `http://192.168.40.17:8001`
+1. PC ejecutando Tejido en `http://192.168.40.17:8001`
 2. Celular conectado a **misma WiFi** (no datos móviles)
 3. Firewall no bloqueando puerto 8001
 
@@ -206,7 +206,7 @@ Al tocarlo, verifica:
 1. En HomeScreen de la app → Tocar icono `network_check`
 2. Debe mostrar:
    - ✅ Internet: Conectado
-   - ✅ Servidor Paperless: http://192.168.40.17:8001
+   - ✅ Servidor Tejido: http://192.168.40.17:8001
    - ✅ Servidor alcanzable: Sí
    - ✅ Latencia: [X] ms
 
@@ -233,13 +233,13 @@ Al tocarlo, verifica:
 ## 📦 **INSTALACIÓN**
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./install_apk.sh
 ```
 
 **O manual:**
 ```bash
-adb uninstall com.ethereal.openscan
+adb uninstall com.ethereal.lumara
 adb install -r LumaraScan_v4.0.2_STABLE.apk
 ```
 
@@ -307,11 +307,11 @@ Una vez instalado v4.0.2:
 2. **Probar sincronización:**
    - Usar diagnóstico de red
    - Asegurar misma WiFi
-   - Sincronizar y verificar en Paperless web
+   - Sincronizar y verificar en Tejido web
 
 3. **Reportar resultados:**
    - Si crashea: Enviar logs (adb logcat)
-   - Si sincroniza: Confirmar cuántos docs en Paperless
+   - Si sincroniza: Confirmar cuántos docs en Tejido
    - Cualquier otro problema: Describir con detalle
 
 ---

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:openscan_indigenas/core/security/secure_config_manager.dart';
+import 'package:lumara_indigenas/core/security/secure_config_manager.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

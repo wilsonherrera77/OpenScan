@@ -36,7 +36,7 @@ $ curl -v http://192.168.40.17:8001/api/
 
 **Código anterior (INCORRECTO):**
 ```dart
-// lib/data/datasources/paperless_api_client.dart:330-337
+// lib/data/datasources/tejido_api_client.dart:330-337
 Future<bool> testConnection() async {
   try {
     final response = await _dio.get('/api/');
@@ -103,7 +103,7 @@ try {
 
 ### Fix #1: testConnection() Acepta 302
 
-**Archivo:** `lib/data/datasources/paperless_api_client.dart:330-339`
+**Archivo:** `lib/data/datasources/tejido_api_client.dart:330-339`
 
 ```dart
 Future<bool> testConnection() async {
@@ -275,9 +275,9 @@ try {
 ### Container Status: ✅ HEALTHY
 
 ```bash
-$ docker ps | grep paperless
-paperless_webserver_1   UP (2 days, healthy)
-paperless_broker_1      UP (2 days)
+$ docker ps | grep tejido
+tejido_webserver_1   UP (2 days, healthy)
+tejido_broker_1      UP (2 days)
 ```
 
 ### API Endpoints: ✅ FUNCIONALES
@@ -295,8 +295,8 @@ $ curl -o /dev/null -w "%{http_code}" http://192.168.40.17:8001/api/documents/sm
 ### Logs: ✅ SIN ERRORES
 
 ```
-[2025-11-10 03:10:00] Task paperless_mail.tasks.process_mail_accounts succeeded in 0.018s
-[2025-11-10 03:05:01] paperless.classifier - No updates since last training
+[2025-11-10 03:10:00] Task tejido_mail.tasks.process_mail_accounts succeeded in 0.018s
+[2025-11-10 03:05:01] tejido.classifier - No updates since last training
 ```
 
 **Conclusión:** Backend está 100% funcional, problema era en Flutter.
@@ -308,7 +308,7 @@ $ curl -o /dev/null -w "%{http_code}" http://192.168.40.17:8001/api/documents/sm
 | File | Lines Changed | Purpose |
 |------|--------------|---------|
 | `lib/core/constants/api_constants.dart` | 26 | receiveTimeout: 15s → 60s |
-| `lib/data/datasources/paperless_api_client.dart` | 330-339 | testConnection() acepta 302 |
+| `lib/data/datasources/tejido_api_client.dart` | 330-339 | testConnection() acepta 302 |
 | `lib/screens/home_screen.dart` | 138-287 | Dialog management robusto |
 | `pubspec.yaml` | 7 | Version: 6.0.3+66 |
 

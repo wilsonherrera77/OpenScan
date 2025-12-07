@@ -102,7 +102,7 @@ El sistema **Lumara/Tejido v6.3.9+85** presenta una **base de código robusta y 
 
 **Resultado**: Issue documentado con comando sugerido para investigación:
 ```bash
-docker logs paperless_webserver_1 --tail 100
+docker logs tejido_webserver_1 --tail 100
 ```
 
 ---
@@ -249,10 +249,10 @@ FASE 1 enfocada en **verificación**, NO implementación.
 **1. Resolver Backend Connectivity** (4 horas)
 ```bash
 # Investigar logs
-docker logs paperless_webserver_1 --tail 100 | grep -i error
+docker logs tejido_webserver_1 --tail 100 | grep -i error
 
 # Verificar configuración red
-docker network inspect paperless-ngx_default
+docker network inspect tejido-ngx_default
 
 # Restart controlado si necesario
 docker-compose restart webserver
@@ -295,7 +295,7 @@ Crear Issue en GitHub:
 **Current State**:
 - 985 test errors
 - Coverage <20%
-- Package name mismatch (openscan_indigenas vs lumara_scan)
+- Package name mismatch (lumara_indigenas vs lumara_scan)
 
 **Goal**:
 - 0 test errors

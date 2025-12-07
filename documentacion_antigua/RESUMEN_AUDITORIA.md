@@ -1,4 +1,4 @@
-# 📊 RESUMEN AUDITORÍA COMPLETA - OpenScan Build
+# 📊 RESUMEN AUDITORÍA COMPLETA - Lumara Build
 
 **Fecha:** 2025-10-06 22:15
 **Estado:** ⚠️ Flutter Snap bloqueado, soluciones alternativas disponibles
@@ -41,7 +41,7 @@ export PATH="$PATH:$HOME/flutter/bin" && \
 echo 'export PATH="$PATH:$HOME/flutter/bin"' >> ~/.bashrc && \
 source ~/.bashrc && \
 flutter doctor --android-licenses && \
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan && \
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara && \
 flutter clean && \
 flutter pub get && \
 flutter build apk --release
@@ -57,7 +57,7 @@ flutter build apk --release
 Es posible que funcione en tu terminal pero no remotamente:
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter clean
 flutter pub get  # Espera 2-3 minutos
 flutter build apk --release  # Espera 5-10 minutos
@@ -72,7 +72,7 @@ Si ves output = está funcionando ✅
 Si las anteriores fallan:
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Crear Dockerfile
 cat > Dockerfile <<'EOF'
@@ -88,26 +88,26 @@ RUN flutter build apk --release
 EOF
 
 # Build
-docker build -t openscan-builder .
+docker build -t lumara-builder .
 
 # Extraer APK
-docker cp $(docker create openscan-builder):/app/build/app/outputs/flutter-apk/app-release.apk ./
+docker cp $(docker create lumara-builder):/app/build/app/outputs/flutter-apk/app-release.apk ./
 ```
 
 ---
 
-## 🔗 CONFIGURACIÓN PAPERLESS ↔ OPENSCAN
+## 🔗 CONFIGURACIÓN TEJIDO ↔ LUMARA
 
-### ✅ Estado Actual de Paperless
+### ✅ Estado Actual de Tejido
 
 ```bash
-✅ Paperless CORRIENDO
+✅ Tejido CORRIENDO
 ✅ Puerto: 0.0.0.0:8001 (expuesto en red)
 ✅ IP del servidor: 172.20.10.13
 ✅ Accesible en: http://172.20.10.13:8001
 ```
 
-### 📱 Configurar OpenScan
+### 📱 Configurar Lumara
 
 **En el LoginScreen de la app, ingresar:**
 
@@ -131,7 +131,7 @@ Password: admin
 http://172.20.10.13:8001
 ```
 
-Debe cargar Paperless ✅
+Debe cargar Tejido ✅
 
 ---
 
@@ -142,7 +142,7 @@ Debe cargar Paperless ✅
 - ✅ Todas las soluciones detalladas
 - ✅ Troubleshooting paso a paso
 
-### 2. `CONFIGURACION_PAPERLESS.md`
+### 2. `CONFIGURACION_TEJIDO.md`
 - ✅ Configuración de red
 - ✅ Firewall setup
 - ✅ HTTPS opcional
@@ -205,13 +205,13 @@ flutter doctor --android-licenses
 **Opción B (Rápida - 5 min):**
 ```bash
 # Intentar build directo
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter clean
 flutter pub get
 flutter build apk --release
 ```
 
-**2. Verificar Paperless:**
+**2. Verificar Tejido:**
 ```bash
 # En navegador de tu PC:
 http://localhost:8001
@@ -244,7 +244,7 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 
 ### 2. Probar Conexión
 
-1. Abrir OpenScan
+1. Abrir Lumara
 2. LoginScreen
 3. Ingresar URL: `http://172.20.10.13:8001`
 4. Usuario: `admin`
@@ -266,8 +266,8 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 ### Flutter sigue sin funcionar
 → Ver `DIAGNOSTICO_BUILD.md` sección "Solución 3: Docker"
 
-### No puedo conectarme a Paperless
-→ Ver `CONFIGURACION_PAPERLESS.md` sección "Troubleshooting"
+### No puedo conectarme a Tejido
+→ Ver `CONFIGURACION_TEJIDO.md` sección "Troubleshooting"
 
 ### App crashea al abrir
 → Ver logs: `adb logcat | grep -i flutter`
@@ -281,13 +281,13 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 
 Todos los documentos están en:
 ```
-/home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/
+/home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara/
 ```
 
 | Documento | Propósito |
 |-----------|-----------|
 | `DIAGNOSTICO_BUILD.md` | Análisis técnico del problema |
-| `CONFIGURACION_PAPERLESS.md` | Setup de conexión |
+| `CONFIGURACION_TEJIDO.md` | Setup de conexión |
 | `RESUMEN_AUDITORIA.md` | Este documento |
 | `PRE_BUILD_CHECKLIST.md` | Preparación para build |
 | `README_BUILD.md` | Instrucciones completas |
@@ -303,7 +303,7 @@ Todos los documentos están en:
 
 **Código:** ✅ 100% completo y funcional
 **Build:** ❌ Bloqueado por Flutter Snap
-**Paperless:** ✅ Configurado y accesible
+**Tejido:** ✅ Configurado y accesible
 **Documentación:** ✅ Completa
 
 ### Bloqueador Único
@@ -331,14 +331,14 @@ sudo snap remove flutter && cd ~ && git clone https://github.com/flutter/flutter
 
 Luego:
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter pub get
 flutter build apk --release
 ```
 
 ### Opción 2 (Más rápida):
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter clean
 flutter pub get
 flutter build apk --release
@@ -350,7 +350,7 @@ flutter build apk --release
 - ✅ Offline queue
 - ✅ Background sync
 - ✅ 3,997 personas del censo
-- ✅ Upload a Paperless
+- ✅ Upload a Tejido
 - ✅ Smart retry logic
 
 **¡El código está LISTO, solo falta compilarlo!** 🚀

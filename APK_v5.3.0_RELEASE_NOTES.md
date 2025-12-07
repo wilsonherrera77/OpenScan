@@ -227,7 +227,7 @@ enum AssignmentStatus {
 │         Data Layer (API + Repository)                │
 │  ┌──────────────────────────────────────────┐       │
 │  │  AssignmentRepository                     │       │
-│  │    → PaperlessApiClient (Dio)            │       │
+│  │    → TejidoApiClient (Dio)            │       │
 │  │    → GET /api/auth/my-assignments/       │       │
 │  │    → GET /api/auth/assignments/          │       │
 │  │    → GET /api/auth/team-statistics/      │       │
@@ -452,7 +452,7 @@ routes: {
 ### Requisitos Previos
 - Android 8.0+ (API Level 26+)
 - 100MB espacio libre en dispositivo
-- Backend Paperless-ngx corriendo en red local
+- Backend Tejido-ngx corriendo en red local
 
 ### Pasos de Instalación
 

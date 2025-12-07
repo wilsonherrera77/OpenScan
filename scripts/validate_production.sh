@@ -141,10 +141,10 @@ validate_configuration() {
 
     # Check production URL
     print_check "Production URL configured"
-    if grep -q "paperless.example.com" "$CONFIG_FILE"; then
-        print_fail "Production URL still uses placeholder (paperless.example.com)"
+    if grep -q "tejido.example.com" "$CONFIG_FILE"; then
+        print_fail "Production URL still uses placeholder (tejido.example.com)"
     else
-        PROD_URL=$(grep "paperlessProductionUrl" "$CONFIG_FILE" | sed "s/.*= '//" | sed "s/'.*//")
+        PROD_URL=$(grep "tejidoProductionUrl" "$CONFIG_FILE" | sed "s/.*= '//" | sed "s/'.*//")
         print_pass
         print_info "URL: $PROD_URL"
     fi
@@ -167,7 +167,7 @@ validate_configuration() {
 
     # Check support email
     print_check "Support email configured"
-    if grep -q "support@openscan-indigenas.org" "$CONFIG_FILE"; then
+    if grep -q "support@lumara-indigenas.org" "$CONFIG_FILE"; then
         print_fail "Support email still uses placeholder"
     else
         SUPPORT_EMAIL=$(grep "supportEmail" "$CONFIG_FILE" | sed "s/.*= '//" | sed "s/'.*//")
@@ -178,7 +178,7 @@ validate_configuration() {
     # Check privacy policy URL
     print_check "Privacy policy URL configured"
     PRIVACY_URL=$(grep "privacyPolicyUrl" "$CONFIG_FILE" | sed "s/.*= '//" | sed "s/'.*//")
-    if [[ "$PRIVACY_URL" == *"openscan-indigenas.org"* ]]; then
+    if [[ "$PRIVACY_URL" == *"lumara-indigenas.org"* ]]; then
         print_warn "Privacy policy URL may be placeholder"
         print_info "URL: $PRIVACY_URL"
     else
@@ -189,7 +189,7 @@ validate_configuration() {
     # Check terms of service URL
     print_check "Terms of service URL configured"
     TERMS_URL=$(grep "termsOfServiceUrl" "$CONFIG_FILE" | sed "s/.*= '//" | sed "s/'.*//")
-    if [[ "$TERMS_URL" == *"openscan-indigenas.org"* ]]; then
+    if [[ "$TERMS_URL" == *"lumara-indigenas.org"* ]]; then
         print_warn "Terms of service URL may be placeholder"
         print_info "URL: $TERMS_URL"
     else
@@ -333,7 +333,7 @@ validate_infrastructure() {
     print_section "8. Infrastructure Connectivity"
 
     # Extract production URL from config
-    PROD_URL=$(grep "paperlessProductionUrl" lib/core/config/production_config.dart | sed "s/.*= '//" | sed "s/'.*//")
+    PROD_URL=$(grep "tejidoProductionUrl" lib/core/config/production_config.dart | sed "s/.*= '//" | sed "s/'.*//")
 
     # Check if URL is configured
     if [[ "$PROD_URL" == *"example.com"* ]]; then
@@ -369,7 +369,7 @@ validate_infrastructure() {
 
 # Main execution
 main() {
-    print_header "OpenScan Indígenas - Production Validation"
+    print_header "Lumara Indígenas - Production Validation"
 
     echo "This script validates that all production requirements are met."
     echo "Running validation checks..."
@@ -424,7 +424,7 @@ main() {
 # Check if running from project root
 if [ ! -f "pubspec.yaml" ]; then
     echo -e "${RED}Error: Must be run from project root directory${NC}"
-    echo "Usage: cd /path/to/openscan && ./scripts/validate_production.sh"
+    echo "Usage: cd /path/to/lumara && ./scripts/validate_production.sh"
     exit 1
 fi
 

@@ -4,15 +4,15 @@ import 'package:intl/intl.dart';
 import '../../core/constants/api_constants.dart';
 import '../../domain/entities/person.dart' as entities;
 import '../../domain/entities/document_existence_check.dart';
-import '../datasources/paperless_api_client.dart';
+import '../datasources/tejido_api_client.dart';
 import '../local/database/app_database.dart' as db;
 
 /// Document Repository
-/// Manages document uploads to Paperless
+/// Manages document uploads to Tejido
 ///
 /// ⚡ FASE 2: Enhanced with metadata caching for better performance
 class DocumentRepository {
-  final PaperlessApiClient _apiClient;
+  final TejidoApiClient _apiClient;
   final db.AppDatabase _database;
   final LoggerAdapter _logger = LoggerAdapter();
 
@@ -44,7 +44,7 @@ class DocumentRepository {
         ApiConstants.tagIds['DIGITALIZADO_MOVIL']!,
       ];
 
-      // Upload to Paperless
+      // Upload to Tejido
       final response = await _apiClient.uploadDocument(
         filePath: filePath,
         fileName: fileName,

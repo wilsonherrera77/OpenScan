@@ -20,8 +20,8 @@ class SecureConfigManager {
   final LoggerAdapter _logger = LoggerAdapter();
 
   // Storage keys
-  static const String _keyApiToken = 'paperless_api_token';
-  static const String _keyBaseUrl = 'paperless_base_url';
+  static const String _keyApiToken = 'tejido_api_token';
+  static const String _keyBaseUrl = 'tejido_base_url';
   static const String _keyUsername = 'username';
   static const String _keyLastTokenRotation = 'last_token_rotation';
 
@@ -57,7 +57,7 @@ class SecureConfigManager {
     }
   }
 
-  /// Get Paperless base URL
+  /// Get Tejido base URL
   Future<String?> getBaseUrl() async {
     try {
       return await _storage.read(key: _keyBaseUrl);
@@ -67,7 +67,7 @@ class SecureConfigManager {
     }
   }
 
-  /// Set Paperless base URL
+  /// Set Tejido base URL
   Future<void> setBaseUrl(String url) async {
     try {
       // Validate URL format

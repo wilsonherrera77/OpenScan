@@ -16,7 +16,7 @@
 ### Issue #003: Archivos No Se Borran del Dispositivo
 
 **Descripción del Problema:**
-Los archivos PDF permanecían en `/storage/emulated/0/Documents/OpenScan/PDF/` después de ser sincronizados exitosamente con Paperless, creando un **riesgo de seguridad y privacidad**.
+Los archivos PDF permanecían en `/storage/emulated/0/Documents/Lumara/PDF/` después de ser sincronizados exitosamente con Tejido, creando un **riesgo de seguridad y privacidad**.
 
 **Impacto:**
 - 🔴 **CRÍTICO**: Datos sensibles (documentos de identidad) permanecen en dispositivo
@@ -49,11 +49,11 @@ Se implementó **eliminación nativa via MediaStore API** para Android 10+:
 ### Flujo de Eliminación Mejorado
 
 ```
-PDF guardado en /storage/emulated/0/Documents/OpenScan/PDF/
+PDF guardado en /storage/emulated/0/Documents/Lumara/PDF/
          ↓
-Encolado para upload a Paperless
+Encolado para upload a Tejido
          ↓
-Upload exitoso a Paperless
+Upload exitoso a Tejido
          ↓
 upload_service.dart llama a _deleteLocalFileAfterSync()
          ↓
@@ -90,7 +90,7 @@ Log de seguridad para auditoría
 **Código clave:**
 ```dart
 class FileDeletionService {
-  static const MethodChannel _channel = MethodChannel('com.ethereal.openscan/file_deletion');
+  static const MethodChannel _channel = MethodChannel('com.ethereal.lumara/file_deletion');
 
   Future<bool> deleteFile(String filePath) async {
     // Try native MediaStore deletion first (Android 10+)
@@ -114,7 +114,7 @@ class FileDeletionService {
 }
 ```
 
-### 2. **MODIFICADO:** `android/app/src/main/kotlin/com/example/openscan/MainActivity.kt`
+### 2. **MODIFICADO:** `android/app/src/main/kotlin/com/example/lumara/MainActivity.kt`
 
 **Cambios:**
 - Agregado MethodChannel handler para `deleteFile`
@@ -126,7 +126,7 @@ class FileDeletionService {
 ```kotlin
 override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
     MethodChannel(flutterEngine.dartExecutor.binaryMessenger,
-        "com.ethereal.openscan/file_deletion")
+        "com.ethereal.lumara/file_deletion")
         .setMethodCallHandler { call, result ->
             when (call.method) {
                 "deleteFile" -> {
@@ -268,7 +268,7 @@ Future<void> _deleteLocalFileAfterSync(File file, String filePath, int uploadId)
 ### Pasos:
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Ejecutar script de instalación
 ./install_apk.sh
@@ -284,18 +284,18 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
 
 ```bash
 # 1. Verificar versión instalada
-adb shell dumpsys package com.ethereal.openscan | grep versionName
+adb shell dumpsys package com.ethereal.lumara | grep versionName
 # Esperado: versionName=4.4.1
 
 # 2. Probar eliminación automática:
 #    a. Abrir app y digitalizar un documento
 #    b. Guardar como PDF
-#    c. Verificar que archivo existe en /storage/emulated/0/Documents/OpenScan/PDF/
-adb shell ls /storage/emulated/0/Documents/OpenScan/PDF/
+#    c. Verificar que archivo existe en /storage/emulated/0/Documents/Lumara/PDF/
+adb shell ls /storage/emulated/0/Documents/Lumara/PDF/
 
-#    d. Esperar a que se sincronice con Paperless
+#    d. Esperar a que se sincronice con Tejido
 #    e. Verificar que archivo FUE ELIMINADO
-adb shell ls /storage/emulated/0/Documents/OpenScan/PDF/
+adb shell ls /storage/emulated/0/Documents/Lumara/PDF/
 # Esperado: Archivo NO debe aparecer
 ```
 
@@ -321,7 +321,7 @@ flutter clean && flutter pub get && flutter build apk --release
 
 ### Test 3: MethodChannel Configurado
 ```kotlin
-Channel: "com.ethereal.openscan/file_deletion"
+Channel: "com.ethereal.lumara/file_deletion"
 Method: "deleteFile"
 Parameters: {"filePath": String}
 Return: Boolean (true if deleted, false otherwise)
@@ -353,7 +353,7 @@ Cada eliminación genera logs detallados:
 🔒 v4.4.1: Starting secure file deletion after successful sync
    └─ Upload ID: 123
    └─ File: Juan_Perez_Cedula.pdf
-   └─ Path: /storage/emulated/0/Documents/OpenScan/PDF/Juan_Perez_Cedula.pdf
+   └─ Path: /storage/emulated/0/Documents/Lumara/PDF/Juan_Perez_Cedula.pdf
 
 🔒 SECURITY: File deleted successfully after sync
    └─ Upload ID: 123
@@ -370,7 +370,7 @@ Cada eliminación genera logs detallados:
 
 ### 1. Archivos Creados por Otras Apps
 
-Si el usuario copia manualmente archivos a `/storage/emulated/0/Documents/OpenScan/PDF/` desde otra app, MediaStore puede no tener registro. En este caso, el fallback de eliminación directa puede fallar.
+Si el usuario copia manualmente archivos a `/storage/emulated/0/Documents/Lumara/PDF/` desde otra app, MediaStore puede no tener registro. En este caso, el fallback de eliminación directa puede fallar.
 
 **Workaround:** Solo usar archivos creados por la app.
 
@@ -471,7 +471,7 @@ adb logcat | grep FileDeletion
 
 2. **Verificar Permisos:**
 ```bash
-adb shell dumpsys package com.ethereal.openscan | grep permission
+adb shell dumpsys package com.ethereal.lumara | grep permission
 # Debe incluir: WRITE_EXTERNAL_STORAGE
 ```
 
@@ -479,13 +479,13 @@ adb shell dumpsys package com.ethereal.openscan | grep permission
 ```bash
 # Verificar que archivo está en MediaStore
 adb shell content query --uri content://media/external/file \
-  --projection _data,_id | grep OpenScan
+  --projection _data,_id | grep Lumara
 ```
 
 4. **Manual Cleanup:**
 ```bash
 # Si es necesario limpiar manualmente
-adb shell rm -rf /storage/emulated/0/Documents/OpenScan/PDF/*
+adb shell rm -rf /storage/emulated/0/Documents/Lumara/PDF/*
 ```
 
 ---

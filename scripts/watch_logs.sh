@@ -34,7 +34,7 @@ case $FILTER in
     ;;
 
   "all")
-    adb -s $DEVICE logcat | grep -E "Lumara|lumara|openscan"
+    adb -s $DEVICE logcat | grep -E "Lumara|lumara|lumara"
     ;;
 
   *)

@@ -1,4 +1,4 @@
-# ✅ Pre-Build Checklist - OpenScan Indigenous Communities
+# ✅ Pre-Build Checklist - Lumara Indigenous Communities
 
 **Fecha de verificación:** 2025-10-06 22:00
 **Versión:** v3.0.0+1 (Sprint 1.5 Complete)
@@ -74,7 +74,7 @@
 
 ### Opción 1: Build APK Release (Recomendado)
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter build apk --release
 ```
 
@@ -106,7 +106,7 @@ flutter build apk --debug
 
 ### Sin Optimizaciones
 - **Universal APK:** ~80-120 MB
-- **Incluye:** OpenScan scanner lib, Drift, WorkManager, Dio
+- **Incluye:** Lumara scanner lib, Drift, WorkManager, Dio
 
 ### Con `--split-per-abi`
 - **arm64-v8a:** ~40-50 MB (mayoría de dispositivos modernos)
@@ -124,12 +124,12 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 
 ### 2. Verificar Instalación
 ```bash
-adb shell pm list packages | grep openscan
+adb shell pm list packages | grep lumara
 ```
 
 ### 3. Lanzar App
 ```bash
-adb shell am start -n com.example.openscan_indigenas/.MainActivity
+adb shell am start -n com.example.lumara_indigenas/.MainActivity
 ```
 
 ### 4. Ver Logs
@@ -178,14 +178,14 @@ Antes de ejecutar `flutter build apk --release`:
 ## 🎯 Configuración de la App en el APK
 
 ### App Metadata
-- **Package:** com.example.openscan_indigenas
+- **Package:** com.example.lumara_indigenas
 - **Versión:** 3.0.0+1
-- **Nombre:** OpenScan Indígenas
+- **Nombre:** Lumara Indígenas
 - **Min SDK:** Android 5.0 (API 21)
 - **Target SDK:** Android 14 (API 34)
 
 ### Permisos Incluidos
-- `INTERNET` - Comunicación con Paperless
+- `INTERNET` - Comunicación con Tejido
 - `CAMERA` - Captura de documentos
 - `READ_EXTERNAL_STORAGE` - Acceso a galería
 - `WRITE_EXTERNAL_STORAGE` - Guardar imágenes temporales
@@ -271,7 +271,7 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 
 **Comando para ejecutar:**
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter build apk --release
 ```
 

@@ -32,7 +32,7 @@
    - Llama a `_apiClient.uploadDocumentWithPerson()`
    - Pasa personId, documentType, etc.
 
-3. **paperless_api_client.dart:381** ✅
+3. **tejido_api_client.dart:381** ✅
    - Llama al endpoint correcto: `/api/documents/upload_with_person/`
    - Con form data correcto: person_id, document_type, nuip, etc.
 
@@ -339,9 +339,9 @@ Future<Map<String, dynamic>> uploadDocumentForPerson({
 }
 ```
 
-#### PASO 1.4: Agregar Logging en paperless_api_client.dart
+#### PASO 1.4: Agregar Logging en tejido_api_client.dart
 
-**Archivo**: `lib/data/datasources/paperless_api_client.dart`
+**Archivo**: `lib/data/datasources/tejido_api_client.dart`
 
 **Ubicación**: Método `uploadDocumentWithPerson` (línea ~351)
 
@@ -548,7 +548,7 @@ Prevenir duplicados a nivel de servidor rechazando uploads de documentos del mis
 
 #### PASO 2.1: Modificar views_census.py
 
-**Archivo**: `/paperless-ngx/src/documents/views_census.py`
+**Archivo**: `/tejido-ngx/src/documents/views_census.py`
 
 **Ubicación**: Después de línea 110 (verificar persona existe)
 
@@ -622,7 +622,7 @@ if existing_relation and not is_replacement:
 
 #### PASO 2.2: Actualizar Manejo de HTTP 409 en Lumara
 
-**Archivo**: `lib/data/datasources/paperless_api_client.dart`
+**Archivo**: `lib/data/datasources/tejido_api_client.dart`
 
 **Ubicación**: En el catch de `uploadDocumentWithPerson`, línea ~404
 
@@ -759,7 +759,7 @@ try {
 ### Entregables del Paso 2
 
 - [ ] views_census.py modificado con validación
-- [ ] paperless_api_client.dart actualizado para HTTP 409
+- [ ] tejido_api_client.dart actualizado para HTTP 409
 - [ ] Nueva excepción DuplicateDocumentException
 - [ ] Diálogo de usuario para manejar duplicados
 
@@ -818,7 +818,7 @@ curl -X POST "http://localhost:8001/api/documents/upload_with_person/" \
 - Agregar logging en DocumentCaptureScreen
 - Agregar logging en upload_service.dart
 - Agregar logging en document_repository.dart
-- Agregar logging en paperless_api_client.dart
+- Agregar logging en tejido_api_client.dart
 
 **14:00 - 15:00**: Compilar APK con Logging
 
@@ -884,7 +884,7 @@ curl -X POST "http://localhost:8001/api/documents/upload_with_person/" \
 - [ ] Android Studio o VS Code con Flutter
 - [ ] Dispositivo Android conectado o emulador
 - [ ] Terminal para watch_logs.sh
-- [ ] Acceso a servidor Paperless
+- [ ] Acceso a servidor Tejido
 - [ ] curl para tests de API
 - [ ] jq para parsear JSON
 

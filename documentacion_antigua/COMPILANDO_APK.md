@@ -53,7 +53,7 @@ Espera a que el comando termine. Verás:
 
 ```bash
 # Ver progreso en tiempo real
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter build apk --debug --dart-define=STAGING=true
 ```
 
@@ -100,7 +100,7 @@ build/app/outputs/flutter-apk/app-debug.apk
 ls -lh build/app/outputs/flutter-apk/app-debug.apk
 
 # Copiar a escritorio
-cp build/app/outputs/flutter-apk/app-debug.apk ~/Escritorio/openscan-test.apk
+cp build/app/outputs/flutter-apk/app-debug.apk ~/Escritorio/lumara-test.apk
 
 # Ver info del APK
 file build/app/outputs/flutter-apk/app-debug.apk
@@ -123,7 +123,7 @@ adb install build/app/outputs/flutter-apk/app-debug.apk
 **Opción B: Via archivo**
 ```bash
 # Copiar APK a carpeta compartida
-cp build/app/outputs/flutter-apk/app-debug.apk ~/Escritorio/openscan-test.apk
+cp build/app/outputs/flutter-apk/app-debug.apk ~/Escritorio/lumara-test.apk
 
 # Enviar a teléfono via:
 # - Email
@@ -142,7 +142,7 @@ cp build/app/outputs/flutter-apk/app-debug.apk ~/Escritorio/openscan-test.apk
 Ver guía completa: **[COMO_PROBAR_LA_APP.md](COMO_PROBAR_LA_APP.md)**
 
 ```
-1. Abrir app "OpenScan Indígenas"
+1. Abrir app "Lumara Indígenas"
 2. Completar onboarding (4 pantallas)
 3. Permitir permisos (cámara, almacenamiento)
 4. Login:

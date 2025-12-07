@@ -2,10 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:mockito/annotations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:openscan_indigenas/core/constants/api_constants.dart';
-import 'package:openscan_indigenas/data/repositories/census_repository.dart';
-import 'package:openscan_indigenas/data/datasources/census_data_source.dart';
-import 'package:openscan_indigenas/domain/entities/person.dart';
+import 'package:lumara_indigenas/core/constants/api_constants.dart';
+import 'package:lumara_indigenas/data/repositories/census_repository.dart';
+import 'package:lumara_indigenas/data/datasources/census_data_source.dart';
+import 'package:lumara_indigenas/domain/entities/person.dart';
 import '../../../helpers/fixtures.dart';
 
 @GenerateMocks([CensusDataSource])

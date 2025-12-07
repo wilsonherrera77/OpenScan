@@ -12,7 +12,7 @@
 📱 RUTA COMPLETA DEL APK:
 ═════════════════════════════════════════════════════════════════════════
 
-/home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/LumaraScan_v4.0.0_debug.apk
+/home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara/LumaraScan_v4.0.0_debug.apk
 
 MD5: 29dad07803ba14da4782194f82a3b7bb
 Tamaño: 159 MB
@@ -23,7 +23,7 @@ Fecha: 8 Octubre 2025, 14:17
 ═════════════════════════════════════════════════════════════════════════
 
 Opción 1 - Script automático (Recomendado):
-    cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+    cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
     ./install_apk.sh
 
 Opción 2 - ADB manual:
@@ -63,7 +63,7 @@ Espacio recuperado:
 ═════════════════════════════════════════════════════════════════════════
 
 1. Abrir Lumara Scan
-2. Login con credenciales Paperless:
+2. Login con credenciales Tejido:
    URL: http://192.168.40.17:8001
    Usuario: admin
    Contraseña: [tu contraseña]
@@ -92,7 +92,7 @@ Espacio recuperado:
 ✅ ConnectivityService robusto
 
 
-📊 ESTADO DE INTEGRACIÓN PAPERLESS:
+📊 ESTADO DE INTEGRACIÓN TEJIDO:
 ═════════════════════════════════════════════════════════════════════════
 
 Servidor: http://192.168.40.17:8001       ✅ ACTIVO
@@ -133,10 +133,10 @@ Guardar logs para debugging:
     adb logcat > lumara_logs.txt
 
 Verificar versión instalada:
-    adb shell dumpsys package com.ethereal.openscan | grep versionName
+    adb shell dumpsys package com.ethereal.lumara | grep versionName
 
 
 ═════════════════════════════════════════════════════════════════════════
-  Desarrollado con Flutter 3.5.3 | Android SDK 36 | Paperless-ngx API
+  Desarrollado con Flutter 3.5.3 | Android SDK 36 | Tejido-ngx API
                     Versión 4.0.0+4 | 8 Octubre 2025
 ═════════════════════════════════════════════════════════════════════════

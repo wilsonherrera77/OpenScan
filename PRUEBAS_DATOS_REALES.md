@@ -3,7 +3,7 @@
 **Fecha:** 2025-10-31
 **Versión:** 5.6.1+57
 **Equipo:** Interdisciplinario de Ingeniería
-**Backend:** Django REST + Paperless-ngx (http://192.168.40.17:8001)
+**Backend:** Django REST + Tejido-ngx (http://192.168.40.17:8001)
 **Frontend:** Flutter App (APK compilado)
 
 ---
@@ -281,7 +281,7 @@ adb logcat | grep -E "(Login|Authentication|RoleBasedNavigator)"
 
 3. **Verificación Backend (Primera Captura)**
    ```bash
-   # Verificar documento en Paperless
+   # Verificar documento en Tejido
    curl -s "http://192.168.40.17:8001/api/documents/?person_id=2071" \
      -H "Authorization: Token 112fb331a1d5b9361446adffa7c6d9c576b98096" | jq '.results | length'
    # Esperado: 1
@@ -705,7 +705,7 @@ curl -s "http://192.168.40.17:8001/api/auth/assignments/[ASSIGNMENT_ID]/" \
 #!/bin/bash
 # reset_user_passwords.sh
 
-docker exec paperless_webserver_1 python3 manage.py shell -c "
+docker exec tejido_webserver_1 python3 manage.py shell -c "
 from django.contrib.auth.models import User
 
 users_passwords = {
@@ -778,8 +778,8 @@ fi
 # Usuarios
 echo ""
 echo "2. Usuarios:"
-docker exec paperless_webserver_1 python3 manage.py shell -c "
-from paperless_auth.models import UserProfile
+docker exec tejido_webserver_1 python3 manage.py shell -c "
+from tejido_auth.models import UserProfile
 from django.contrib.auth.models import User
 total = User.objects.count()
 by_role = {}
@@ -795,8 +795,8 @@ for role, count in by_role.items():
 # Asignaciones
 echo ""
 echo "3. Asignaciones:"
-docker exec paperless_webserver_1 python3 manage.py shell -c "
-from paperless_auth.models import PersonAssignment
+docker exec tejido_webserver_1 python3 manage.py shell -c "
+from tejido_auth.models import PersonAssignment
 total = PersonAssignment.objects.count()
 by_status = {}
 for assignment in PersonAssignment.objects.all():
@@ -811,8 +811,8 @@ for status, count in by_status.items():
 # Sesiones
 echo ""
 echo "4. Sesiones:"
-docker exec paperless_webserver_1 python3 manage.py shell -c "
-from paperless_auth.models import DigitizationSession
+docker exec tejido_webserver_1 python3 manage.py shell -c "
+from tejido_auth.models import DigitizationSession
 total = DigitizationSession.objects.count()
 active = DigitizationSession.objects.filter(ended_at__isnull=True).count()
 print(f'   Total: {total}')
@@ -821,7 +821,7 @@ print(f'   Activas: {active}')
 
 # Documentos
 echo ""
-echo "5. Documentos en Paperless:"
+echo "5. Documentos en Tejido:"
 DOCS_COUNT=$(curl -s "$API_URL/api/documents/" -H "Authorization: Token $TOKEN" | jq '.count')
 echo "   Total: $DOCS_COUNT"
 

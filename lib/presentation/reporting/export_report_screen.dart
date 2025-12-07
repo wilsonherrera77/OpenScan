@@ -308,7 +308,7 @@ class _ExportReportScreenState extends State<ExportReportScreen> {
             style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey),
           ),
           pw.Text(
-            'OpenScan Indígenas - Sistema de Digitalización',
+            'Lumara Indígenas - Sistema de Digitalización',
             style: const pw.TextStyle(fontSize: 10, color: PdfColors.grey),
           ),
         ],

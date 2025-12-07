@@ -103,7 +103,7 @@ flutter doctor
 
 ```bash
 # Ir al directorio del proyecto
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Agregar Flutter al PATH de esta sesión
 export PATH="$PATH:$HOME/flutter/bin"
@@ -137,7 +137,7 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 
 Una vez instalado:
 
-1. **Abrir OpenScan**
+1. **Abrir Lumara**
 2. **LoginScreen:**
    - URL: `http://172.20.10.13:8001`
    - Usuario: `admin`
@@ -154,7 +154,7 @@ Una vez instalado:
 
 ### Test 1: Login y Autenticación
 ```
-✅ Conecta a Paperless
+✅ Conecta a Tejido
 ✅ Token guardado en secure storage
 ✅ Navega a PersonSelectionScreen
 ```
@@ -171,7 +171,7 @@ Una vez instalado:
 ✅ Captura foto
 ✅ Selecciona tipo de documento
 ✅ Upload inmediato exitoso
-✅ Documento aparece en Paperless
+✅ Documento aparece en Tejido
 ```
 
 ### Test 4: Offline Queue
@@ -235,7 +235,7 @@ echo 'export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/pl
 echo 'export PATH="$PATH:$HOME/flutter/bin"' >> ~/.bashrc && \
 
 # Build APK
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan && \
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara && \
 export PATH="$PATH:$HOME/flutter/bin" && \
 flutter build apk --release && \
 
@@ -293,7 +293,7 @@ Una vez instalado, la app incluye:
 - Múltiples tipos de documentos
 - Upload con retry logic
 
-### 5. ✅ Paperless Integration
+### 5. ✅ Tejido Integration
 - API REST con Dio
 - Token authentication
 - Creación automática de documentos
@@ -304,7 +304,7 @@ Una vez instalado, la app incluye:
 
 Todos los documentos están disponibles en:
 ```
-/home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/
+/home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara/
 ```
 
 | Documento | Propósito |
@@ -313,7 +313,7 @@ Todos los documentos están disponibles en:
 | `INSTRUCCIONES_FINALES.md` | Este documento |
 | `RESUMEN_AUDITORIA.md` | Resumen ejecutivo |
 | `DIAGNOSTICO_BUILD.md` | Análisis técnico del problema |
-| `CONFIGURACION_PAPERLESS.md` | Setup de red y conexión |
+| `CONFIGURACION_TEJIDO.md` | Setup de red y conexión |
 | `TESTING_PLAN.md` | 20 test cases completos |
 | `SPRINT_1.5_FINAL_STATUS.md` | Estado del desarrollo |
 | `README_BUILD.md` | Instrucciones de build |
@@ -366,7 +366,7 @@ flutter build apk --release
 - ✅ Offline queue
 - ✅ Background sync
 - ✅ 3,997 personas del censo
-- ✅ Upload a Paperless
+- ✅ Upload a Tejido
 - ✅ Smart retry logic
 
 ---

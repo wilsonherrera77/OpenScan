@@ -12,13 +12,13 @@
 ═══════════════════════════════════════════════════════════════════════
 
 "al parecer la app LumaraScan_v4.0.5_SYNC_FIX.apk, ya es funcional,
-pero no logro que envie la informacion al paperless. esto es grave"
+pero no logro que envie la informacion al tejido. esto es grave"
 
 Estado:
   ✅ App funcional (no crashea)
   ✅ PDFs se guardan localmente
-  ❌ Documentos NO aparecen en Paperless
-  ⚠️ Mensaje "Enqueued for Paperless sync" se mostraba SIEMPRE
+  ❌ Documentos NO aparecen en Tejido
+  ⚠️ Mensaje "Enqueued for Tejido sync" se mostraba SIEMPRE
 
 
 ═══════════════════════════════════════════════════════════════════════
@@ -29,7 +29,7 @@ Metodología:
   1. Revisión de código de punta a punta
   2. Análisis de flujos de datos
   3. Identificación de puntos de fallo
-  4. Verificación de conectividad con Paperless API
+  4. Verificación de conectividad con Tejido API
   5. Análisis de logs y mensajes de error
 
 
@@ -55,12 +55,12 @@ try {
 // Mensaje SIEMPRE mostraba éxito (lines 956-958)
 String displayText;
 (savedDirectory != null)
-    ? displayText = "PDF Saved at\n$savedDirectory\n\n✅ Enqueued for Paperless sync"
+    ? displayText = "PDF Saved at\n$savedDirectory\n\n✅ Enqueued for Tejido sync"
     : displayText = "Failed to generate pdf. Try Again.";
 ```
 
 Problema:
-  El mensaje "✅ Enqueued for Paperless sync" se mostraba SIEMPRE si el
+  El mensaje "✅ Enqueued for Tejido sync" se mostraba SIEMPRE si el
   PDF se guardó, INCLUSO si el encolamiento falló dentro del try/catch.
 
   El usuario veía "éxito" pero el PDF nunca se encolaba.
@@ -81,7 +81,7 @@ try {
 // Show HONEST message
 if (savedDirectory != null) {
   if (enqueuedSuccessfully) {
-    displayText = "PDF Saved at\n$savedDirectory\n\n✅ Enqueued for Paperless sync";
+    displayText = "PDF Saved at\n$savedDirectory\n\n✅ Enqueued for Tejido sync";
   } else {
     displayText = "PDF Saved at\n$savedDirectory\n\n⚠️ Not enqueued: ${enqueueError}\n\nSync manually or check logs";
   }
@@ -104,11 +104,11 @@ La app tiene DOS opciones para crear PDF:
 1. "Share PDF" (icono PDF) - línea 876
    → Guarda PDF en directorio de app
    → Comparte via Android Share
-   → ❌ NO encolaba para Paperless (v4.0.5)
+   → ❌ NO encolaba para Tejido (v4.0.5)
 
 2. "Save to device" (icono celular) - línea 901
-   → Guarda PDF en /Documents/OpenScan/PDF/
-   → ✅ SÍ encolaba para Paperless
+   → Guarda PDF en /Documents/Lumara/PDF/
+   → ✅ SÍ encolaba para Tejido
 
 Código ANTES (v4.0.5):
 ```dart
@@ -123,14 +123,14 @@ ListTile(
     await Share.shareXFiles([XFile(pdfPath)], text: 'Compartir PDF');
 
     Navigator.pop(context);
-    // ❌ NO encola a Paperless
+    // ❌ NO encola a Tejido
   },
 ),
 ```
 
 Problema:
   Si el usuario usaba "Share PDF" (opción más intuitiva), el PDF
-  NUNCA se encolaba para Paperless. Solo funcionaba con "Save to device".
+  NUNCA se encolaba para Tejido. Solo funcionaba con "Save to device".
 
 Código AHORA (v4.0.6):
 ```dart
@@ -141,7 +141,7 @@ ListTile(
     // Guarda PDF
     await fileOperations.saveToAppDirectory(...);
 
-    // ✅ NUEVO: Auto-encolar a Paperless
+    // ✅ NUEVO: Auto-encolar a Tejido
     try {
       final uploadService = Provider.of<UploadService>(context, listen: false);
       final pdfFile = File(pdfPath);
@@ -151,7 +151,7 @@ ListTile(
           documentFile: pdfFile,
           title: fileName,
         );
-        print('✅ Shared PDF enqueued for Paperless sync');
+        print('✅ Shared PDF enqueued for Tejido sync');
       }
     } catch (e) {
       print('❌ Failed to enqueue: $e');
@@ -185,7 +185,7 @@ Escenario Más Probable:
   4. ❌ PDF NO se encola (Error #2)
   5. Usuario toca sincronización
   6. App dice "Sincronización exitosa" (0 pendientes = éxito)
-  7. ❌ No hay documentos en Paperless
+  7. ❌ No hay documentos en Tejido
 
 Escenario Alternativo:
   1. Usuario captura fotos con Normal Scan ✅
@@ -195,7 +195,7 @@ Escenario Alternativo:
   5. ❌ Mensaje engañoso dice "✅ Enqueued" (Error #1)
   6. Usuario toca sincronización
   7. App dice "Sincronización exitosa" (0 pendientes = éxito)
-  8. ❌ No hay documentos en Paperless
+  8. ❌ No hay documentos en Tejido
 
 
 ═══════════════════════════════════════════════════════════════════════
@@ -223,11 +223,11 @@ Cambio 2: Auto-Sync en "Share PDF"
 
   Antes:
     - Solo guardaba y compartía
-    - NO encolaba a Paperless
+    - NO encolaba a Tejido
 
   Ahora:
     - Guarda PDF
-    - ✨ Encola a Paperless automáticamente
+    - ✨ Encola a Tejido automáticamente
     - Comparte
     - Logs detallados para debugging
 
@@ -247,7 +247,7 @@ Versión: 4.0.6+10
   🚀 INSTALACIÓN
 ═══════════════════════════════════════════════════════════════════════
 
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./install_apk.sh
 
 
@@ -266,12 +266,12 @@ Pasos:
 
 Resultado Esperado:
   Si TODO funciona:
-    "PDF Saved at /storage/.../OpenScan/PDF
+    "PDF Saved at /storage/.../Lumara/PDF
 
-    ✅ Enqueued for Paperless sync"
+    ✅ Enqueued for Tejido sync"
 
   Si FALLA el encolamiento:
-    "PDF Saved at /storage/.../OpenScan/PDF
+    "PDF Saved at /storage/.../Lumara/PDF
 
     ⚠️ Not enqueued: [ERROR EXACTO]
 
@@ -290,11 +290,11 @@ Pasos:
   2. Ir a Export → "Share PDF"
   3. Cancelar el diálogo de compartir
   4. Ir a Home → Tocar icono de sincronización
-  5. Verificar Paperless web: http://192.168.40.17:8001
+  5. Verificar Tejido web: http://192.168.40.17:8001
 
 Resultado Esperado:
   ✅ Sincronización muestra "1 documento sincronizado"
-  ✅ Documento aparece en Paperless
+  ✅ Documento aparece en Tejido
 
 Si FALLA:
   Conectar dispositivo con USB y ejecutar:
@@ -322,11 +322,11 @@ Luego revisar logs:
 Resultado Esperado:
   I/flutter (xxxxx): 📥 Enqueuing generic document: /path/to/file.pdf
   I/flutter (xxxxx): ✅ Generic document enqueued with ID: [NUMBER]
-  I/flutter (xxxxx): 📤 Auto-uploading PDF to Paperless: /path/to/file.pdf
-  I/flutter (xxxxx): ✅ PDF enqueued for Paperless sync
+  I/flutter (xxxxx): 📤 Auto-uploading PDF to Tejido: /path/to/file.pdf
+  I/flutter (xxxxx): ✅ PDF enqueued for Tejido sync
 
 Si aparece:
-  I/flutter (xxxxx): ❌ Failed to enqueue PDF for Paperless: [ERROR]
+  I/flutter (xxxxx): ❌ Failed to enqueue PDF for Tejido: [ERROR]
 
 → Ese es el error que necesitamos diagnosticar.
 
@@ -339,7 +339,7 @@ Si aparece:
 ────────────────────────────────────────────────────────────────────────
 Captura con Normal Scan             ✅ SÍ       ✅ SÍ
 Guardar PDF local                   ✅ SÍ       ✅ SÍ
-"Share PDF" encola a Paperless      ❌ NO       ✅ SÍ
+"Share PDF" encola a Tejido      ❌ NO       ✅ SÍ
 "Save to device" encola             ✅ SÍ       ✅ SÍ
 Mensaje honesto si falla            ❌ NO       ✅ SÍ
 Muestra error exacto                ❌ NO       ✅ SÍ
@@ -385,7 +385,7 @@ Inmediato:
   2. Ejecutar Prueba 1 (Mensaje Honesto)
   3. Si mensaje dice "⚠️ Not enqueued": ANOTAR ERROR EXACTO
   4. Ejecutar Prueba 2 (Share PDF)
-  5. Verificar documentos en Paperless
+  5. Verificar documentos en Tejido
 
 Si TODO funciona:
   ✅ Usar app en producción
@@ -403,7 +403,7 @@ Si FALLA:
 ═══════════════════════════════════════════════════════════════════════
 
 v4.0.4 → v4.0.5:
-  - Agregada integración Normal Scan → Paperless
+  - Agregada integración Normal Scan → Tejido
   - Agregado enqueueGenericDocument()
   - Agregado uploadGenericDocument()
   - ❌ Mensaje engañoso
@@ -463,7 +463,7 @@ Próximo paso CRÍTICO:
   Instalar → Ejecutar Prueba 1 → ANOTAR MENSAJE EXACTO → Reportar
 
 Si el mensaje dice "✅ Enqueued":
-  → Ejecutar Prueba 2 y verificar en Paperless
+  → Ejecutar Prueba 2 y verificar en Tejido
 
 Si el mensaje dice "⚠️ Not enqueued: [ERROR]":
   → REPORTAR ERROR EXACTO para diagnóstico adicional

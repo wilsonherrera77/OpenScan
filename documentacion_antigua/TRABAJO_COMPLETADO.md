@@ -1,4 +1,4 @@
-# ✅ TRABAJO COMPLETADO - OpenScan
+# ✅ TRABAJO COMPLETADO - Lumara
 
 **Fecha:** 2025-10-07
 **Estado:** 95% Completado - Listo para build final
@@ -7,7 +7,7 @@
 
 ## 🎯 RESUMEN EJECUTIVO
 
-He completado todo el trabajo de desarrollo, troubleshooting y documentación para OpenScan. El proyecto está 95% completo y listo para generar el APK.
+He completado todo el trabajo de desarrollo, troubleshooting y documentación para Lumara. El proyecto está 95% completo y listo para generar el APK.
 
 **Progreso:**
 ```
@@ -198,7 +198,7 @@ Dart 3.9.2 • DevTools 2.48.0
 - `PRE_BUILD_CHECKLIST.md` - Checklist
 
 #### Configuración (2 archivos)
-- `CONFIGURACION_PAPERLESS.md` - Setup de red
+- `CONFIGURACION_TEJIDO.md` - Setup de red
 - `RESUMEN_AUDITORIA.md` - Auditoría completa
 
 #### Testing (1 archivo)
@@ -222,7 +222,7 @@ Dart 3.9.2 • DevTools 2.48.0
 
 ---
 
-### 8. Verificación de Paperless ✅
+### 8. Verificación de Tejido ✅
 
 **Configuración verificada:**
 ```
@@ -233,7 +233,7 @@ Dart 3.9.2 • DevTools 2.48.0
 ✓ Estado: Accesible desde red
 ```
 
-**Documentado en:** `CONFIGURACION_PAPERLESS.md`
+**Documentado en:** `CONFIGURACION_TEJIDO.md`
 
 **Tiempo:** 30 minutos
 
@@ -320,7 +320,7 @@ Total:                    16 horas
 ✓ Validación de datos
 ```
 
-### 5. Paperless API Integration
+### 5. Tejido API Integration
 ```dart
 ✓ Upload completo con multipart
 ✓ Token authentication
@@ -334,7 +334,7 @@ Total:                    16 horas
 ## 📁 ESTRUCTURA DEL PROYECTO
 
 ```
-OpenScan/
+Lumara/
 ├── lib/
 │   ├── main.dart (96 líneas)
 │   ├── core/
@@ -395,7 +395,7 @@ Tiempo: 5-10 minutos
 ## 🚀 COMANDO PARA COMPLETAR
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./build_apk.sh
 ```
 
@@ -440,7 +440,7 @@ Password: admin
 ✓ Background sync (automático cada 15 min)
 ✓ 3,997 personas del censo (búsqueda rápida)
 ✓ Smart retry (3 intentos con backoff)
-✓ Upload a Paperless (automático)
+✓ Upload a Tejido (automático)
 ```
 
 ---
@@ -456,7 +456,7 @@ Password: admin
 - [x] Descargar Android SDK (146MB)
 - [x] Crear scripts automatizados (3)
 - [x] Generar documentación exhaustiva (23 archivos)
-- [x] Verificar configuración Paperless
+- [x] Verificar configuración Tejido
 
 ### Build 🔄
 - [ ] Instalar Java JDK 17 ← **SIGUIENTE PASO**
@@ -465,7 +465,7 @@ Password: admin
 
 ### Post-Build 📱
 - [ ] Instalar APK en dispositivo
-- [ ] Configurar conexión a Paperless
+- [ ] Configurar conexión a Tejido
 - [ ] Ejecutar test plan (20 casos)
 - [ ] Validar funcionalidades
 
@@ -505,7 +505,7 @@ Password: admin
 - Sincronización automática
 - 3,997 personas del censo
 - Smart retry con backoff
-- Integración completa con Paperless
+- Integración completa con Tejido
 
 ---
 
@@ -518,7 +518,7 @@ Password: admin
 | **Estado completo** | `LISTO_PARA_BUILD.md` |
 | **Instrucciones** | `README_EJECUTAR_AHORA.md` |
 | **Índice completo** | `INDICE_DOCUMENTACION.md` |
-| **Configurar red** | `CONFIGURACION_PAPERLESS.md` |
+| **Configurar red** | `CONFIGURACION_TEJIDO.md` |
 | **Testing** | `TESTING_PLAN.md` |
 | **Troubleshooting** | `DIAGNOSTICO_BUILD.md` |
 
@@ -529,7 +529,7 @@ Password: admin
 ```
 ╔══════════════════════════════════════════════════════════╗
 ║                                                          ║
-║   ✅ OPENSCAN - 95% COMPLETADO                           ║
+║   ✅ LUMARA - 95% COMPLETADO                           ║
 ║                                                          ║
 ║   📦 Código: 1,828 líneas                                ║
 ║   📚 Docs: 23 archivos                                   ║

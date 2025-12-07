@@ -1,4 +1,4 @@
-# 📱 Manual de Usuario - OpenScan Indígenas
+# 📱 Manual de Usuario - Lumara Indígenas
 
 **Versión:** 3.0.0
 **Última actualización:** 2025-10-07
@@ -19,7 +19,7 @@
 
 ## 🎯 Introducción
 
-OpenScan Indígenas es una aplicación móvil diseñada para digitalizar y gestionar documentos de comunidades indígenas, integrándose con el sistema Paperless-ngx para almacenamiento y procesamiento con OCR.
+Lumara Indígenas es una aplicación móvil diseñada para digitalizar y gestionar documentos de comunidades indígenas, integrándose con el sistema Tejido-ngx para almacenamiento y procesamiento con OCR.
 
 ### Características Principales
 
@@ -282,7 +282,7 @@ R: No. Cada documento debe fotografiarse individualmente para mejor calidad de O
 R: Tómala de nuevo. La app te avisará si la calidad es muy baja.
 
 **P: ¿Puedo editar un documento después de subirlo?**
-R: No desde la app móvil. Debes editarlo en el sistema Paperless-ngx.
+R: No desde la app móvil. Debes editarlo en el sistema Tejido-ngx.
 
 **P: ¿Qué tamaño máximo tienen las fotos?**
 R: Las fotos se comprimen automáticamente a máximo 5MB.
@@ -344,7 +344,7 @@ R: Usa la opción de exportar a PDF o Excel desde el dashboard.
 ### La cámara no funciona
 
 **Soluciones:**
-1. Ve a Configuración del celular → Aplicaciones → OpenScan → Permisos
+1. Ve a Configuración del celular → Aplicaciones → Lumara → Permisos
 2. Activa permiso de cámara
 3. Reinicia la app
 4. Prueba con otra app de cámara para verificar que la cámara funciona
@@ -371,7 +371,7 @@ R: Usa la opción de exportar a PDF o Excel desde el dashboard.
 
 ### Contacto
 
-- **Email:** support@openscan-indigenas.org
+- **Email:** support@lumara-indigenas.org
 - **Teléfono:** +57 XXX XXX XXXX
 - **Horario:** Lunes a Viernes, 8:00 AM - 5:00 PM
 
@@ -390,8 +390,8 @@ Cuando contactes soporte, incluye:
 
 - **Guía de Campo:** Instrucciones rápidas para trabajo en terreno
 - **Videos Tutoriales:** Canal de YouTube (próximamente)
-- **Políticas de Privacidad:** https://openscan-indigenas.org/privacy
-- **Términos de Servicio:** https://openscan-indigenas.org/terms
+- **Políticas de Privacidad:** https://lumara-indigenas.org/privacy
+- **Términos de Servicio:** https://lumara-indigenas.org/terms
 
 ---
 

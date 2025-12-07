@@ -198,7 +198,7 @@ class UploadService {
       // Use document number as title if available, otherwise use provided title or generate one
       final generatedTitle = documentNumber ?? title ?? 'Documento ${DateTime.now().toString().substring(0, 16)}';
 
-      // ✅ v4.4.0: Map document type name to native Paperless document_type ID
+      // ✅ v4.4.0: Map document type name to native Tejido document_type ID
       int? nativeDocumentTypeId;
       int? documentTagId; // v4.5.1: Tag ID for the document type
 
@@ -499,7 +499,7 @@ class UploadService {
       final fileSize = optimizedFileSize;
       debugPrint('🔶 [PROCESS-DEBUG] File size: $fileSize bytes');
 
-      // Upload to Paperless (generic or person-specific)
+      // Upload to Tejido (generic or person-specific)
       // Note: Using potentially optimized file here
       debugPrint('🔶 [PROCESS-DEBUG] === CALLING _uploadDocument() ===');
       debugPrint('🔶 [PROCESS-DEBUG] upload.personId: ${upload.personId}');
@@ -510,14 +510,14 @@ class UploadService {
       final duration = DateTime.now().difference(startTime);
 
       debugPrint('🟢 [PROCESS-DEBUG] Upload successful in ${duration.inSeconds}s');
-      _logger.i('✅ Upload $uploadId successful in ${duration.inSeconds}s. Paperless ID: ${response['id']}');
+      _logger.i('✅ Upload $uploadId successful in ${duration.inSeconds}s. Tejido ID: ${response['id']}');
 
       // Add to history with performance metrics
       await _database.recordUploadHistory(
         personId: upload.personId,
         personName: upload.personName,
         documentType: upload.documentType,
-        paperlessDocumentId: response['id'] as int?,
+        tejidoDocumentId: response['id'] as int?,
         fileSize: fileSize,
         uploadDurationMs: duration.inMilliseconds,
         wasOffline: wasOffline,
@@ -528,7 +528,7 @@ class UploadService {
 
       // 🔒 SECURITY: Delete local file after successful sync (GDPR/Privacy compliance)
       // Files containing sensitive personal data MUST be removed from device
-      // after confirmed upload to Paperless server
+      // after confirmed upload to Tejido server
       await _deleteLocalFileAfterSync(file, upload.filePath, uploadId);
 
       // Update sync status to success
@@ -885,7 +885,7 @@ class UploadService {
     return true;
   }
 
-  /// Delete local file after successful sync to Paperless
+  /// Delete local file after successful sync to Tejido
   /// 🔒 SECURITY & COMPLIANCE: GDPR/Privacy requirement
   /// Files with sensitive personal data MUST be deleted from device after upload
   ///

@@ -2,7 +2,7 @@
 ## Intento de Fix Sincronización Lumara ↔ Tejido
 
 **Fecha:** 2025-10-12
-**Objetivo:** Resolver sincronización de documentos entre app móvil y backend Paperless-ngx
+**Objetivo:** Resolver sincronización de documentos entre app móvil y backend Tejido-ngx
 **Resultado:** ❌ **PARCIALMENTE EXITOSO** - Backend arreglado, app con problemas persistentes
 
 ---
@@ -30,15 +30,15 @@
 **Problema Original:**
 ```python
 # Línea 157 (antes):
-# Nota: El archivo se maneja internamente por Paperless
+# Nota: El archivo se maneja internamente por Tejido
 # En producción, aquí iría el código para mover el archivo
-# al directorio de consumo de Paperless
+# al directorio de consumo de Tejido
 ```
 
 **Solución Implementada:**
 ```python
 # Líneas 165-255 (después):
-# Guardar archivo y procesar con Paperless consume pipeline
+# Guardar archivo y procesar con Tejido consume pipeline
 temp_file_path = Path(tempfile.mkdtemp(dir=settings.SCRATCH_DIR)) / ...
 temp_file_path.write_bytes(doc_data)
 
@@ -205,7 +205,7 @@ adb devices
 
 ## 🔧 Cambios Realizados en Código
 
-### Backend (Paperless-ngx)
+### Backend (Tejido-ngx)
 
 **Archivo Modificado:** `src/documents/views_census.py`
 
@@ -230,7 +230,7 @@ adb devices
 
 **Archivos Ya Modificados (commit anterior):**
 3. `lib/data/repositories/document_repository.dart` - Usa `uploadDocumentWithPerson`
-4. `lib/data/datasources/paperless_api_client.dart` - Implementa nuevo endpoint
+4. `lib/data/datasources/tejido_api_client.dart` - Implementa nuevo endpoint
 
 **Estado:** ⚠️ Código listo pero **sin verificar en dispositivo**
 
@@ -267,7 +267,7 @@ Problema: Causa desconocida (sin logs)
 
 ## 🎯 Estado Actual del Sistema
 
-### Backend (Tejido/Paperless-ngx)
+### Backend (Tejido/Tejido-ngx)
 ```
 ✅ Endpoint /api/documents/upload_with_person/ FUNCIONAL
 ✅ Guarda archivos correctamente

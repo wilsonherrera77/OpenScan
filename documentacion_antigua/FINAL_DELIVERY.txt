@@ -2,7 +2,7 @@
 ║                                                                          ║
 ║                    ✅ PROYECTO COMPLETADO AL 100%                        ║
 ║                                                                          ║
-║                     OpenScan Indígenas v3.0.0                           ║
+║                     Lumara Indígenas v3.0.0                           ║
 ║              Sistema de Digitalización de Documentos                    ║
 ║                  para Comunidades Indígenas                             ║
 ║                                                                          ║
@@ -62,7 +62,7 @@ MÉTRICAS DE CALIDAD:
    • UI/UX intuitiva
    Entregado: 38 archivos, 2,850 líneas
 
-✅ SPRINT 3: Integración Paperless
+✅ SPRINT 3: Integración Tejido
    • Cliente API completo
    • Cola offline
    • Sincronización automática
@@ -154,7 +154,7 @@ MÉTRICAS DE CALIDAD:
    • Incluye: Privacy Policy, Terms of Service
 
 ⏳ #3: Email de Soporte
-   • Qué: Crear soporte@openscan-indigenas.org
+   • Qué: Crear soporte@lumara-indigenas.org
    • Quién: Admin
    • Cuándo: HOY
    • Tiempo: 2-4 horas
@@ -186,14 +186,14 @@ MÉTRICAS DE CALIDAD:
       → Asignar responsables
 
    4. ⏳ Crear email de soporte (2 horas)
-      → soporte@openscan-indigenas.org
+      → soporte@lumara-indigenas.org
 
    5. ⏳ Solicitar cotizaciones pentesting (2 horas)
       → Enviar emails a 3 firmas
 
 📅 ESTA SEMANA (Día 1-7):
 
-   6. Configurar servidor Paperless + SSL + DNS
+   6. Configurar servidor Tejido + SSL + DNS
    7. Generar fingerprints SSL
    8. Actualizar 5 líneas en production_config.dart
    9. Contratar firma de pentesting
@@ -313,7 +313,7 @@ Asignar responsables para cada área:
   ESTRUCTURA DE ARCHIVOS ENTREGADOS
 ═══════════════════════════════════════════════════════════════════════════
 
-OpenScan/
+Lumara/
 ├── lib/                         # 15,410 líneas de código ✅
 │   ├── core/
 │   ├── data/

@@ -1,7 +1,7 @@
 # Lumara Frontend - Quick Reference Guide
 
 ## Project Overview
-- **Name:** Lumara Scan (OpenScan)
+- **Name:** Lumara Scan (Lumara)
 - **Version:** 5.6.1 (Phase 2: Session Tracking + Review Workflow + CSV Export)
 - **Framework:** Flutter 3.x with Dart
 - **Architecture:** Clean Architecture (Presentation/Domain/Data)
@@ -40,7 +40,7 @@
 
 ### 3. Data Layer (`lib/data/`)
 - **4 repositories** (AuthRepository, CensusRepository, DocumentRepository, AssignmentRepository)
-- **2 data sources** (PaperlessApiClient, CensusDataSource)
+- **2 data sources** (TejidoApiClient, CensusDataSource)
 - **SQLite database** (AppDatabase with Drift ORM)
 
 ### 4. Services Layer (`lib/services/`)
@@ -262,7 +262,7 @@ MultiProvider(
 
 ### Add a New API Endpoint
 1. Add method to appropriate Repository
-2. Use PaperlessApiClient (Dio HTTP)
+2. Use TejidoApiClient (Dio HTTP)
 3. Map to Domain entity with `.fromJson()`
 4. Expose through Provider/Service
 5. Consume in Screen
@@ -270,7 +270,7 @@ MultiProvider(
 ### Debug Network Issues
 1. Check `core/constants/api_constants.dart` for URL
 2. Test connection: `ServerConfigScreen` → Test Connection
-3. Check `PaperlessApiClient` for auth token
+3. Check `TejidoApiClient` for auth token
 4. Review logs: Check `Logger` output in console
 
 ---

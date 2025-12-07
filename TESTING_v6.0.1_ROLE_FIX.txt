@@ -12,7 +12,7 @@ Fix: Frontend workaround - Force admin role if username="admin"
 ═══════════════════════════════════════════════════════════════════════════════
 
 # Terminal 1: Desinstalar e instalar
-adb uninstall com.ethereal.openscan
+adb uninstall com.ethereal.lumara
 adb install -r ~/Descargas/Lumara_v6.0.1_ROLE_FIX_AdminWorkaround_20251109_205023.apk
 
 # Terminal 2: Capturar logs (IMPORTANTE - dejar corriendo)
@@ -165,9 +165,9 @@ ESCENARIO 3: App crashea al login
 Una vez confirmado que backend retorna role incorrecto:
 
 # Opción A: Fix en DB
-docker exec -it paperless-webserver-1 python3 manage.py shell -c "
+docker exec -it tejido-webserver-1 python3 manage.py shell -c "
 from django.contrib.auth.models import User
-from paperless_auth.models import UserProfile
+from tejido_auth.models import UserProfile
 user = User.objects.get(username='admin')
 profile = UserProfile.objects.get(user=user)
 print(f'Current role: {profile.role}')
@@ -177,7 +177,7 @@ print(f'Updated role: {profile.role}')
 "
 
 # Opción B: Fix en Serializer (si DB está correcto)
-# Verificar: paperless_auth/serializers.py
+# Verificar: tejido_auth/serializers.py
 # Revisar UserProfileSerializer.get_role()
 
 # Después del fix backend:

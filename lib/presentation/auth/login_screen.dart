@@ -8,7 +8,7 @@ import '../providers/assignment_provider.dart';
 import 'qr_config_screen.dart';
 
 /// Login Screen
-/// Allows users to authenticate with Paperless-ngx
+/// Allows users to authenticate with Tejido-ngx
 class LoginScreen extends StatefulWidget {
   static const String route = '/login';
 
@@ -176,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   controller: _baseUrlController,
                   decoration: const InputDecoration(
-                    labelText: 'URL del Servidor Paperless',
+                    labelText: 'URL del Servidor Tejido',
                     prefixIcon: Icon(Icons.cloud),
                     border: OutlineInputBorder(),
                     hintText: 'http://127.0.0.1:8001',
@@ -324,7 +324,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 8),
                         const Text(
-                          '1. Accede al panel admin de Paperless\n'
+                          '1. Accede al panel admin de Tejido\n'
                           '2. Usa las mismas credenciales del admin\n'
                           '3. Usuario por defecto: admin',
                           style: TextStyle(fontSize: 13),

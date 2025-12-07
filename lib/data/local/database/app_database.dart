@@ -13,7 +13,7 @@ part 'app_database.g.dart';
 // ============================================
 
 /// Pending Uploads Table
-/// Stores documents waiting to be uploaded to Paperless
+/// Stores documents waiting to be uploaded to Tejido
 class PendingUploads extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get personId => text()();
@@ -44,7 +44,7 @@ class UploadHistory extends Table {
   TextColumn get personId => text()();
   TextColumn get personName => text()();
   TextColumn get documentType => text()();
-  IntColumn get paperlessDocumentId => integer().nullable()();
+  IntColumn get tejidoDocumentId => integer().nullable()();
   DateTimeColumn get uploadedAt => dateTime().withDefault(currentDateAndTime)();
   TextColumn get status => text()();
   // New: performance metrics
@@ -70,7 +70,7 @@ class Persons extends Table {
 }
 
 /// Document Types Table (API cache)
-/// NEW: Cache of Paperless document types
+/// NEW: Cache of Tejido document types
 class DocumentTypes extends Table {
   IntColumn get id => integer()();
   TextColumn get name => text()();
@@ -81,7 +81,7 @@ class DocumentTypes extends Table {
 }
 
 /// Tags Table (API cache)
-/// NEW: Cache of Paperless tags
+/// NEW: Cache of Tejido tags
 class Tags extends Table {
   IntColumn get id => integer()();
   TextColumn get name => text()();
@@ -93,7 +93,7 @@ class Tags extends Table {
 }
 
 /// Custom Fields Table (API cache)
-/// ⚡ FASE 2: Cache of Paperless custom fields
+/// ⚡ FASE 2: Cache of Tejido custom fields
 class CustomFields extends Table {
   IntColumn get id => integer()();
   TextColumn get name => text()();
@@ -178,7 +178,7 @@ class AppDatabase extends _$AppDatabase {
       debugPrint('🔵 [DB] LazyDatabase initializing...');
       try {
         final dbFolder = await getApplicationDocumentsDirectory();
-        final file = File(p.join(dbFolder.path, 'openscan_indigenas.db'));
+        final file = File(p.join(dbFolder.path, 'lumara_indigenas.db'));
         debugPrint('🔵 [DB] Database path: ${file.path}');
         debugPrint('🔵 [DB] Database exists: ${file.existsSync()}');
 
@@ -710,7 +710,7 @@ class AppDatabase extends _$AppDatabase {
     required String personId,
     required String personName,
     required String documentType,
-    int? paperlessDocumentId,
+    int? tejidoDocumentId,
     required int fileSize,
     required int uploadDurationMs,
     required bool wasOffline,
@@ -720,7 +720,7 @@ class AppDatabase extends _$AppDatabase {
         personId: personId,
         personName: personName,
         documentType: documentType,
-        paperlessDocumentId: Value(paperlessDocumentId),
+        tejidoDocumentId: Value(tejidoDocumentId),
         status: 'success',
         fileSize: Value(fileSize),
         uploadDurationMs: Value(uploadDurationMs),

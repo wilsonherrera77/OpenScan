@@ -12,7 +12,7 @@
 
 ✅ **GARANTÍA 0% PÉRDIDA DE DOCUMENTOS**
 
-El sistema ahora implementa una estrategia completa de triple capa que garantiza que ningún documento se pierda durante el proceso de digitalización y sincronización con Paperless-ngx:
+El sistema ahora implementa una estrategia completa de triple capa que garantiza que ningún documento se pierda durante el proceso de digitalización y sincronización con Tejido-ngx:
 
 1. **🔀 Dual HTTP Channels (Primary + Fallback)**
 2. **🔄 RetryService con Exponential Backoff**
@@ -24,7 +24,7 @@ El sistema ahora implementa una estrategia completa de triple capa que garantiza
 
 ### 1. 🔀 Dual HTTP Channel Strategy
 
-**Archivo:** `lib/data/datasources/paperless_api_client.dart`
+**Archivo:** `lib/data/datasources/tejido_api_client.dart`
 
 **Líneas modificadas:** 411-574
 
@@ -251,7 +251,7 @@ processUpload() called
   ↓
 RetryService.retryUpload() → Attempt 1
   ↓
-paperless_api_client.uploadDocumentWithPerson()
+tejido_api_client.uploadDocumentWithPerson()
   ↓
 TRY Canal PRIMARY (/upload_with_person/)
   ↓
@@ -483,7 +483,7 @@ Mark as 'failed_permanently'
 1. `lib/services/retry_service.dart` (287 líneas)
 
 ### Archivos Modificados
-1. `lib/data/datasources/paperless_api_client.dart`
+1. `lib/data/datasources/tejido_api_client.dart`
    - Líneas 411-574: Dual HTTP implementation
 
 2. `lib/services/upload_service.dart`

@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:openscan/core/security/secure_config_manager.dart';
+import 'package:lumara/core/security/secure_config_manager.dart';
 
 // Generate mocks: flutter pub run build_runner build
 @GenerateMocks([FlutterSecureStorage])
@@ -309,7 +309,7 @@ void main() {
 
       test('rotation should not affect base URL', () async {
         // Arrange
-        final baseUrl = 'https://paperless.example.com';
+        final baseUrl = 'https://tejido.example.com';
         final oldToken = 'old_token';
         final newToken = 'new_token';
 

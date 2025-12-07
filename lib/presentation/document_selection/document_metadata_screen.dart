@@ -29,7 +29,7 @@ class _DocumentMetadataScreenState extends State<DocumentMetadataScreen> {
   final _logger = Logger(printer: PrettyPrinter(methodCount: 0));
   bool _isCheckingDuplicate = false;
 
-  // Document types matching Paperless tags (IDs 10-16)
+  // Document types matching Tejido tags (IDs 10-16)
   final Map<String, int> _documentTypes = {
     'Registro Civil de Nacimiento': 10,
     'Tarjeta de Identidad': 11,
@@ -181,7 +181,7 @@ class _DocumentMetadataScreenState extends State<DocumentMetadataScreen> {
       documentNumber: _documentNumberController.text.trim(),
     );
 
-    // Navigate to OpenScan home
+    // Navigate to Lumara home
     if (mounted) {
       Navigator.of(context).pushReplacementNamed(HomeScreen.route);
     }
@@ -329,7 +329,7 @@ class _DocumentMetadataScreenState extends State<DocumentMetadataScreen> {
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Esta información se enviará a Paperless junto con el documento digitalizado.',
+                        'Esta información se enviará a Tejido junto con el documento digitalizado.',
                         style: TextStyle(fontSize: 14, color: Colors.blue),
                       ),
                     ),

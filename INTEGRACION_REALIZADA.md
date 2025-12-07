@@ -416,7 +416,7 @@ flutter build apk --debug
 ✓ Built build/app/outputs/flutter-apk/app-debug.apk (70 segundos)
 
 # Ubicación del APK:
-/home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/build/app/outputs/flutter-apk/app-debug.apk
+/home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara/build/app/outputs/flutter-apk/app-debug.apk
 ```
 
 ### Versionado Sugerido

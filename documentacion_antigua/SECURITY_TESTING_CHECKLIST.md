@@ -1,6 +1,6 @@
 # 🔒 Security Testing Checklist
 
-**Project:** OpenScan Indígenas
+**Project:** Lumara Indígenas
 **Version:** 3.0.0
 **Last Updated:** 2025-10-07
 
@@ -120,7 +120,7 @@ Notes: _________________
 **Test Script:**
 ```bash
 # Check if files are encrypted
-adb shell "run-as com.openscan.indigenas ls -la /data/data/com.openscan.indigenas/files/"
+adb shell "run-as com.lumara.indigenas ls -la /data/data/com.lumara.indigenas/files/"
 # Files should have .encrypted extension
 
 # Verify encryption
@@ -157,14 +157,14 @@ Notes: _________________
 **Test Commands:**
 ```bash
 # Test HTTPS enforcement
-curl -v http://paperless.your-domain.com/api/
+curl -v http://tejido.your-domain.com/api/
 # Should redirect to HTTPS or reject
 
 # Test certificate pinning (with invalid cert)
 # Expected: Connection rejected
 
 # Check TLS version
-nmap --script ssl-enum-ciphers -p 443 paperless.your-domain.com
+nmap --script ssl-enum-ciphers -p 443 tejido.your-domain.com
 ```
 
 **Results:**
@@ -446,7 +446,7 @@ Notes: _________________
     </base-config>
 
     <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">paperless.your-domain.com</domain>
+        <domain includeSubdomains="true">tejido.your-domain.com</domain>
         <pin-set expiration="2026-01-01">
             <pin digest="SHA-256">YOUR_PIN_HERE</pin>
             <pin digest="SHA-256">BACKUP_PIN_HERE</pin>
@@ -462,7 +462,7 @@ Notes: _________________
 # App should reject connection
 
 # Test cleartext
-adb shell am start -n com.openscan.indigenas/.MainActivity
+adb shell am start -n com.lumara.indigenas/.MainActivity
 adb logcat | grep "Cleartext"
 # Should see: "Cleartext traffic not permitted"
 ```

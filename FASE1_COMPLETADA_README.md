@@ -15,7 +15,7 @@ La FASE 1 ha generado **3 documentos** con información completa de la verificac
 
 **Contenido**:
 - ✅ Ejercicios anti-retroceso (6 verificaciones)
-- ✅ Análisis backend Django/Paperless-ngx
+- ✅ Análisis backend Django/Tejido-ngx
 - ✅ Análisis código Flutter (6 archivos críticos)
 - ✅ Estado suite de tests (985 errores identificados)
 - ✅ Bugs detectados y decisiones tomadas
@@ -75,7 +75,7 @@ git tag v6.3.9+85-fase1-verified
 
 ### 2️⃣ Resolver Backend Connectivity (4 horas)
 ```bash
-docker logs paperless_webserver_1 --tail 100 | grep -i error
+docker logs tejido_webserver_1 --tail 100 | grep -i error
 ```
 
 ### 3️⃣ Verificar Censo 3998 Personas (15 min)

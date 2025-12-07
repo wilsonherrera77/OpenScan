@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:openscan_indigenas/presentation/providers/auth_provider.dart';
-import 'package:openscan_indigenas/domain/entities/auth_token.dart';
+import 'package:lumara_indigenas/presentation/providers/auth_provider.dart';
+import 'package:lumara_indigenas/domain/entities/auth_token.dart';
 import '../../../mocks/mock_repositories.mocks.dart';
 import '../../../helpers/fixtures.dart';
 
@@ -144,7 +144,7 @@ void main() {
       // Arrange
       const username = 'testuser';
       const password = 'testpass';
-      const baseUrl = 'https://custom.paperless.com';
+      const baseUrl = 'https://custom.tejido.com';
       final mockToken = Fixtures.createMockAuthToken();
 
       when(mockRepository.login(
@@ -265,7 +265,7 @@ void main() {
   group('AuthProvider - updateBaseUrl', () {
     test('should update base URL successfully', () async {
       // Arrange
-      const newUrl = 'https://new.paperless.com';
+      const newUrl = 'https://new.tejido.com';
       final updatedToken = Fixtures.createMockAuthToken();
 
       when(mockRepository.updateBaseUrl(newUrl))
@@ -298,7 +298,7 @@ void main() {
   group('AuthProvider - getBaseUrl', () {
     test('should return base URL from repository', () async {
       // Arrange
-      const expectedUrl = 'https://paperless.example.com';
+      const expectedUrl = 'https://tejido.example.com';
       when(mockRepository.getBaseUrl())
           .thenAnswer((_) async => expectedUrl);
 

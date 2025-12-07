@@ -1,10 +1,10 @@
 #!/bin/bash
-# Script para completar instalación y generar APK de OpenScan
+# Script para completar instalación y generar APK de Lumara
 # Ejecutar con: bash build_apk.sh
 
 set -e
 
-echo "🚀 OpenScan - Script de Build APK"
+echo "🚀 Lumara - Script de Build APK"
 echo "=================================="
 echo ""
 
@@ -101,8 +101,8 @@ show_success "Flutter verificado"
 echo ""
 
 # 7. Ir al directorio del proyecto
-show_progress "Navegando al proyecto OpenScan..."
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+show_progress "Navegando al proyecto Lumara..."
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 show_success "Directorio: $(pwd)"
 
 echo ""
@@ -143,7 +143,7 @@ if [ -f "$APK_PATH" ]; then
     echo "   ✓ Background sync cada 15 minutos"
     echo "   ✓ 3,997 personas del censo"
     echo "   ✓ Smart retry logic"
-    echo "   ✓ Upload automático a Paperless"
+    echo "   ✓ Upload automático a Tejido"
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo -e "${GREEN}🎉 BUILD COMPLETADO${NC}"

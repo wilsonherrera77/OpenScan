@@ -2,7 +2,7 @@
 ║                                                                       ║
 ║          🔧 LUMARA SCAN v4.0.3 - SINCRONIZACIÓN CORREGIDA             ║
 ║                                                                       ║
-║         La app ahora sincroniza correctamente con Paperless          ║
+║         La app ahora sincroniza correctamente con Tejido          ║
 ║                                                                       ║
 ╚═══════════════════════════════════════════════════════════════════════╝
 
@@ -11,7 +11,7 @@
 
 La app NO se sincronizaba porque usaba URL incorrecta por defecto:
   ❌ Antes: http://10.0.2.2:8001 (emulador Android)
-  ✅ Ahora: http://192.168.40.17:8001 (tu servidor Paperless)
+  ✅ Ahora: http://192.168.40.17:8001 (tu servidor Tejido)
 
 
 🔍 CAMBIOS IMPLEMENTADOS:
@@ -30,8 +30,8 @@ La app NO se sincronizaba porque usaba URL incorrecta por defecto:
      2. Cómo capturar documentos
      3. Cómo editar y recortar fotos
      4. Cómo organizar documentos
-     5. Cómo sincronizar con Paperless
-     6. Cómo verificar en Paperless web
+     5. Cómo sincronizar con Tejido
+     6. Cómo verificar en Tejido web
    - Todo en español con ejemplos prácticos
 
 3. Optimización del APK ✅
@@ -43,7 +43,7 @@ La app NO se sincronizaba porque usaba URL incorrecta por defecto:
 📱 APK v4.0.3:
 ═════════════════════════════════════════════════════════════════════════
 
-Ruta: /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/LumaraScan_v4.0.3_STABLE.apk
+Ruta: /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara/LumaraScan_v4.0.3_STABLE.apk
 
 MD5: 23ec4417609a12ef6713741f4013a922
 Tamaño: 70 MB
@@ -57,7 +57,7 @@ lo hace automáticamente.
 🚀 INSTALACIÓN:
 ═════════════════════════════════════════════════════════════════════════
 
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./install_apk.sh
 
 
@@ -78,7 +78,7 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
    - Tocar icono "network_check" (primer icono arriba)
    - Debe mostrar:
      ✅ Internet: Conectado
-     ✅ Servidor Paperless: http://192.168.40.17:8001
+     ✅ Servidor Tejido: http://192.168.40.17:8001
      ✅ Servidor alcanzable: Sí
      ✅ Latencia: [X] ms
 
@@ -95,7 +95,7 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
    - Esperar mensaje de confirmación
    - Verificar que se sincronizó correctamente
 
-6. VERIFICAR EN PAPERLESS WEB:
+6. VERIFICAR EN TEJIDO WEB:
    - Abrir navegador en PC
    - Ir a: http://192.168.40.17:8001
    - Iniciar sesión
@@ -123,7 +123,7 @@ Prueba 3: Sincronización ✅
   1. Asegurar celular en misma WiFi que PC
   2. Tocar icono de sincronización
   3. ¿Muestra mensaje de éxito?
-  4. ¿Fotos aparecen en Paperless web?
+  4. ¿Fotos aparecen en Tejido web?
 
 Prueba 4: Instrucciones ✅
   1. Abrir menú lateral
@@ -151,7 +151,7 @@ Prueba 4: Instrucciones ✅
    - Leer mensaje de error detallado
    - Compartir captura si persiste el problema
 
-4. Verificar que Paperless está corriendo:
+4. Verificar que Tejido está corriendo:
    curl http://192.168.40.17:8001
 
    Debe responder (HTTP 200 o 302)

@@ -14,7 +14,7 @@ class CertificatePinner {
 
   /// Known certificate SHA-256 fingerprints
   ///
-  /// PRODUCTION: Add your Paperless server's certificate fingerprints here
+  /// PRODUCTION: Add your Tejido server's certificate fingerprints here
   ///
   /// To get fingerprint:
   /// ```bash

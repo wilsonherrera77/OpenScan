@@ -122,7 +122,7 @@ class _ViewDocumentState extends State<ViewDocument>
 
   Future<void> createDirectoryPath() async {
     Directory? appDir = await getExternalStorageDirectory();
-    String dirPath = "${appDir?.path}/OpenScan ${DateTime.now()}";
+    String dirPath = "${appDir?.path}/Lumara ${DateTime.now()}";
     String fileName = dirPath.substring(dirPath.lastIndexOf("/") + 1);
     widget.directoryOS.dirPath = dirPath;
     widget.directoryOS.dirName = fileName;
@@ -179,7 +179,7 @@ class _ViewDocumentState extends State<ViewDocument>
       setState(() {});
       getDirectoryData();
 
-      // ✅ FIX v6.4.0+88: Auto-enqueue para upload a Paperless usando archivo GUARDADO
+      // ✅ FIX v6.4.0+88: Auto-enqueue para upload a Tejido usando archivo GUARDADO
       try {
         print('[DEBUG] === AUTO-ENQUEUE START ===');
 
@@ -198,7 +198,7 @@ class _ViewDocumentState extends State<ViewDocument>
           print('[DEBUG]   - documentNumber: ${censusProvider.documentNumber}');
         }
 
-        print('[DEBUG] Auto-enqueuing captured images for Paperless sync...');
+        print('[DEBUG] Auto-enqueuing captured images for Tejido sync...');
         print('[DEBUG] fromGallery: $fromGallery, imageFilePath: $imageFilePath');
 
         if (fromGallery && galleryImages != null) {
@@ -345,7 +345,7 @@ class _ViewDocumentState extends State<ViewDocument>
     }
   }
 
-  /// ✅ v6.4.0+91: Sincronizar TODOS los documentos de esta carpeta a Paperless
+  /// ✅ v6.4.0+91: Sincronizar TODOS los documentos de esta carpeta a Tejido
   Future<void> _syncAllDocuments() async {
     print('[SYNC] ====== _syncAllDocuments() INICIADO ======'); // DEBUG v6.4.0+91
     print('[SYNC] directoryImages.length = ${directoryImages.length}');
@@ -1114,7 +1114,7 @@ class _ViewDocumentState extends State<ViewDocument>
               final fileName = (enableSelect) ? selectedFileName : widget.directoryOS.newName!;
               final pdfPath = '${storedDirectory.path}/$fileName.pdf';
 
-              // 📤 AUTO-UPLOAD TO PAPERLESS after creating PDF
+              // 📤 AUTO-UPLOAD TO TEJIDO after creating PDF
               bool shareEnqueued = false;
               String? shareError;
 
@@ -1124,9 +1124,9 @@ class _ViewDocumentState extends State<ViewDocument>
                 final pdfFile = File(pdfPath);
 
                 if (await pdfFile.exists()) {
-                  print('📤 Auto-uploading shared PDF to Paperless: $pdfPath');
+                  print('📤 Auto-uploading shared PDF to Tejido: $pdfPath');
 
-                  // Enqueue for Paperless upload with document metadata
+                  // Enqueue for Tejido upload with document metadata
                   // v4.4.2: Pass source directory to enable cleanup after sync
                   // v4.5.1: Only assigns document type tag automatically
                   // v6.4.8: Include person data for document-census linking
@@ -1141,14 +1141,14 @@ class _ViewDocumentState extends State<ViewDocument>
                     familyId: censusProvider.selectedPerson?.familyId,
                   );
 
-                  print('✅ Shared PDF enqueued for Paperless sync, person: ${censusProvider.selectedPerson?.fullName ?? "GENERIC"}');
+                  print('✅ Shared PDF enqueued for Tejido sync, person: ${censusProvider.selectedPerson?.fullName ?? "GENERIC"}');
                   shareEnqueued = true;
                 } else {
                   print('⚠️ Shared PDF file not found at: $pdfPath');
                   shareError = 'PDF file not found';
                 }
               } catch (e) {
-                print('❌ Failed to enqueue shared PDF for Paperless: $e');
+                print('❌ Failed to enqueue shared PDF for Tejido: $e');
                 shareError = e.toString();
               }
 
@@ -1164,7 +1164,7 @@ class _ViewDocumentState extends State<ViewDocument>
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('✅ PDF encolado para Paperless'),
+                    content: Text('✅ PDF encolado para Tejido'),
                     backgroundColor: Colors.green,
                     duration: Duration(seconds: 2),
                   ),
@@ -1199,7 +1199,7 @@ class _ViewDocumentState extends State<ViewDocument>
                 quality: imageQuality,
               );
 
-              // 📤 AUTO-UPLOAD TO PAPERLESS if PDF was saved successfully
+              // 📤 AUTO-UPLOAD TO TEJIDO if PDF was saved successfully
               bool enqueuedSuccessfully = false;
               String? enqueueError;
 
@@ -1215,9 +1215,9 @@ class _ViewDocumentState extends State<ViewDocument>
                   final pdfFile = File(pdfPath);
 
                   if (await pdfFile.exists()) {
-                    print('📤 Auto-uploading PDF to Paperless: $pdfPath');
+                    print('📤 Auto-uploading PDF to Tejido: $pdfPath');
 
-                    // Enqueue for Paperless upload with document metadata
+                    // Enqueue for Tejido upload with document metadata
                     // v4.4.2: Pass source directory to enable cleanup after sync
                     // v4.5.1: Only assigns document type tag automatically
                     // v6.4.8: Include person data for document-census linking
@@ -1232,14 +1232,14 @@ class _ViewDocumentState extends State<ViewDocument>
                       familyId: censusProvider.selectedPerson?.familyId,
                     );
 
-                    print('✅ PDF enqueued for Paperless sync, person: ${censusProvider.selectedPerson?.fullName ?? "GENERIC"}');
+                    print('✅ PDF enqueued for Tejido sync, person: ${censusProvider.selectedPerson?.fullName ?? "GENERIC"}');
                     enqueuedSuccessfully = true;
                   } else {
                     print('⚠️ PDF file not found at: $pdfPath');
                     enqueueError = 'PDF file not found';
                   }
                 } catch (e) {
-                  print('❌ Failed to enqueue PDF for Paperless: $e');
+                  print('❌ Failed to enqueue PDF for Tejido: $e');
                   enqueueError = e.toString();
                   // Don't block user - just log error
                 }
@@ -1249,7 +1249,7 @@ class _ViewDocumentState extends State<ViewDocument>
               String displayText;
               if (savedDirectory != null) {
                 if (enqueuedSuccessfully) {
-                  displayText = "PDF Saved at\n$savedDirectory\n\n✅ Enqueued for Paperless sync";
+                  displayText = "PDF Saved at\n$savedDirectory\n\n✅ Enqueued for Tejido sync";
                 } else {
                   displayText = "PDF Saved at\n$savedDirectory\n\n⚠️ Not enqueued: ${enqueueError ?? 'Unknown error'}\n\nSync manually or check logs";
                 }

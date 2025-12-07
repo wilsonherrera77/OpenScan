@@ -14,11 +14,11 @@ final slideList = [
   Slide(
     imageUrl: 'assets/home.jpg',
     title: '1. Inicio de Sesión',
-    description: 'Ingresa tus credenciales de Paperless:\n'
+    description: 'Ingresa tus credenciales de Tejido:\n'
         '• Usuario: admin (o tu usuario)\n'
         '• Contraseña: tu contraseña\n'
         '• URL del Servidor: http://192.168.10.48:8001\n\n'
-        '⚠️ IMPORTANTE: Asegúrate de estar conectado a la misma WiFi que el servidor Paperless.',
+        '⚠️ IMPORTANTE: Asegúrate de estar conectado a la misma WiFi que el servidor Tejido.',
   ),
   Slide(
     imageUrl: 'assets/view_doc_01.jpg',
@@ -55,7 +55,7 @@ final slideList = [
   Slide(
     imageUrl: 'assets/view_doc_05.jpg',
     title: '5. Sincronización',
-    description: 'Sincroniza con Paperless:\n'
+    description: 'Sincroniza con Tejido:\n'
         '• Toca el icono de sincronización (nube) en la barra superior\n'
         '• O activa sincronización automática cada 15 min\n'
         '• Diagnóstico de red: Toca icono network_check\n\n'
@@ -66,10 +66,10 @@ final slideList = [
   ),
   Slide(
     imageUrl: 'assets/view_doc_04.jpg',
-    title: '6. Verificar en Paperless',
+    title: '6. Verificar en Tejido',
     description: 'En tu navegador:\n'
         '• Abre http://192.168.10.48:8001\n'
-        '• Inicia sesión en Paperless\n'
+        '• Inicia sesión en Tejido\n'
         '• Ve a "Documentos"\n'
         '• Verás tus documentos sincronizados\n\n'
         '📊 La app mostrará estadísticas:\n'

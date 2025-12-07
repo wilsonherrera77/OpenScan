@@ -69,7 +69,7 @@ IMPORTANTE: Como cambiamos la firma, necesitas DESINSTALAR la versión
 anterior antes de instalar la nueva.
 
 Opción 1 - Script automático:
-  cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+  cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
   ./install_apk.sh
 
   El script automáticamente:
@@ -170,7 +170,7 @@ Todas las funcionalidades de v4.0.3 se mantienen:
 ✅ Instrucciones de uso completas (6 pantallas)
 ✅ Recorte de fotos sin crashear
 ✅ Diagnóstico de red
-✅ Sincronización con Paperless (misma WiFi)
+✅ Sincronización con Tejido (misma WiFi)
 
 
 📝 PRUEBAS RECOMENDADAS:

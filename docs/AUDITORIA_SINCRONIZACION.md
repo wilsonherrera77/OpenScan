@@ -14,10 +14,10 @@ Usuario reporta: "Error de sincronización - No se pudo sincronizar. Verifica tu
 ### Causa Raíz Identificada
 🎯 **LA APP NO TIENE IMPLEMENTADA LA SINCRONIZACIÓN DE DATOS DEL CENSO**
 
-La aplicación Lumara carga los datos del censo desde un archivo CSV hardcodeado en los assets, NO desde el API de Paperless. El botón "Sincronizar" solo sincroniza uploads de documentos pendientes.
+La aplicación Lumara carga los datos del censo desde un archivo CSV hardcodeado en los assets, NO desde el API de Tejido. El botón "Sincronizar" solo sincroniza uploads de documentos pendientes.
 
 ### Impacto
-- ⚠️ Usuarios no pueden obtener datos actualizados del censo desde Paperless
+- ⚠️ Usuarios no pueden obtener datos actualizados del censo desde Tejido
 - ⚠️ Datos del censo desactualizados en la app
 - ⚠️ Confusión del usuario (botón "sincronizar" no hace lo esperado)
 - ⚠️ Necesidad de recompilar APK cada vez que se actualiza el censo
@@ -26,13 +26,13 @@ La aplicación Lumara carga los datos del censo desde un archivo CSV hardcodeado
 
 ## AUDITORÍA DETALLADA
 
-### 1. BACKEND (Paperless-NGX) ✅
+### 1. BACKEND (Tejido-NGX) ✅
 
 **Estado**: FUNCIONANDO CORRECTAMENTE
 
 #### Base de Datos
 ```bash
-✅ Container: paperless-webserver-1
+✅ Container: tejido-webserver-1
 ✅ Estado: Healthy (17 horas uptime)
 ✅ Puerto: 0.0.0.0:8001 → 8000
 ```
@@ -87,7 +87,7 @@ La aplicación Lumara carga los datos del censo desde un archivo CSV hardcodeado
 │  ┌─────────────────────────────────────────────────┐   │
 │  │  scheduleImmediateSync()                        │   │
 │  │  1. ✅ Verifica conectividad                    │   │
-│  │  2. ✅ Valida servidor Paperless                │   │
+│  │  2. ✅ Valida servidor Tejido                │   │
 │  │  3. ❌ Solo procesa UPLOADS pendientes          │   │
 │  │  4. ❌ NO descarga datos del censo              │   │
 │  └─────────────────────────────────────────────────┘   │
@@ -134,7 +134,7 @@ CensusProvider → CensusRepository → CensusDataSource
 ```
 
 **❌ PROBLEMAS**:
-1. Datos nunca se sincronizan con Paperless
+1. Datos nunca se sincronizan con Tejido
 2. CSV debe actualizarse manualmente
 3. Requiere recompilación del APK cada vez
 4. No hay API calls a `/api/census/`
@@ -149,7 +149,7 @@ CensusProvider → CensusRepository → CensusDataSource
 #### Pruebas Realizadas
 
 ```bash
-# Desde PC a Paperless
+# Desde PC a Tejido
 ✅ curl http://192.168.40.17:8001/api/
    HTTP 302 - OK
 
@@ -158,7 +158,7 @@ CensusProvider → CensusRepository → CensusDataSource
 
 # Conectividad
 ✅ PC: 192.168.40.17 (WiFi wlp0s20f3)
-✅ Docker: paperless-webserver-1 healthy
+✅ Docker: tejido-webserver-1 healthy
 ✅ Token: e0282ce5e8fe0d64aee117cfba27b4082e32ce01 (válido)
 ```
 
@@ -176,8 +176,8 @@ scheduleImmediateSync() {
   // 1. Verifica conectividad ✅
   if (!hasConnection) return false;
 
-  // 2. Valida servidor Paperless ✅
-  serverCheck = validatePaperlessConnection(baseUrl);
+  // 2. Valida servidor Tejido ✅
+  serverCheck = validateTejidoConnection(baseUrl);
   if (serverCheck['error'] != null) return false;
 
   // 3. Procesa uploads pendientes ✅ (pero no hay ninguno)
@@ -201,7 +201,7 @@ scheduleImmediateSync() {
 ```
 Usuario presiona "Sincronizar"
            ↓
-1. App conecta a Paperless
+1. App conecta a Tejido
 2. Descarga lista actualizada del censo (3,998 personas)
 3. Guarda en base de datos local
 4. Actualiza UI con datos frescos
@@ -214,7 +214,7 @@ Usuario presiona "Sincronizar"
 Usuario presiona "Sincronizar"
            ↓
 1. App verifica conectividad ✅
-2. App valida servidor Paperless ✅
+2. App valida servidor Tejido ✅
 3. App revisa si hay uploads pendientes
    → Si no hay: retorna true sin hacer nada
    → Si hay: los procesa
@@ -227,7 +227,7 @@ Usuario presiona "Sincronizar"
 
 ## ARCHIVOS CLAVE IDENTIFICADOS
 
-### Backend (Paperless)
+### Backend (Tejido)
 ```
 ✅ /src/documents/models.py
    Línea ~500: class CensusPerson
@@ -235,7 +235,7 @@ Usuario presiona "Sincronizar"
 ✅ /src/documents/views_census.py
    Línea ~50: class CensusPersonViewSet
 
-✅ /src/paperless/urls.py
+✅ /src/tejido/urls.py
    Línea ~80: api_router.register(r"census", CensusPersonViewSet)
 ```
 
@@ -250,7 +250,7 @@ Usuario presiona "Sincronizar"
 ✅ /lib/data/repositories/census_repository.dart
    Línea 18: getAllPersons() - Usa data source local
 
-❌ /lib/data/datasources/paperless_api_client.dart
+❌ /lib/data/datasources/tejido_api_client.dart
    NO tiene método getCensusPersons()
 
 ❌ /lib/data/local/database/app_database.dart
@@ -288,7 +288,7 @@ class CensusPersons extends Table {
 
 #### 1.2. Endpoint en API Client
 ```dart
-// paperless_api_client.dart
+// tejido_api_client.dart
 Future<List<Map<String, dynamic>>> getCensusPersons({
   int? limit,
   int? offset,
@@ -317,7 +317,7 @@ Future<List<Map<String, dynamic>>> getCensusPersons({
 ```dart
 // census_sync_service.dart (NUEVO ARCHIVO)
 class CensusSyncService {
-  final PaperlessApiClient _apiClient;
+  final TejidoApiClient _apiClient;
   final AppDatabase _database;
 
   Future<bool> syncCensusData() async {
@@ -438,7 +438,7 @@ class CensusDataSource {
 ```
 
 **VENTAJAS OPCIÓN 1**:
-- ✅ Sincronización real con Paperless
+- ✅ Sincronización real con Tejido
 - ✅ Datos siempre actualizados
 - ✅ No requiere recompilación para actualizar censo
 - ✅ Soporte offline con datos cacheados
@@ -459,9 +459,9 @@ class CensusDataSource {
 
 **Implementación**:
 
-#### 2.1. Actualizar PaperlessApiClient
+#### 2.1. Actualizar TejidoApiClient
 ```dart
-// paperless_api_client.dart
+// tejido_api_client.dart
 Future<List<Map<String, dynamic>>> getCensusPersons() async {
   final response = await _dio.get('/api/census/');
   return (response.data['results'] as List).cast<Map<String, dynamic>>();
@@ -472,7 +472,7 @@ Future<List<Map<String, dynamic>>> getCensusPersons() async {
 ```dart
 // census_data_source.dart
 class CensusDataSource {
-  final PaperlessApiClient _apiClient;
+  final TejidoApiClient _apiClient;
   List<Person>? _cachedPersons;
   DateTime? _lastSyncTime;
 
@@ -557,7 +557,7 @@ TOKEN="e0282ce5e8fe0d64aee117cfba27b4082e32ce01"
 API_URL="http://192.168.40.17:8001"
 OUTPUT_FILE="assets/census/persons.csv"
 
-echo "📥 Downloading census data from Paperless..."
+echo "📥 Downloading census data from Tejido..."
 
 curl -s -H "Authorization: Token $TOKEN" \
   "$API_URL/api/census/?limit=10000" | \
@@ -640,7 +640,7 @@ flutter build apk --release
 - [ ] Obtener aprobación para proceder
 
 ### 2. Implementación (1-2 horas)
-- [ ] Modificar `paperless_api_client.dart` (+30 líneas)
+- [ ] Modificar `tejido_api_client.dart` (+30 líneas)
 - [ ] Modificar `census_data_source.dart` (+50 líneas)
 - [ ] Modificar `background_sync_service.dart` (+10 líneas)
 - [ ] Testing manual
@@ -669,7 +669,7 @@ flutter build apk --release
 ```
 Opción 2 (Recomendada):
 
-lib/data/datasources/paperless_api_client.dart
+lib/data/datasources/tejido_api_client.dart
   + Agregar método getCensusPersons()
   + ~30 líneas nuevas
 
@@ -696,7 +696,7 @@ Archivos: 4 modificados, 0 nuevos
 
 ## RIESGOS Y MITIGACIÓN
 
-### Riesgo 1: API de Paperless Cae
+### Riesgo 1: API de Tejido Cae
 **Probabilidad**: Media
 **Impacto**: Alto
 **Mitigación**: Fallback a CSV local si API falla
@@ -721,7 +721,7 @@ Archivos: 4 modificados, 0 nuevos
 ## CONCLUSIONES
 
 ### Hallazgos Clave
-1. ✅ Backend Paperless está completamente funcional
+1. ✅ Backend Tejido está completamente funcional
 2. ❌ Frontend Lumara NO sincroniza datos del censo
 3. ❌ Datos del censo están hardcodeados en CSV local
 4. ✅ Networking funciona correctamente
@@ -736,7 +736,7 @@ Archivos: 4 modificados, 0 nuevos
 ### Beneficios de la Solución
 - ✅ Datos del censo siempre actualizados
 - ✅ No requiere recompilación de APK
-- ✅ Sincronización real con Paperless
+- ✅ Sincronización real con Tejido
 - ✅ Fallback robusto si API falla
 - ✅ Implementación rápida
 
@@ -783,7 +783,7 @@ adb logcat -s flutter:V > logs_census_sync_$(date +%Y%m%d_%H%M%S).txt
 
 ## APÉNDICE B: Endpoints Disponibles
 
-### Backend Paperless
+### Backend Tejido
 
 ```
 GET /api/census/

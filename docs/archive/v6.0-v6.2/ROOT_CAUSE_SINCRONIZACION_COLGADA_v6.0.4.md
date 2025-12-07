@@ -52,7 +52,7 @@ BackgroundSyncService.scheduleImmediateSync()
     ↓
 Step 1: ConnectivityService.hasInternetConnection() (5s timeout)
     ↓ (si OK)
-Step 2: ConnectivityService.validatePaperlessConnection() (10s timeout)
+Step 2: ConnectivityService.validateTejidoConnection() (10s timeout)
     ↓ (si OK)
 Step 3: ConnectivityService.retryWithBackoff(
     operation: () async {
@@ -250,13 +250,13 @@ static Future<bool> _performSync() async {
     }
   }
 
-  // Step 2: Verify Paperless server
-  final apiClient = PaperlessApiClient();
+  // Step 2: Verify Tejido server
+  final apiClient = TejidoApiClient();
   final baseUrl = apiClient.baseUrl;
 
-  final serverCheck = await ConnectivityService.validatePaperlessConnection(baseUrl);
+  final serverCheck = await ConnectivityService.validateTejidoConnection(baseUrl);
   if (serverCheck['error'] != null) {
-    _logger.e('❌ Paperless server validation failed: ${serverCheck['error']}');
+    _logger.e('❌ Tejido server validation failed: ${serverCheck['error']}');
     return false;
   }
 

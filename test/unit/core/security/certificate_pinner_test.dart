@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:openscan_indigenas/core/security/certificate_pinner.dart';
+import 'package:lumara_indigenas/core/security/certificate_pinner.dart';
 
 void main() {
   group('CertificatePinner', () {

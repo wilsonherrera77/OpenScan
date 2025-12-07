@@ -4,7 +4,7 @@
 
 **Duración Estimada**: 45-60 minutos
 **Prioridad**: 🔴 **CRÍTICA** - Este es el test más importante pre-deploy
-**Prerequisitos**: Servidor Paperless operativo, dispositivo con app instalada
+**Prerequisitos**: Servidor Tejido operativo, dispositivo con app instalada
 
 ---
 
@@ -24,7 +24,7 @@ graph TD
 
 ## 🔧 Paso 1: Preparación del Entorno (5 minutos)
 
-### 1.1 Verificar Servidor Paperless
+### 1.1 Verificar Servidor Tejido
 
 **Objetivo**: Asegurar que el servidor está operativo y accesible.
 
@@ -41,7 +41,7 @@ Time: 0.005s
 ```
 
 **Interpretación**:
-- ✅ **Status 302**: Redirect normal de Paperless (OK)
+- ✅ **Status 302**: Redirect normal de Tejido (OK)
 - ✅ **Time <0.1s**: Latencia baja (buena conectividad)
 - ❌ **Timeout**: Servidor no accesible o IP incorrecta
 - ❌ **Status 500**: Servidor con problemas
@@ -49,10 +49,10 @@ Time: 0.005s
 **Troubleshooting**:
 ```bash
 # Si falla, verificar que el container está corriendo
-docker ps | grep paperless
+docker ps | grep tejido
 
 # Verificar logs del servidor
-docker logs paperless-webserver-1 --tail 50
+docker logs tejido-webserver-1 --tail 50
 
 # Verificar conectividad de red
 ping 172.20.10.3
@@ -211,7 +211,7 @@ Success
 ```
 
 **Qué hace este comando**:
-- 🗑️ Elimina base de datos SQLite (openscan_indigenas.db)
+- 🗑️ Elimina base de datos SQLite (lumara_indigenas.db)
 - 🗑️ Elimina cache de metadatos
 - 🗑️ Elimina shared preferences (configuración)
 - 🗑️ Elimina secure storage (tokens)
@@ -252,7 +252,7 @@ ls: /data/data/com.lumara.app/databases/: No such file or directory
 
 ```bash
 # Monitorear logs de performance en tiempo real
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./scripts/watch_logs.sh '' performance | tee performance_test_$(date +%Y%m%d_%H%M%S).log
 ```
 
@@ -599,7 +599,7 @@ Every 2.0s: adb shell dumpsys meminfo com.lumara.app | grep TOTAL
 - **Tiempo total**: <5000ms (red WiFi)
 - **Upload exitoso**: Status 200
 - **Compresión HTTP**: Sí (FASE 3)
-- **ID de documento**: Asignado por Paperless
+- **ID de documento**: Asignado por Tejido
 
 **Análisis detallado**:
 
@@ -636,10 +636,10 @@ Mejora: 4.5x más rápido ✅
 
 ---
 
-### 5.11 Operación 11: Verificación en Paperless (Validación Final)
+### 5.11 Operación 11: Verificación en Tejido (Validación Final)
 
 **Acción manual**:
-1. Abrir Paperless en navegador: http://172.20.10.3:8001
+1. Abrir Tejido en navegador: http://172.20.10.3:8001
 2. Login con credenciales
 3. Buscar documento recién subido (ID 1234)
 4. Verificar:
@@ -647,7 +647,7 @@ Mejora: 4.5x más rápido ✅
    - ✅ Metadata correcta (título, tipo, tags)
    - ✅ Custom fields correctos
 
-**Criterio de éxito**: Documento visible y completo en Paperless
+**Criterio de éxito**: Documento visible y completo en Tejido
 
 ---
 
@@ -708,7 +708,7 @@ Mejora: 2.2x más rápido ✅
 
 ```bash
 # Analizar log de performance guardado
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Contar operaciones exitosas
 grep "✅" performance_test_*.log | wc -l
@@ -750,7 +750,7 @@ grep "❌" performance_test_*.log
 - [ ] Captura de foto funciona
 - [ ] Optimización de imagen funciona (60-80%)
 - [ ] Upload exitoso
-- [ ] Documento visible en Paperless
+- [ ] Documento visible en Tejido
 
 **Performance FASE 1** (BLOQUEANTE):
 - [ ] Login <500ms
@@ -802,7 +802,7 @@ grep "❌" performance_test_*.log
 **Diagnóstico**:
 ```bash
 # Verificar que cache se guardó
-adb shell "run-as com.lumara.app sqlite3 /data/data/com.lumara.app/databases/openscan_indigenas.db 'SELECT COUNT(*) FROM tags;'"
+adb shell "run-as com.lumara.app sqlite3 /data/data/com.lumara.app/databases/lumara_indigenas.db 'SELECT COUNT(*) FROM tags;'"
 ```
 
 **Si retorna 0**: Cache no se guardó
@@ -835,7 +835,7 @@ adb shell "run-as com.lumara.app sqlite3 /data/data/com.lumara.app/databases/ope
 **Fix**:
 ```bash
 # Forzar recreación de índices
-adb shell "run-as com.lumara.app sqlite3 /data/data/com.lumara.app/databases/openscan_indigenas.db" < recreate_indexes.sql
+adb shell "run-as com.lumara.app sqlite3 /data/data/com.lumara.app/databases/lumara_indigenas.db" < recreate_indexes.sql
 ```
 
 #### 2.4 Upload Muy Lento (>10 segundos)
@@ -857,7 +857,7 @@ speedtest-cli --simple
 **Fix**:
 - Mover dispositivo más cerca del router WiFi
 - Verificar que optimización funcionó (logs de 🖼️)
-- Verificar carga del servidor Paperless
+- Verificar carga del servidor Tejido
 
 ---
 

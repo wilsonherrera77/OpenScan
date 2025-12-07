@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:openscan_indigenas/core/accessibility/accessibility_helper.dart';
+import 'package:lumara_indigenas/core/accessibility/accessibility_helper.dart';
 
 void main() {
   group('Accessibility Widgets Tests', () {

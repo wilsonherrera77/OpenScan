@@ -1,6 +1,6 @@
 # 🔒 SECURITY AUDIT REPORT
 
-**Project:** OpenScan Indígenas
+**Project:** Lumara Indígenas
 **Version:** 3.0.0
 **Audit Date:** 2025-10-07
 **Auditor:** Elite Security Team
@@ -191,7 +191,7 @@ static const List<String> certificateFingerprints = [
 1. **Generate Certificate Fingerprint:**
 ```bash
 # Get certificate from server
-echo | openssl s_client -connect paperless.example.com:443 2>&1 | \
+echo | openssl s_client -connect tejido.example.com:443 2>&1 | \
   openssl x509 -outform PEM > cert.pem
 
 # Extract public key fingerprint
@@ -223,7 +223,7 @@ test('should reject invalid certificates', () async {
 
 **Implemented:**
 ```dart
-// lib/data/datasources/paperless_api_client.dart:127
+// lib/data/datasources/tejido_api_client.dart:127
 if (const bool.fromEnvironment('dart.vm.product') && uri.scheme != 'https') {
   throw ArgumentError('HTTPS required in production');
 }

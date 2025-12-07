@@ -1,4 +1,4 @@
-# 🚀 Estado Actual del Build - OpenScan
+# 🚀 Estado Actual del Build - Lumara
 
 **Fecha:** 2025-10-07 07:17
 **Estado:** ✅ Flutter funcional, ❌ Android SDK faltante
@@ -112,7 +112,7 @@ source ~/.bashrc
 flutter doctor --android-licenses
 
 # 7. Build
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter build apk --release
 ```
 
@@ -151,7 +151,7 @@ sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 flutter doctor --android-licenses
 
 # 8. Build
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter build apk --release
 ```
 
@@ -239,14 +239,14 @@ sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
 **Luego build:**
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 export PATH="$PATH:$HOME/flutter/bin"
 flutter build apk --release
 ```
 
 ---
 
-## ✅ CONFIGURACIÓN PAPERLESS
+## ✅ CONFIGURACIÓN TEJIDO
 
 Ya está lista y esperando:
 
@@ -281,7 +281,7 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 ```
 
 ### 3. Configurar en App
-- Abrir OpenScan
+- Abrir Lumara
 - LoginScreen
 - URL: `http://172.20.10.13:8001`
 - Usuario: `admin`
@@ -290,7 +290,7 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 ### 4. Probar Funcionalidad
 - ✅ Person Selection (3,997 personas)
 - ✅ Document Capture
-- ✅ Upload to Paperless
+- ✅ Upload to Tejido
 - ✅ Offline Queue
 - ✅ Background Sync
 

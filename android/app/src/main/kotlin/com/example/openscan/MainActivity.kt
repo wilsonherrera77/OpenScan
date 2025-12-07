@@ -1,4 +1,4 @@
-package com.ethereal.openscan
+package com.ethereal.lumara
 
 import android.content.ContentUris
 import android.net.Uri
@@ -11,7 +11,7 @@ import io.flutter.plugin.common.MethodChannel
 import java.io.File
 
 class MainActivity: FlutterActivity() {
-    private val CHANNEL = "com.ethereal.openscan/file_deletion"
+    private val CHANNEL = "com.ethereal.lumara/file_deletion"
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)

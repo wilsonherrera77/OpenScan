@@ -1,5 +1,5 @@
 /// Authentication token entity
-/// Represents authentication credentials for Paperless API
+/// Represents authentication credentials for Tejido API
 class AuthToken {
   final String token;
   final String username;

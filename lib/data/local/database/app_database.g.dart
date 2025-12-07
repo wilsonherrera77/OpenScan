@@ -839,11 +839,11 @@ class $UploadHistoryTable extends UploadHistory
   late final GeneratedColumn<String> documentType = GeneratedColumn<String>(
       'document_type', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _paperlessDocumentIdMeta =
-      const VerificationMeta('paperlessDocumentId');
+  static const VerificationMeta _tejidoDocumentIdMeta =
+      const VerificationMeta('tejidoDocumentId');
   @override
-  late final GeneratedColumn<int> paperlessDocumentId = GeneratedColumn<int>(
-      'paperless_document_id', aliasedName, true,
+  late final GeneratedColumn<int> tejidoDocumentId = GeneratedColumn<int>(
+      'tejido_document_id', aliasedName, true,
       type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _uploadedAtMeta =
       const VerificationMeta('uploadedAt');
@@ -890,7 +890,7 @@ class $UploadHistoryTable extends UploadHistory
         personId,
         personName,
         documentType,
-        paperlessDocumentId,
+        tejidoDocumentId,
         uploadedAt,
         status,
         fileSize,
@@ -932,11 +932,11 @@ class $UploadHistoryTable extends UploadHistory
     } else if (isInserting) {
       context.missing(_documentTypeMeta);
     }
-    if (data.containsKey('paperless_document_id')) {
+    if (data.containsKey('tejido_document_id')) {
       context.handle(
-          _paperlessDocumentIdMeta,
-          paperlessDocumentId.isAcceptableOrUnknown(
-              data['paperless_document_id']!, _paperlessDocumentIdMeta));
+          _tejidoDocumentIdMeta,
+          tejidoDocumentId.isAcceptableOrUnknown(
+              data['tejido_document_id']!, _tejidoDocumentIdMeta));
     }
     if (data.containsKey('uploaded_at')) {
       context.handle(
@@ -983,8 +983,8 @@ class $UploadHistoryTable extends UploadHistory
           .read(DriftSqlType.string, data['${effectivePrefix}person_name'])!,
       documentType: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}document_type'])!,
-      paperlessDocumentId: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}paperless_document_id']),
+      tejidoDocumentId: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}tejido_document_id']),
       uploadedAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}uploaded_at'])!,
       status: attachedDatabase.typeMapping
@@ -1010,7 +1010,7 @@ class UploadHistoryData extends DataClass
   final String personId;
   final String personName;
   final String documentType;
-  final int? paperlessDocumentId;
+  final int? tejidoDocumentId;
   final DateTime uploadedAt;
   final String status;
   final int fileSize;
@@ -1021,7 +1021,7 @@ class UploadHistoryData extends DataClass
       required this.personId,
       required this.personName,
       required this.documentType,
-      this.paperlessDocumentId,
+      this.tejidoDocumentId,
       required this.uploadedAt,
       required this.status,
       required this.fileSize,
@@ -1034,8 +1034,8 @@ class UploadHistoryData extends DataClass
     map['person_id'] = Variable<String>(personId);
     map['person_name'] = Variable<String>(personName);
     map['document_type'] = Variable<String>(documentType);
-    if (!nullToAbsent || paperlessDocumentId != null) {
-      map['paperless_document_id'] = Variable<int>(paperlessDocumentId);
+    if (!nullToAbsent || tejidoDocumentId != null) {
+      map['tejido_document_id'] = Variable<int>(tejidoDocumentId);
     }
     map['uploaded_at'] = Variable<DateTime>(uploadedAt);
     map['status'] = Variable<String>(status);
@@ -1051,9 +1051,9 @@ class UploadHistoryData extends DataClass
       personId: Value(personId),
       personName: Value(personName),
       documentType: Value(documentType),
-      paperlessDocumentId: paperlessDocumentId == null && nullToAbsent
+      tejidoDocumentId: tejidoDocumentId == null && nullToAbsent
           ? const Value.absent()
-          : Value(paperlessDocumentId),
+          : Value(tejidoDocumentId),
       uploadedAt: Value(uploadedAt),
       status: Value(status),
       fileSize: Value(fileSize),
@@ -1070,8 +1070,8 @@ class UploadHistoryData extends DataClass
       personId: serializer.fromJson<String>(json['personId']),
       personName: serializer.fromJson<String>(json['personName']),
       documentType: serializer.fromJson<String>(json['documentType']),
-      paperlessDocumentId:
-          serializer.fromJson<int?>(json['paperlessDocumentId']),
+      tejidoDocumentId:
+          serializer.fromJson<int?>(json['tejidoDocumentId']),
       uploadedAt: serializer.fromJson<DateTime>(json['uploadedAt']),
       status: serializer.fromJson<String>(json['status']),
       fileSize: serializer.fromJson<int>(json['fileSize']),
@@ -1087,7 +1087,7 @@ class UploadHistoryData extends DataClass
       'personId': serializer.toJson<String>(personId),
       'personName': serializer.toJson<String>(personName),
       'documentType': serializer.toJson<String>(documentType),
-      'paperlessDocumentId': serializer.toJson<int?>(paperlessDocumentId),
+      'tejidoDocumentId': serializer.toJson<int?>(tejidoDocumentId),
       'uploadedAt': serializer.toJson<DateTime>(uploadedAt),
       'status': serializer.toJson<String>(status),
       'fileSize': serializer.toJson<int>(fileSize),
@@ -1101,7 +1101,7 @@ class UploadHistoryData extends DataClass
           String? personId,
           String? personName,
           String? documentType,
-          Value<int?> paperlessDocumentId = const Value.absent(),
+          Value<int?> tejidoDocumentId = const Value.absent(),
           DateTime? uploadedAt,
           String? status,
           int? fileSize,
@@ -1112,9 +1112,9 @@ class UploadHistoryData extends DataClass
         personId: personId ?? this.personId,
         personName: personName ?? this.personName,
         documentType: documentType ?? this.documentType,
-        paperlessDocumentId: paperlessDocumentId.present
-            ? paperlessDocumentId.value
-            : this.paperlessDocumentId,
+        tejidoDocumentId: tejidoDocumentId.present
+            ? tejidoDocumentId.value
+            : this.tejidoDocumentId,
         uploadedAt: uploadedAt ?? this.uploadedAt,
         status: status ?? this.status,
         fileSize: fileSize ?? this.fileSize,
@@ -1130,9 +1130,9 @@ class UploadHistoryData extends DataClass
       documentType: data.documentType.present
           ? data.documentType.value
           : this.documentType,
-      paperlessDocumentId: data.paperlessDocumentId.present
-          ? data.paperlessDocumentId.value
-          : this.paperlessDocumentId,
+      tejidoDocumentId: data.tejidoDocumentId.present
+          ? data.tejidoDocumentId.value
+          : this.tejidoDocumentId,
       uploadedAt:
           data.uploadedAt.present ? data.uploadedAt.value : this.uploadedAt,
       status: data.status.present ? data.status.value : this.status,
@@ -1152,7 +1152,7 @@ class UploadHistoryData extends DataClass
           ..write('personId: $personId, ')
           ..write('personName: $personName, ')
           ..write('documentType: $documentType, ')
-          ..write('paperlessDocumentId: $paperlessDocumentId, ')
+          ..write('tejidoDocumentId: $tejidoDocumentId, ')
           ..write('uploadedAt: $uploadedAt, ')
           ..write('status: $status, ')
           ..write('fileSize: $fileSize, ')
@@ -1168,7 +1168,7 @@ class UploadHistoryData extends DataClass
       personId,
       personName,
       documentType,
-      paperlessDocumentId,
+      tejidoDocumentId,
       uploadedAt,
       status,
       fileSize,
@@ -1182,7 +1182,7 @@ class UploadHistoryData extends DataClass
           other.personId == this.personId &&
           other.personName == this.personName &&
           other.documentType == this.documentType &&
-          other.paperlessDocumentId == this.paperlessDocumentId &&
+          other.tejidoDocumentId == this.tejidoDocumentId &&
           other.uploadedAt == this.uploadedAt &&
           other.status == this.status &&
           other.fileSize == this.fileSize &&
@@ -1195,7 +1195,7 @@ class UploadHistoryCompanion extends UpdateCompanion<UploadHistoryData> {
   final Value<String> personId;
   final Value<String> personName;
   final Value<String> documentType;
-  final Value<int?> paperlessDocumentId;
+  final Value<int?> tejidoDocumentId;
   final Value<DateTime> uploadedAt;
   final Value<String> status;
   final Value<int> fileSize;
@@ -1206,7 +1206,7 @@ class UploadHistoryCompanion extends UpdateCompanion<UploadHistoryData> {
     this.personId = const Value.absent(),
     this.personName = const Value.absent(),
     this.documentType = const Value.absent(),
-    this.paperlessDocumentId = const Value.absent(),
+    this.tejidoDocumentId = const Value.absent(),
     this.uploadedAt = const Value.absent(),
     this.status = const Value.absent(),
     this.fileSize = const Value.absent(),
@@ -1218,7 +1218,7 @@ class UploadHistoryCompanion extends UpdateCompanion<UploadHistoryData> {
     required String personId,
     required String personName,
     required String documentType,
-    this.paperlessDocumentId = const Value.absent(),
+    this.tejidoDocumentId = const Value.absent(),
     this.uploadedAt = const Value.absent(),
     required String status,
     this.fileSize = const Value.absent(),
@@ -1233,7 +1233,7 @@ class UploadHistoryCompanion extends UpdateCompanion<UploadHistoryData> {
     Expression<String>? personId,
     Expression<String>? personName,
     Expression<String>? documentType,
-    Expression<int>? paperlessDocumentId,
+    Expression<int>? tejidoDocumentId,
     Expression<DateTime>? uploadedAt,
     Expression<String>? status,
     Expression<int>? fileSize,
@@ -1245,8 +1245,8 @@ class UploadHistoryCompanion extends UpdateCompanion<UploadHistoryData> {
       if (personId != null) 'person_id': personId,
       if (personName != null) 'person_name': personName,
       if (documentType != null) 'document_type': documentType,
-      if (paperlessDocumentId != null)
-        'paperless_document_id': paperlessDocumentId,
+      if (tejidoDocumentId != null)
+        'tejido_document_id': tejidoDocumentId,
       if (uploadedAt != null) 'uploaded_at': uploadedAt,
       if (status != null) 'status': status,
       if (fileSize != null) 'file_size': fileSize,
@@ -1260,7 +1260,7 @@ class UploadHistoryCompanion extends UpdateCompanion<UploadHistoryData> {
       Value<String>? personId,
       Value<String>? personName,
       Value<String>? documentType,
-      Value<int?>? paperlessDocumentId,
+      Value<int?>? tejidoDocumentId,
       Value<DateTime>? uploadedAt,
       Value<String>? status,
       Value<int>? fileSize,
@@ -1271,7 +1271,7 @@ class UploadHistoryCompanion extends UpdateCompanion<UploadHistoryData> {
       personId: personId ?? this.personId,
       personName: personName ?? this.personName,
       documentType: documentType ?? this.documentType,
-      paperlessDocumentId: paperlessDocumentId ?? this.paperlessDocumentId,
+      tejidoDocumentId: tejidoDocumentId ?? this.tejidoDocumentId,
       uploadedAt: uploadedAt ?? this.uploadedAt,
       status: status ?? this.status,
       fileSize: fileSize ?? this.fileSize,
@@ -1295,8 +1295,8 @@ class UploadHistoryCompanion extends UpdateCompanion<UploadHistoryData> {
     if (documentType.present) {
       map['document_type'] = Variable<String>(documentType.value);
     }
-    if (paperlessDocumentId.present) {
-      map['paperless_document_id'] = Variable<int>(paperlessDocumentId.value);
+    if (tejidoDocumentId.present) {
+      map['tejido_document_id'] = Variable<int>(tejidoDocumentId.value);
     }
     if (uploadedAt.present) {
       map['uploaded_at'] = Variable<DateTime>(uploadedAt.value);
@@ -1323,7 +1323,7 @@ class UploadHistoryCompanion extends UpdateCompanion<UploadHistoryData> {
           ..write('personId: $personId, ')
           ..write('personName: $personName, ')
           ..write('documentType: $documentType, ')
-          ..write('paperlessDocumentId: $paperlessDocumentId, ')
+          ..write('tejidoDocumentId: $tejidoDocumentId, ')
           ..write('uploadedAt: $uploadedAt, ')
           ..write('status: $status, ')
           ..write('fileSize: $fileSize, ')
@@ -2871,7 +2871,7 @@ typedef $$UploadHistoryTableCreateCompanionBuilder = UploadHistoryCompanion
   required String personId,
   required String personName,
   required String documentType,
-  Value<int?> paperlessDocumentId,
+  Value<int?> tejidoDocumentId,
   Value<DateTime> uploadedAt,
   required String status,
   Value<int> fileSize,
@@ -2884,7 +2884,7 @@ typedef $$UploadHistoryTableUpdateCompanionBuilder = UploadHistoryCompanion
   Value<String> personId,
   Value<String> personName,
   Value<String> documentType,
-  Value<int?> paperlessDocumentId,
+  Value<int?> tejidoDocumentId,
   Value<DateTime> uploadedAt,
   Value<String> status,
   Value<int> fileSize,
@@ -2913,8 +2913,8 @@ class $$UploadHistoryTableFilterComposer
   ColumnFilters<String> get documentType => $composableBuilder(
       column: $table.documentType, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get paperlessDocumentId => $composableBuilder(
-      column: $table.paperlessDocumentId,
+  ColumnFilters<int> get tejidoDocumentId => $composableBuilder(
+      column: $table.tejidoDocumentId,
       builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get uploadedAt => $composableBuilder(
@@ -2956,8 +2956,8 @@ class $$UploadHistoryTableOrderingComposer
       column: $table.documentType,
       builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get paperlessDocumentId => $composableBuilder(
-      column: $table.paperlessDocumentId,
+  ColumnOrderings<int> get tejidoDocumentId => $composableBuilder(
+      column: $table.tejidoDocumentId,
       builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<DateTime> get uploadedAt => $composableBuilder(
@@ -2998,8 +2998,8 @@ class $$UploadHistoryTableAnnotationComposer
   GeneratedColumn<String> get documentType => $composableBuilder(
       column: $table.documentType, builder: (column) => column);
 
-  GeneratedColumn<int> get paperlessDocumentId => $composableBuilder(
-      column: $table.paperlessDocumentId, builder: (column) => column);
+  GeneratedColumn<int> get tejidoDocumentId => $composableBuilder(
+      column: $table.tejidoDocumentId, builder: (column) => column);
 
   GeneratedColumn<DateTime> get uploadedAt => $composableBuilder(
       column: $table.uploadedAt, builder: (column) => column);
@@ -3047,7 +3047,7 @@ class $$UploadHistoryTableTableManager extends RootTableManager<
             Value<String> personId = const Value.absent(),
             Value<String> personName = const Value.absent(),
             Value<String> documentType = const Value.absent(),
-            Value<int?> paperlessDocumentId = const Value.absent(),
+            Value<int?> tejidoDocumentId = const Value.absent(),
             Value<DateTime> uploadedAt = const Value.absent(),
             Value<String> status = const Value.absent(),
             Value<int> fileSize = const Value.absent(),
@@ -3059,7 +3059,7 @@ class $$UploadHistoryTableTableManager extends RootTableManager<
             personId: personId,
             personName: personName,
             documentType: documentType,
-            paperlessDocumentId: paperlessDocumentId,
+            tejidoDocumentId: tejidoDocumentId,
             uploadedAt: uploadedAt,
             status: status,
             fileSize: fileSize,
@@ -3071,7 +3071,7 @@ class $$UploadHistoryTableTableManager extends RootTableManager<
             required String personId,
             required String personName,
             required String documentType,
-            Value<int?> paperlessDocumentId = const Value.absent(),
+            Value<int?> tejidoDocumentId = const Value.absent(),
             Value<DateTime> uploadedAt = const Value.absent(),
             required String status,
             Value<int> fileSize = const Value.absent(),
@@ -3083,7 +3083,7 @@ class $$UploadHistoryTableTableManager extends RootTableManager<
             personId: personId,
             personName: personName,
             documentType: documentType,
-            paperlessDocumentId: paperlessDocumentId,
+            tejidoDocumentId: tejidoDocumentId,
             uploadedAt: uploadedAt,
             status: status,
             fileSize: fileSize,

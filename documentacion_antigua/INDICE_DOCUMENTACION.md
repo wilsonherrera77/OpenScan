@@ -1,6 +1,6 @@
-# 📚 ÍNDICE DE DOCUMENTACIÓN - OpenScan
+# 📚 ÍNDICE DE DOCUMENTACIÓN - Lumara
 
-**Proyecto:** OpenScan - Digitalización de Documentos para Comunidades Indígenas
+**Proyecto:** Lumara - Digitalización de Documentos para Comunidades Indígenas
 **Fecha:** 2025-10-07
 **Total Documentos:** 18 archivos
 
@@ -113,7 +113,7 @@ Resumen del issue con Flutter Snap y su resolución.
 **Contenido:**
 - Problema principal identificado
 - 3 soluciones disponibles
-- Configuración Paperless-OpenScan
+- Configuración Tejido-Lumara
 - Estado de todos los componentes
 - Próximos pasos
 
@@ -123,14 +123,14 @@ Resumen del issue con Flutter Snap y su resolución.
 
 ## 🔌 CONFIGURACIÓN
 
-### 10. **CONFIGURACION_PAPERLESS.md** (6.7KB)
-**Guía de conexión OpenScan ↔ Paperless**
+### 10. **CONFIGURACION_TEJIDO.md** (6.7KB)
+**Guía de conexión Lumara ↔ Tejido**
 
 **Contenido:**
 - Identificar IP del servidor
-- Exponer Paperless en red local
+- Exponer Tejido en red local
 - Configurar firewall
-- Configurar OpenScan app
+- Configurar Lumara app
 - HTTPS opcional
 - Testing completo
 
@@ -226,7 +226,7 @@ Guía de build con múltiples opciones.
 ### 17. **README.md** (4.6KB)
 **README principal del proyecto**
 
-Información general del proyecto OpenScan.
+Información general del proyecto Lumara.
 
 ---
 
@@ -249,7 +249,7 @@ Registro de versiones y cambios del proyecto.
 3. **DIAGNOSTICO_BUILD.md**
 
 ### Quiero configurar la conexión:
-1. **CONFIGURACION_PAPERLESS.md**
+1. **CONFIGURACION_TEJIDO.md**
 
 ### Quiero probar la app:
 1. **TESTING_PLAN.md**
@@ -317,7 +317,7 @@ TESTING_PLAN.md
 ```
 ESTADO_ACTUAL_BUILD.md
   ↓
-CONFIGURACION_PAPERLESS.md
+CONFIGURACION_TEJIDO.md
   ↓
 build_apk.sh (revisar código)
 ```
@@ -336,7 +336,7 @@ Ejecutar 20 test cases
 ## 📁 ESTRUCTURA DE ARCHIVOS
 
 ```
-OpenScan/
+Lumara/
 ├── 📄 README.md (Principal)
 ├── 📄 CHANGELOG.md
 │
@@ -356,7 +356,7 @@ OpenScan/
 │   └── STATUS_FLUTTER_ISSUE.md
 │
 ├── 🔌 CONFIGURACIÓN
-│   ├── CONFIGURACION_PAPERLESS.md
+│   ├── CONFIGURACION_TEJIDO.md
 │   └── PRE_BUILD_CHECKLIST.md
 │
 ├── 📝 INSTRUCCIONES
@@ -386,7 +386,7 @@ OpenScan/
 
 **"Qué falló"** → DIAGNOSTICO_BUILD.md, RESUMEN_AUDITORIA.md
 
-**"Cómo configurar red"** → CONFIGURACION_PAPERLESS.md
+**"Cómo configurar red"** → CONFIGURACION_TEJIDO.md
 
 **"Cómo probar"** → TESTING_PLAN.md
 
@@ -409,7 +409,7 @@ OpenScan/
 1. **README_EJECUTAR_AHORA.md** - Para generar APK ahora
 2. **build_apk.sh** - Script automático
 3. **RESUMEN_FINAL.md** - Estado del proyecto
-4. **CONFIGURACION_PAPERLESS.md** - Setup de red
+4. **CONFIGURACION_TEJIDO.md** - Setup de red
 5. **TESTING_PLAN.md** - Plan de pruebas
 
 ### Comandos Directos:
@@ -446,4 +446,4 @@ cat INDICE_DOCUMENTACION.md
 
 ---
 
-**📚 Este índice te ayuda a navegar toda la documentación del proyecto OpenScan**
+**📚 Este índice te ayuda a navegar toda la documentación del proyecto Lumara**

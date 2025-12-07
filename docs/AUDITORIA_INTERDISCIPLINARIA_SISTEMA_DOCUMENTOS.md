@@ -2,7 +2,7 @@
 **Fecha**: 28 de octubre de 2025 - 00:30
 **Equipo**: Ingeniería Senior (30+ años experiencia combinada)
 **Tipo**: Auditoría Estática + Dinámica
-**Alcance**: Sistema completo Lumara ↔ Paperless
+**Alcance**: Sistema completo Lumara ↔ Tejido
 
 ---
 
@@ -44,7 +44,7 @@
 
 ### Requisito del Cliente
 
-> "La aplicación Lumara debe enviar número de documento y tipo de documento a Paperless. Paperless debe contestar si hay documentos registrados de este usuario. Si no hay datos, se sincroniza. Si ya existe ese tipo específico de documento, debe preguntarse al usuario si quiere actualizarlo. Si acepta, Paperless debe valorar si los documentos son idénticos. Si son diferentes tipos, notificar error y permitir reclasificar. Si son idénticos, aplicar OCR avanzado, comparar calidad, mantener el mejor y eliminar el de menor calidad. Si tienen igual calidad, mantener el primero."
+> "La aplicación Lumara debe enviar número de documento y tipo de documento a Tejido. Tejido debe contestar si hay documentos registrados de este usuario. Si no hay datos, se sincroniza. Si ya existe ese tipo específico de documento, debe preguntarse al usuario si quiere actualizarlo. Si acepta, Tejido debe valorar si los documentos son idénticos. Si son diferentes tipos, notificar error y permitir reclasificar. Si son idénticos, aplicar OCR avanzado, comparar calidad, mantener el mejor y eliminar el de menor calidad. Si tienen igual calidad, mantener el primero."
 
 ### Hallazgos Principales
 
@@ -100,7 +100,7 @@
 
 ## AUDITORÍA ESTÁTICA: ANÁLISIS DE CÓDIGO
 
-### 1. BACKEND (Paperless-NGX)
+### 1. BACKEND (Tejido-NGX)
 
 #### 1.1. Modelos de Datos
 
@@ -123,7 +123,7 @@ class DocumentPersonRelation:
     # - association_method ('APP', 'APP_SMART', 'MANUAL')
 
 class Document:
-    # ✅ COMPLETO (modelo nativo de Paperless)
+    # ✅ COMPLETO (modelo nativo de Tejido)
     # - content (texto OCR)
     # - tags (tipos de documentos)
     # - created, modified timestamps
@@ -202,7 +202,7 @@ def auto_compare_document_quality():
     Criterios: ✅ ÓPTIMOS (umbral 5% es estándar de la industria)
 ```
 
-**Registro en URLs**: `src/paperless/urls.py`
+**Registro en URLs**: `src/tejido/urls.py`
 ```python
 Line 28: from documents.views_census_smart_upload import smart_upload_document
 Line 145-147:
@@ -268,7 +268,7 @@ Status: ✅ EXCELENTE - Entidades bien diseñadas y completas
 
 #### 2.2. API Client
 
-**Archivo**: `lib/data/datasources/paperless_api_client.dart`
+**Archivo**: `lib/data/datasources/tejido_api_client.dart`
 
 ```dart
 // MÉTODO 1: Verificación de existencia
@@ -1058,7 +1058,7 @@ RESULTADO: ✅ Sistema inteligente que detecta anomalías
 
 - [ ] B4.2: Registrar endpoint en URLs
   ```python
-  # paperless/urls.py
+  # tejido/urls.py
   path(
       "api/documents/<int:document_id>/reclassify/",
       reclassify_document,
@@ -1668,13 +1668,13 @@ python manage.py calculate_existing_hashes
 flutter build apk --release
 
 # Monitoring
-tail -f logs/paperless.log | grep SMART_
-docker logs -f paperless-webserver-1 | grep SMART_COMPARE
+tail -f logs/tejido.log | grep SMART_
+docker logs -f tejido-webserver-1 | grep SMART_COMPARE
 ```
 
 ### ANEXO C: Referencias
 
-- **Paperless-NGX Docs**: https://docs.paperless-ngx.com/
+- **Tejido-NGX Docs**: https://docs.tejido-ngx.com/
 - **Flutter Best Practices**: https://flutter.dev/docs/development/best-practices
 - **ImageHash Library**: https://github.com/JohannesBuchner/imagehash
 - **OCR Quality Standards**: ISO 19005-2 (PDF/A-2)

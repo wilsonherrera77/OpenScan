@@ -21,9 +21,9 @@ Status code 400: "Client error - the request contains bad syntax or cannot be fu
 ```
 
 **Causa raíz:**
-Los IDs en `api_constants.dart` NO coincidían con los IDs reales en la base de datos de Paperless.
+Los IDs en `api_constants.dart` NO coincidían con los IDs reales en la base de datos de Tejido.
 
-**Respuesta de Paperless:**
+**Respuesta de Tejido:**
 ```json
 {
   "document_type": ["Invalid pk \"8\" - object does not exist."],
@@ -35,11 +35,11 @@ Los IDs en `api_constants.dart` NO coincidían con los IDs reales en la base de 
 
 ## 🔍 **INVESTIGACIÓN**
 
-### 1. Verificación de IDs en Paperless
+### 1. Verificación de IDs en Tejido
 
-Ejecuté query en base de datos de Paperless:
+Ejecuté query en base de datos de Tejido:
 ```bash
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import Tag, DocumentType
 for tag in Tag.objects.all(): print(f'{tag.id}: {tag.name}')
 for dt in DocumentType.objects.all(): print(f'{dt.id}: {dt.name}')
@@ -53,7 +53,7 @@ for dt in DocumentType.objects.all(): print(f'{dt.id}: {dt.name}')
 
 ### 2. Tags faltantes creados
 
-Creé los tags necesarios en Paperless:
+Creé los tags necesarios en Tejido:
 ```python
 Tag.objects.get_or_create(name='PENDIENTE')          # ID: 17
 Tag.objects.get_or_create(name='VERIFICADO')         # ID: 18
@@ -89,8 +89,8 @@ static const Map<String, int> documentTypeIds = {
 
 #### DESPUÉS (v4.3.1) - ✅ CORRECTO
 ```dart
-// Tags (must match Paperless configuration)
-// ✅ VERIFIED IDs from Paperless database
+// Tags (must match Tejido configuration)
+// ✅ VERIFIED IDs from Tejido database
 static const Map<String, int> tagIds = {
   'PENDIENTE': 17,             // ✅ Creado y verificado
   'VERIFICADO': 18,            // ✅ Creado y verificado
@@ -101,8 +101,8 @@ static const Map<String, int> tagIds = {
   'INCOMPLETO': 23,            // ✅ Creado y verificado
 };
 
-// Document Types (must match Paperless configuration)
-// ✅ VERIFIED IDs from Paperless database
+// Document Types (must match Tejido configuration)
+// ✅ VERIFIED IDs from Tejido database
 static const Map<String, int> documentTypeIds = {
   'CEDULA_CIUDADANIA': 1,      // ✅ Verificado
   'TARJETA_IDENTIDAD': 2,      // ✅ Verificado
@@ -150,7 +150,7 @@ curl -X POST -H "Authorization: Token XXX" \
 
 ## 📊 **TABLA DE IDS CORRECTOS**
 
-### Tags en Paperless
+### Tags en Tejido
 
 | Nombre | ID Correcto | ID Anterior (Incorrecto) |
 |--------|-------------|--------------------------|
@@ -169,7 +169,7 @@ curl -X POST -H "Authorization: Token XXX" \
 | **OCR_IA** | **22** | **6 ❌** |
 | **INCOMPLETO** | **23** | **7 ❌** |
 
-### Document Types en Paperless
+### Document Types en Tejido
 
 | Nombre | ID Correcto |
 |--------|-------------|
@@ -187,7 +187,7 @@ curl -X POST -H "Authorization: Token XXX" \
 
 ### Opción 1: Script Automático (Recomendado)
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./install_apk.sh
 ```
 
@@ -209,9 +209,9 @@ adb install -r LumaraScan_v4.3.1_BUGFIX_IDS.apk
 4. Escanear documento
 5. Guardar PDF
 
-**Resultado esperado:** ✅ "PDF encolado para Paperless" (sin errores)
+**Resultado esperado:** ✅ "PDF encolado para Tejido" (sin errores)
 
-### Verificación en Paperless:
+### Verificación en Tejido:
 
 1. Ir a http://192.168.40.17:8001
 2. Buscar documento recién subido
@@ -223,12 +223,12 @@ adb install -r LumaraScan_v4.3.1_BUGFIX_IDS.apk
 
 ---
 
-## 🔐 **TAGS CREADOS EN PAPERLESS**
+## 🔐 **TAGS CREADOS EN TEJIDO**
 
-Para referencia, estos tags fueron creados en Paperless:
+Para referencia, estos tags fueron creados en Tejido:
 
 ```bash
-docker exec paperless-webserver-1 bash -c 'cd /usr/src/paperless/src && python3 manage.py shell -c "
+docker exec tejido-webserver-1 bash -c 'cd /usr/src/tejido/src && python3 manage.py shell -c "
 from documents.models import Tag
 for tag in [\"PENDIENTE\", \"VERIFICADO\", \"RECHAZADO\", \"URGENTE\", \"DIGITALIZADO_MOVIL\", \"OCR_IA\", \"INCOMPLETO\"]:
     t, created = Tag.objects.get_or_create(name=tag)
@@ -276,7 +276,7 @@ for tag in [\"PENDIENTE\", \"VERIFICADO\", \"RECHAZADO\", \"URGENTE\", \"DIGITAL
 -   ...
 - };
 
-+ // ✅ VERIFIED IDs from Paperless database
++ // ✅ VERIFIED IDs from Tejido database
 + static const Map<String, int> tagIds = {
 +   'PENDIENTE': 17,
 +   'VERIFICADO': 18,
@@ -289,7 +289,7 @@ for tag in [\"PENDIENTE\", \"VERIFICADO\", \"RECHAZADO\", \"URGENTE\", \"DIGITAL
 ## 🎯 **LECCIONES APRENDIDAS**
 
 ### Problema Raíz
-No se verificaron los IDs reales en la base de datos de Paperless antes de hardcodearlos en la app.
+No se verificaron los IDs reales en la base de datos de Tejido antes de hardcodearlos en la app.
 
 ### Prevención Futura
 1. ✅ Siempre verificar IDs en BD antes de hardcodear
@@ -317,7 +317,7 @@ No se verificaron los IDs reales en la base de datos de Paperless antes de hardc
 ## ✅ **ESTADO**
 
 - ✅ Problema identificado
-- ✅ Tags creados en Paperless
+- ✅ Tags creados en Tejido
 - ✅ IDs corregidos en api_constants.dart
 - ✅ APK recompilado
 - ✅ Script de instalación actualizado

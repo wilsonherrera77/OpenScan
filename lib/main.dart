@@ -12,7 +12,7 @@ import 'screens/view_document.dart';
 import 'screens/splash_screen.dart';
 
 // Indigenous Communities Integration
-import 'data/datasources/paperless_api_client.dart';
+import 'data/datasources/tejido_api_client.dart';
 import 'data/datasources/census_data_source.dart';
 import 'data/repositories/auth_repository.dart';
 import 'data/repositories/census_repository.dart';
@@ -78,7 +78,7 @@ void main() async {
 
   // Initialize dependencies
   final database = AppDatabase();
-  final apiClient = PaperlessApiClient();
+  final apiClient = TejidoApiClient();
   final censusDataSource = CensusDataSource();
 
   // CRITICAL: Load auth from storage before creating services
@@ -111,12 +111,12 @@ void main() async {
         Provider.value(value: uploadService),
         Provider.value(value: database),
       ],
-      child: OpenScan(),
+      child: Lumara(),
     ),
   );
 }
 
-class OpenScan extends StatelessWidget {
+class Lumara extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -149,7 +149,7 @@ class OpenScan extends StatelessWidget {
         SplashScreen.route: (context) => SplashScreen(),
         GettingStartedScreen.route: (context) => GettingStartedScreen(),
         HomeScreen.route: (context) => HomeScreen(),
-        // ViewDocument.route: (context) => ViewDocument(directoryOS: DirectoryOS()), // TODO: Restore original OpenScan functionality
+        // ViewDocument.route: (context) => ViewDocument(directoryOS: DirectoryOS()), // TODO: Restore original Lumara functionality
         AboutScreen.route: (context) => AboutScreen(),
         // Sprint 4: Advanced Features (temporarily disabled for APK build)
         // DashboardScreen.route: (context) => const DashboardScreen(),

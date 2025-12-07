@@ -12,12 +12,12 @@
 
 Al capturar fotos con "Normal Scan" y tocar sincronización:
   - App mostraba "Sincronización exitosa ✅"
-  - PERO: Los documentos NO aparecían en Paperless
-  - Paperless mantenía los mismos 4 documentos
+  - PERO: Los documentos NO aparecían en Tejido
+  - Tejido mantenía los mismos 4 documentos
 
 Causa:
   El flujo de Normal Scan guardaba PDFs SOLO en el celular, nunca los
-  agregaba a la cola de sincronización con Paperless.
+  agregaba a la cola de sincronización con Tejido.
 
 
 ✅ SOLUCIÓN IMPLEMENTADA (v4.0.5):
@@ -27,8 +27,8 @@ Ahora cuando guardas un PDF desde Normal Scan:
   1. Tomas foto(s) con Normal Scan
   2. Recortas y editas las fotos
   3. Guardas como PDF (botón "Save to device")
-  4. ✨ NUEVO: El PDF se encola AUTOMÁTICAMENTE para Paperless
-  5. Sincronización ahora SÍ envía los documentos a Paperless
+  4. ✨ NUEVO: El PDF se encola AUTOMÁTICAMENTE para Tejido
+  5. Sincronización ahora SÍ envía los documentos a Tejido
 
 → Ya NO necesitas hacer nada extra - el PDF se sincroniza automáticamente
 
@@ -48,7 +48,7 @@ instalar esta. El script install_apk.sh lo hace automáticamente.
 🚀 INSTALACIÓN:
 ═════════════════════════════════════════════════════════════════════════
 
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./install_apk.sh
 
 
@@ -71,14 +71,14 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
 3. GUARDAR COMO PDF
    - Tocar menú (⋮) → Export → Save to device
    - Seleccionar calidad
-   - PDF se guarda en: /storage/emulated/0/Documents/OpenScan/PDF/
-   - ✨ NUEVO: PDF se encola para Paperless automáticamente
-   - Mensaje confirma: "PDF Saved at... ✅ Enqueued for Paperless sync"
+   - PDF se guarda en: /storage/emulated/0/Documents/Lumara/PDF/
+   - ✨ NUEVO: PDF se encola para Tejido automáticamente
+   - Mensaje confirma: "PDF Saved at... ✅ Enqueued for Tejido sync"
 
-4. SINCRONIZAR CON PAPERLESS
+4. SINCRONIZAR CON TEJIDO
    - Tocar icono de sincronización (nube)
    - O esperar 15 minutos (sincronización automática)
-   - Documentos se suben a Paperless
+   - Documentos se suben a Tejido
    - ✅ Ahora SÍ aparecen en http://192.168.40.17:8001
 
 
@@ -88,10 +88,10 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
                                       v4.0.4      v4.0.5
 Captura con Normal Scan               ✅ SÍ       ✅ SÍ
 Guardar PDF local                     ✅ SÍ       ✅ SÍ
-Auto-encolar PDF para Paperless       ❌ NO       ✅ SÍ
+Auto-encolar PDF para Tejido       ❌ NO       ✅ SÍ
 Sincronización envía documentos       ❌ NO       ✅ SÍ
 Mensaje "Sincronización exitosa"     ✅ SÍ       ✅ SÍ
-Documentos aparecen en Paperless      ❌ NO       ✅ SÍ
+Documentos aparecen en Tejido      ❌ NO       ✅ SÍ
 
 
 🔧 CAMBIOS TÉCNICOS:
@@ -105,14 +105,14 @@ Archivos modificados:
    - Tags automáticos: DIGITALIZADO_MOVIL, PENDIENTE
 
 2. lib/data/repositories/document_repository.dart
-   - Agregado: uploadGenericDocument() para API de Paperless
+   - Agregado: uploadGenericDocument() para API de Tejido
    - Usa tipo de documento: OTRO_DOCUMENTO
    - Sin campos de persona asociados
 
 3. lib/screens/view_document.dart
    - Importa: Provider y UploadService
    - Al guardar PDF: llama enqueueGenericDocument()
-   - Feedback al usuario: "✅ Enqueued for Paperless sync"
+   - Feedback al usuario: "✅ Enqueued for Tejido sync"
 
 4. pubspec.yaml
    - Versión: 4.0.4+8 → 4.0.5+9
@@ -125,14 +125,14 @@ Prueba 1: Captura y Sincronización
   [ ] Tomar 2-3 fotos con Normal Scan
   [ ] Recortar fotos
   [ ] Guardar como PDF (Export → Save to device)
-  [ ] ¿Mensaje confirma "Enqueued for Paperless sync"? → ✅
+  [ ] ¿Mensaje confirma "Enqueued for Tejido sync"? → ✅
   [ ] Tocar icono de sincronización
   [ ] ¿Sincronización exitosa? → ✅
-  [ ] Abrir Paperless web: http://192.168.40.17:8001
+  [ ] Abrir Tejido web: http://192.168.40.17:8001
   [ ] ¿PDF aparece en lista de documentos? → ✅ CRÍTICO
 
-Prueba 2: Verificar Metadata en Paperless
-  [ ] Abrir documento en Paperless
+Prueba 2: Verificar Metadata en Tejido
+  [ ] Abrir documento en Tejido
   [ ] Verificar título (debe ser nombre del documento)
   [ ] Verificar tags: "Digitalizado Móvil", "Pendiente"
   [ ] Verificar tipo: "Otro Documento"
@@ -141,7 +141,7 @@ Prueba 3: Sincronización Automática
   [ ] Capturar y guardar PDF
   [ ] NO tocar sync manualmente
   [ ] Esperar 15 minutos
-  [ ] Verificar que PDF aparece en Paperless → ✅
+  [ ] Verificar que PDF aparece en Tejido → ✅
 
 
 📋 FUNCIONALIDADES COMPLETAS v4.0.5:
@@ -153,16 +153,16 @@ Prueba 3: Sincronización Automática
 ✅ Instrucciones de uso completas (v4.0.4)
 ✅ Recorte automático sin crashear (v4.0.4)
 ✅ Diagnóstico de red detallado (v4.0.4)
-✅ Normal Scan → PDF → Paperless (v4.0.5) ← NUEVO
+✅ Normal Scan → PDF → Tejido (v4.0.5) ← NUEVO
 ✅ Sincronización funcional (v4.0.5) ← CORREGIDO
-✅ PDFs se envían a Paperless (v4.0.5) ← CORREGIDO
+✅ PDFs se envían a Tejido (v4.0.5) ← CORREGIDO
 
 
 ⚠️ REQUISITOS PARA SINCRONIZACIÓN:
 ═════════════════════════════════════════════════════════════════════════
 
 1. Celular y PC en la MISMA red WiFi
-2. Paperless corriendo en http://192.168.40.17:8001
+2. Tejido corriendo en http://192.168.40.17:8001
 3. Usuario logueado en la app
 4. Permisos de notificación concedidos (para sincronización en background)
 
@@ -170,10 +170,10 @@ Prueba 3: Sincronización Automática
 ❓ SI ALGO NO FUNCIONA:
 ═════════════════════════════════════════════════════════════════════════
 
-1. ¿PDF guardado pero NO aparece en Paperless?
+1. ¿PDF guardado pero NO aparece en Tejido?
    → Verificar que celular esté en misma WiFi que PC
    → Usar diagnóstico de red (icono network_check)
-   → Verificar que Paperless esté accesible: http://192.168.40.17:8001
+   → Verificar que Tejido esté accesible: http://192.168.40.17:8001
    → Tocar sincronización manualmente
 
 2. ¿Mensaje "Sincronización exitosa" pero sin documentos?
@@ -196,7 +196,7 @@ La app tiene DOS flujos de subida de documentos:
    → Captura fotos
    → Edita y recorta
    → Guarda como PDF local
-   → ✨ Auto-encola a Paperless
+   → ✨ Auto-encola a Tejido
    → Tipo: "Otro Documento"
    → Sin persona asociada
    → Tags: Digitalizado Móvil, Pendiente
@@ -205,7 +205,7 @@ La app tiene DOS flujos de subida de documentos:
    → Selecciona persona del censo
    → Selecciona tipo de documento (Cédula, EPS, etc.)
    → Captura foto
-   → Sube directamente a Paperless
+   → Sube directamente a Tejido
    → Tipo: según selección
    → Persona asociada con metadata
    → Tags: Persona-específicos + OCR IA
@@ -217,7 +217,7 @@ La app tiene DOS flujos de subida de documentos:
 Inmediato:
   1. Instalar v4.0.5 en dispositivo
   2. Ejecutar pruebas de captura y sincronización
-  3. Confirmar que PDFs aparecen en Paperless
+  3. Confirmar que PDFs aparecen en Tejido
   4. Verificar sincronización automática (esperar 15 min)
 
 Corto plazo:
@@ -238,8 +238,8 @@ APK: LumaraScan_v4.0.5_SYNC_FIX.apk
 MD5: 38e766b6627d16e9f0552ed7ad579cf6
 
 Cambio principal:
-  Normal Scan → Save to device → ✨ Auto-encola a Paperless
-  → Sincronización ahora SÍ envía documentos a Paperless
+  Normal Scan → Save to device → ✨ Auto-encola a Tejido
+  → Sincronización ahora SÍ envía documentos a Tejido
 
 Funcionalidades:
   ✅ TODAS operativas

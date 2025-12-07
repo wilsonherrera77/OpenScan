@@ -54,7 +54,7 @@ La **FASE 2** se enfocó en optimizaciones de rendimiento para mejorar la eficie
 ```dart
 static QueryExecutor _openConnection() {
   return driftDatabase(
-    name: 'openscan_indigenas.db',
+    name: 'lumara_indigenas.db',
     native: const DriftNativeOptions(
       enableWalMode: true,  // ⚡ FASE 2: 2-3x faster concurrent writes
       synchronousMode: SynchronousMode.normal,  // ⚡ Better mobile performance
@@ -631,7 +631,7 @@ Mejora: 4.2x más rápido, 78% menos datos
 **Comando**:
 ```bash
 # Verificar que WAL está activado
-sqlite3 ~/openscan_indigenas.db "PRAGMA journal_mode;"
+sqlite3 ~/lumara_indigenas.db "PRAGMA journal_mode;"
 ```
 
 **Resultado Esperado**:
@@ -1105,7 +1105,7 @@ Aunque FASE 2 está completa, identificamos oportunidades adicionales para FASE 
 ### 7. **Compresión de Requests HTTP (gzip)**
 - Habilitar compression en Dio client
 - Request body compression para JSON grandes
-- Response compression (ya soportado por Paperless)
+- Response compression (ya soportado por Tejido)
 
 **Impacto Estimado**: 20-30% reducción en datos de red
 
@@ -1194,7 +1194,7 @@ La aplicación ahora está en un **estado profesional y production-ready**. Se r
 
 ### Verificar WAL Mode
 ```bash
-sqlite3 ~/openscan_indigenas.db "PRAGMA journal_mode;"
+sqlite3 ~/lumara_indigenas.db "PRAGMA journal_mode;"
 ```
 
 ### Regenerar Código Drift

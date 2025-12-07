@@ -83,7 +83,7 @@ class _TagSelectorState extends State<TagSelector> {
               SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'No hay etiquetas disponibles. Verifica la conexión con Paperless.',
+                  'No hay etiquetas disponibles. Verifica la conexión con Tejido.',
                   style: TextStyle(color: Colors.orange),
                 ),
               ),

@@ -36,15 +36,15 @@ cec592b feat(security): Implementar input validation y sanitization
 ```
 
 #### Archivos Creados:
-- `/src/paperless/middleware_security.py` (233 líneas)
-- `/src/paperless/models_audit.py` (308 líneas)
-- `/src/paperless/permissions.py` (326 líneas)
+- `/src/tejido/middleware_security.py` (233 líneas)
+- `/src/tejido/models_audit.py` (308 líneas)
+- `/src/tejido/permissions.py` (326 líneas)
 - `.env.example` (completo)
 
 #### Archivos Modificados:
-- `/src/paperless/settings.py` (+83 líneas)
-- `/src/paperless/validators.py` (+123 líneas)
-- `/src/paperless/models.py` (import de audit models)
+- `/src/tejido/settings.py` (+83 líneas)
+- `/src/tejido/validators.py` (+123 líneas)
+- `/src/tejido/models.py` (import de audit models)
 - `.gitignore` (protección de .env)
 
 ---
@@ -146,7 +146,7 @@ python -c "from django.core.management.utils import get_random_secret_key; print
 
 4. **Ejecutar migraciones**
 ```bash
-python manage.py makemigrations paperless
+python manage.py makemigrations tejido
 python manage.py migrate
 ```
 
@@ -173,8 +173,8 @@ flutter pub get
 
 3. **Inicializar servicios en main.dart**
 ```dart
-import 'package:openscan/core/security/encryption_service.dart';
-import 'package:openscan/core/security/secure_token_storage.dart';
+import 'package:lumara/core/security/encryption_service.dart';
+import 'package:lumara/core/security/secure_token_storage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -293,9 +293,9 @@ flutter test test/core/security/secure_token_storage_test.dart
 ### Backend
 - `FASE2_SEGURIDAD_IMPLEMENTADA.md` - Documentación completa
 - `.env.example` - Variables de entorno documentadas
-- `src/paperless/middleware_security.py` - Middleware docs
-- `src/paperless/models_audit.py` - Audit models docs
-- `src/paperless/permissions.py` - RBAC docs
+- `src/tejido/middleware_security.py` - Middleware docs
+- `src/tejido/models_audit.py` - Audit models docs
+- `src/tejido/permissions.py` - RBAC docs
 
 ### Frontend
 - `lib/core/security/encryption_service.dart` - Encryption docs

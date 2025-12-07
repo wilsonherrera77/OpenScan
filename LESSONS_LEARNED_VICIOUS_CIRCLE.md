@@ -266,7 +266,7 @@ adb logcat | grep "🔍 DEBUG"
 
 ```bash
 # Check installed version
-adb shell dumpsys package com.ethereal.openscan | grep versionName
+adb shell dumpsys package com.ethereal.lumara | grep versionName
 
 # Expected output: versionName=6.0.1
 ```

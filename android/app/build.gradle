@@ -29,7 +29,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.ethereal.openscan"
+    namespace "com.ethereal.lumara"
     compileSdkVersion 36
     ndkVersion flutter.ndkVersion
 
@@ -52,7 +52,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.ethereal.openscan"
+        applicationId "com.ethereal.lumara"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()

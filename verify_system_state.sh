@@ -50,10 +50,10 @@ echo ""
 # 2. Docker Containers
 echo -e "${BLUE}2. DOCKER CONTAINERS${NC}"
 echo "   ────────────────────────────────────────"
-CONTAINERS=$(docker ps --filter "name=paperless" --format "{{.Names}}" | wc -l)
+CONTAINERS=$(docker ps --filter "name=tejido" --format "{{.Names}}" | wc -l)
 echo "   Containers corriendo: $CONTAINERS"
 
-docker ps --filter "name=paperless" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | while read line; do
+docker ps --filter "name=tejido" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | while read line; do
     if echo "$line" | grep -q "Up"; then
         echo -e "   ${GREEN}$line${NC}"
     else
@@ -67,8 +67,8 @@ echo ""
 echo -e "${BLUE}3. USUARIOS${NC}"
 echo "   ────────────────────────────────────────"
 
-docker exec paperless_webserver_1 python3 manage.py shell -c "
-from paperless_auth.models import UserProfile
+docker exec tejido_webserver_1 python3 manage.py shell -c "
+from tejido_auth.models import UserProfile
 from django.contrib.auth.models import User
 
 total = User.objects.count()
@@ -95,8 +95,8 @@ echo ""
 echo -e "${BLUE}4. ASIGNACIONES${NC}"
 echo "   ────────────────────────────────────────"
 
-docker exec paperless_webserver_1 python3 manage.py shell -c "
-from paperless_auth.models import PersonAssignment
+docker exec tejido_webserver_1 python3 manage.py shell -c "
+from tejido_auth.models import PersonAssignment
 
 total = PersonAssignment.objects.count()
 print(f'   Total asignaciones: {total}')
@@ -119,8 +119,8 @@ echo ""
 echo -e "${BLUE}5. SESIONES DE DIGITALIZACIÓN${NC}"
 echo "   ────────────────────────────────────────"
 
-docker exec paperless_webserver_1 python3 manage.py shell -c "
-from paperless_auth.models import DigitizationSession
+docker exec tejido_webserver_1 python3 manage.py shell -c "
+from tejido_auth.models import DigitizationSession
 
 total = DigitizationSession.objects.count()
 active = DigitizationSession.objects.filter(ended_at__isnull=True).count()
@@ -140,8 +140,8 @@ if completed > 0:
 
 echo ""
 
-# 6. Documentos en Paperless
-echo -e "${BLUE}6. DOCUMENTOS EN PAPERLESS${NC}"
+# 6. Documentos en Tejido
+echo -e "${BLUE}6. DOCUMENTOS EN TEJIDO${NC}"
 echo "   ────────────────────────────────────────"
 
 DOCS_RESPONSE=$(curl -s "$API_URL/api/documents/" -H "Authorization: Token $TOKEN")
@@ -161,12 +161,12 @@ echo ""
 echo -e "${BLUE}7. REDIS (CACHE)${NC}"
 echo "   ────────────────────────────────────────"
 
-REDIS_PING=$(docker exec paperless_broker_1 redis-cli PING 2>/dev/null || echo "ERROR")
+REDIS_PING=$(docker exec tejido_broker_1 redis-cli PING 2>/dev/null || echo "ERROR")
 
 if [ "$REDIS_PING" = "PONG" ]; then
     echo -e "   Status: ${GREEN}✅ Funcionando${NC}"
 
-    KEYS_COUNT=$(docker exec paperless_broker_1 redis-cli DBSIZE 2>/dev/null | grep -oP '\d+' || echo "0")
+    KEYS_COUNT=$(docker exec tejido_broker_1 redis-cli DBSIZE 2>/dev/null | grep -oP '\d+' || echo "0")
     echo "   Keys en cache: $KEYS_COUNT"
 else
     echo -e "   Status: ${RED}❌ No disponible${NC}"

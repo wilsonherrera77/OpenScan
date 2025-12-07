@@ -91,14 +91,14 @@ Estas features NO están en v5.5.0 (fueron intentadas en versiones posteriores y
 
 ```bash
 # 1. Desinstalar versión anterior
-adb uninstall com.ethereal.openscan
+adb uninstall com.ethereal.lumara
 
 # 2. Instalar v5.5.0
 adb install -r ~/Descargas/Lumara_v5.5.0_UNIX_EOL_GARANTIZADO_20251012_113207.apk
 
 # 3. Capturar logs
 adb logcat -c  # Limpiar logs
-adb logcat | grep -i "lumara\|openscan\|error" > /tmp/v5.5.0_test_$(date +%Y%m%d_%H%M%S).log &
+adb logcat | grep -i "lumara\|lumara\|error" > /tmp/v5.5.0_test_$(date +%Y%m%d_%H%M%S).log &
 
 # 4. Testing manual (5 features críticas)
 ```

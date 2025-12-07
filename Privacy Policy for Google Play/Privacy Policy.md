@@ -1,6 +1,6 @@
 **Privacy Policy**
 
-Ethereal Developers built the OpenScan app as an Open Source app. This SERVICE is provided by Ethereal Developers at no cost and is intended for use as is.
+Ethereal Developers built the Lumara app as an Open Source app. This SERVICE is provided by Ethereal Developers at no cost and is intended for use as is.
 
 This page is used to inform visitors regarding our policies with the collection, use, and disclosure of Personal Information if anyone decided to use our Service.
 

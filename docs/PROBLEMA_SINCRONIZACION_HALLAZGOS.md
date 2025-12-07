@@ -1,4 +1,4 @@
-# 🔍 HALLAZGOS: Problema de Sincronización Lumara ↔ Paperless
+# 🔍 HALLAZGOS: Problema de Sincronización Lumara ↔ Tejido
 
 **Fecha**: 27 de octubre de 2025
 **Investigador**: Equipo de Ingeniería Senior
@@ -8,7 +8,7 @@
 
 ## 📋 Problema Reportado por Usuario
 
-> "lumara no se esta sincronizando y amarrando los documentos con la base de datos que tambien esta cargada en la aplicacion que aun se llama paperless."
+> "lumara no se esta sincronizando y amarrando los documentos con la base de datos que tambien esta cargada en la aplicacion que aun se llama tejido."
 
 ---
 
@@ -16,14 +16,14 @@
 
 ### 1. Verificación del Backend
 
-#### ✅ Censo Cargado en Paperless
+#### ✅ Censo Cargado en Tejido
 ```bash
-docker exec paperless-webserver-1 python3 manage.py shell -c \
+docker exec tejido-webserver-1 python3 manage.py shell -c \
   "from documents.models import CensusPerson; print(CensusPerson.objects.count())"
 # Resultado: 3998 personas
 ```
 
-**Conclusión**: El censo SÍ está cargado correctamente en la base de datos de Paperless.
+**Conclusión**: El censo SÍ está cargado correctamente en la base de datos de Tejido.
 
 ---
 
@@ -120,7 +120,7 @@ return await _documentRepository.uploadDocumentForPerson(
 - person_id: 3998, 3999, 4000, 4001...
 - NUIP: 1021315923, 35476686...
 
-**En Paperless** (CensusPerson):
+**En Tejido** (CensusPerson):
 - Algunos IDs coinciden (ej: ID 3998 = MARTIN HERRERA OCAMPO)
 - Pero otros tienen IDs diferentes (6061, 5931, 7019...)
 
@@ -141,7 +141,7 @@ CensusPerson.objects.get(id=3998)
 
 | Componente | Estado | Observaciones |
 |-----------|--------|---------------|
-| **Backend Paperless** | ✅ Funciona | Endpoint y modelos OK |
+| **Backend Tejido** | ✅ Funciona | Endpoint y modelos OK |
 | **Censo en BD** | ✅ Cargado | 3,998 personas |
 | **Endpoint upload_with_person** | ✅ Funciona | Crea documentos y relaciones |
 | **Relaciones en BD** | ❌ 0 | Ningún documento asociado |
@@ -190,7 +190,7 @@ Crear flujo de prueba end-to-end:
 2. Seleccionar tipo de documento
 3. Capturar/seleccionar imagen
 4. Subir documento
-5. **Verificar en Paperless**:
+5. **Verificar en Tejido**:
    - Documento creado
    - Relación creada
    - Metadata correcta
@@ -206,7 +206,7 @@ Mientras se investiga el problema en Lumara, se puede:
    ./scripts/test_upload_with_person.sh
    ```
 
-2. **Asociar documentos manualmente** en Paperless:
+2. **Asociar documentos manualmente** en Tejido:
    - Ir a documento en interfaz web
    - Buscar custom field "person_id"
    - Crear relación en DocumentPersonRelation
@@ -237,12 +237,12 @@ Verificar que los documentos subidos desde Lumara se asocian correctamente con l
 ### Precondiciones
 - APK instalado con FASE 1+2+3
 - Censo de 3,998 personas cargado en Lumara
-- Censo de 3,998 personas cargado en Paperless
-- 0 relaciones documento-persona en Paperless
+- Censo de 3,998 personas cargado en Tejido
+- 0 relaciones documento-persona en Tejido
 
 ### Test Cases
 1. **TC-3-01**: Upload documento para persona existente
-2. **TC-3-02**: Verificar relación en Paperless
+2. **TC-3-02**: Verificar relación en Tejido
 3. **TC-3-03**: Upload múltiples documentos para misma persona
 4. **TC-3-04**: Verificar metadata (person_id, NUIP, document_type)
 5. **TC-3-05**: Upload para diferentes tipos de documentos
@@ -252,7 +252,7 @@ Verificar que los documentos subidos desde Lumara se asocian correctamente con l
 - ✅ Relaciones documento-persona creadas correctamente
 - ✅ Metadata completa y correcta
 - ✅ API devuelve documentos asociados a persona
-- ✅ Interfaz web de Paperless muestra asociación
+- ✅ Interfaz web de Tejido muestra asociación
 
 ---
 

@@ -19,7 +19,7 @@
 ### Opción 1: Script Automático (RECOMENDADO)
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./build_apk.sh
 ```
 
@@ -47,7 +47,7 @@ yes | sdkmanager --licenses
 sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
 # 3. Build APK
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 export PATH="$PATH:$HOME/flutter/bin"
 flutter build apk --release
 
@@ -76,7 +76,7 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 
 ### 2. Configurar App
 
-Al abrir OpenScan:
+Al abrir Lumara:
 
 1. **LoginScreen:**
    ```
@@ -133,7 +133,7 @@ Una vez instalado, tendrás:
 - Backoff exponencial
 - Categorización de errores
 
-### 5. ✅ Paperless Integration
+### 5. ✅ Tejido Integration
 - Upload automático
 - Token authentication
 - API REST completa
@@ -143,7 +143,7 @@ Una vez instalado, tendrás:
 ## 📊 ESTRUCTURA DEL CÓDIGO
 
 ```
-OpenScan/
+Lumara/
 ├── lib/
 │   ├── main.dart (96 líneas)
 │   ├── data/
@@ -186,7 +186,7 @@ flutter doctor
 
 ### APK no genera
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter clean
 flutter pub get
 flutter build apk --release --verbose
@@ -205,7 +205,7 @@ En el directorio del proyecto hay:
 | `INSTRUCCIONES_FINALES.md` | Guía detallada |
 | `ESTADO_ACTUAL_BUILD.md` | Estado técnico |
 | `RESUMEN_AUDITORIA.md` | Resumen ejecutivo |
-| `CONFIGURACION_PAPERLESS.md` | Setup de red |
+| `CONFIGURACION_TEJIDO.md` | Setup de red |
 | `TESTING_PLAN.md` | 20 test cases |
 
 ---
@@ -226,7 +226,7 @@ Después del build:
 - [ ] Dispositivo Android conectado
 - [ ] Depuración USB habilitada
 - [ ] APK instalado con adb
-- [ ] Paperless accesible en http://172.20.10.13:8001
+- [ ] Tejido accesible en http://172.20.10.13:8001
 
 ---
 
@@ -235,7 +235,7 @@ Después del build:
 Si quieres ejecutar todo sin el script:
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan && \
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara && \
 sudo apt-get update && sudo apt-get install -y openjdk-17-jdk && \
 export ANDROID_HOME="$HOME/Android/Sdk" && \
 export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$HOME/flutter/bin" && \
@@ -251,7 +251,7 @@ echo "✅ APK:" && ls -lh build/app/outputs/flutter-apk/app-release.apk
 
 1. **Ahora:** Ejecutar `./build_apk.sh`
 2. **Después:** Instalar APK en dispositivo
-3. **Luego:** Configurar conexión a Paperless
+3. **Luego:** Configurar conexión a Tejido
 4. **Finalmente:** Probar upload de documentos
 
 ---

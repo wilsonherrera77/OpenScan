@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:openscan_indigenas/presentation/onboarding/onboarding_screen.dart';
+import 'package:lumara_indigenas/presentation/onboarding/onboarding_screen.dart';
 
 void main() {
   group('OnboardingScreen Widget Tests', () {
@@ -19,7 +19,7 @@ void main() {
       );
 
       // Should start on first page
-      expect(find.text('Bienvenido a OpenScan Indígenas'), findsOneWidget);
+      expect(find.text('Bienvenido a Lumara Indígenas'), findsOneWidget);
       expect(find.text('Digitaliza documentos de tu comunidad de forma fácil, segura y gratuita.'),
           findsOneWidget);
 

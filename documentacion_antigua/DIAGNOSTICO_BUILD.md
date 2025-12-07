@@ -85,7 +85,7 @@ flutter doctor
 flutter doctor --android-licenses
 
 # 6. Ir al proyecto y build
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter pub get
 flutter build apk --release
 ```
@@ -102,7 +102,7 @@ Si tienes Android Studio instalado:
 # 1. Abrir Android Studio
 android-studio
 
-# 2. File → Open → Seleccionar carpeta OpenScan
+# 2. File → Open → Seleccionar carpeta Lumara
 
 # 3. Android Studio instalará dependencias automáticamente
 
@@ -117,8 +117,8 @@ Si ninguna solución funciona en esta máquina:
 
 1. Comprimir proyecto:
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan
-tar -czf OpenScan.tar.gz OpenScan/
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara
+tar -czf Lumara.tar.gz Lumara/
 ```
 
 2. Transferir a máquina con Flutter funcional
@@ -156,10 +156,10 @@ CMD ["cat", "build/app/outputs/flutter-apk/app-release.apk"]
 EOF
 
 # Build
-docker build -t openscan-builder .
+docker build -t lumara-builder .
 
 # Extract APK
-docker run --rm openscan-builder cat build/app/outputs/flutter-apk/app-release.apk > app-release.apk
+docker run --rm lumara-builder cat build/app/outputs/flutter-apk/app-release.apk > app-release.apk
 ```
 
 ---
@@ -178,7 +178,7 @@ echo 'export PATH="$PATH:$HOME/flutter/bin"' >> ~/.bashrc
 source ~/.bashrc
 flutter doctor -v
 flutter doctor --android-licenses
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter clean
 flutter pub get
 flutter build apk --release
@@ -202,7 +202,7 @@ El error que mostraste puede ser un problema de cómo estoy ejecutando los coman
 **Intenta TÚ MISMO en tu terminal:**
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # 1. Limpiar
 flutter clean
@@ -224,11 +224,11 @@ ls -lh build/app/outputs/flutter-apk/app-release.apk
 
 ---
 
-## 📱 CONFIGURACIÓN OPENSCAN ↔ PAPERLESS
+## 📱 CONFIGURACIÓN LUMARA ↔ TEJIDO
 
 ### Archivos de Configuración
 
-#### 1. URL de Paperless
+#### 1. URL de Tejido
 
 **Archivo:** `lib/core/constants/api_constants.dart`
 
@@ -242,7 +242,7 @@ static const String defaultBaseUrl = 'http://10.0.2.2:8001';
 |-------------|-----|
 | Emulador Android | `http://10.0.2.2:8001` |
 | Dispositivo en misma WiFi | `http://192.168.X.X:8001` |
-| Servidor remoto | `https://paperless.ejemplo.com` |
+| Servidor remoto | `https://tejido.ejemplo.com` |
 
 #### 2. Token de Autenticación
 
@@ -254,19 +254,19 @@ static const String defaultBaseUrl = 'http://10.0.2.2:8001';
 
 Editar `lib/core/config/env_config.dart`:
 ```dart
-static const String paperlessApiToken = 'TU_TOKEN_AQUI';
+static const String tejidoApiToken = 'TU_TOKEN_AQUI';
 ```
 
-### Obtener IP del servidor Paperless
+### Obtener IP del servidor Tejido
 
 ```bash
-# En el servidor donde corre Paperless
+# En el servidor donde corre Tejido
 ip addr show | grep "inet " | grep -v 127.0.0.1
 ```
 
-### Exponer Paperless en la red
+### Exponer Tejido en la red
 
-Editar `docker-compose.yml` de Paperless:
+Editar `docker-compose.yml` de Tejido:
 
 ```yaml
 services:
@@ -277,7 +277,7 @@ services:
 
 Reiniciar:
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/paperless-ngx
+cd /home/smt/Escritorio/programacion_proyectos/tejido/tejido-ngx
 docker compose down
 docker compose up -d
 ```
@@ -296,7 +296,7 @@ En el dispositivo Android, abrir navegador:
 http://192.168.X.X:8001
 ```
 
-Debería cargar la interfaz de Paperless.
+Debería cargar la interfaz de Tejido.
 
 ---
 
@@ -374,9 +374,9 @@ Buscar:
    - `flutter build apk` compilará correctamente
    - APK estará en build/app/outputs/
 
-3. **Configurar conexión Paperless:**
+3. **Configurar conexión Tejido:**
    - Cambiar IP en api_constants.dart
-   - Exponer Paperless en red
+   - Exponer Tejido en red
    - Probar desde navegador del dispositivo
 
 ---
@@ -395,7 +395,7 @@ export PATH="$PATH:$HOME/flutter/bin" && \
 echo 'export PATH="$PATH:$HOME/flutter/bin"' >> ~/.bashrc && \
 source ~/.bashrc && \
 flutter doctor --android-licenses && \
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan && \
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara && \
 flutter clean && \
 flutter pub get && \
 flutter build apk --release
@@ -404,7 +404,7 @@ flutter build apk --release
 **Opción 2: Intentar directamente (más rápido si funciona)**
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 flutter clean
 flutter pub get
 flutter build apk --release

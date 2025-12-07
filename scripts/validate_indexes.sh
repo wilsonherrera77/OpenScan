@@ -2,7 +2,7 @@
 # Valida que los índices SQLite existen y se usan
 
 DEVICE=${1:-$(adb devices | grep -w "device" | awk '{print $1}' | head -1)}
-DB_PATH="/data/data/com.lumara.app/databases/openscan_indigenas.db"
+DB_PATH="/data/data/com.lumara.app/databases/lumara_indigenas.db"
 
 echo "🔍 Validando índices SQLite..."
 echo ""

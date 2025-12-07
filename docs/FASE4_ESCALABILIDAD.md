@@ -348,7 +348,7 @@ void main() async {
   // Warm up cache con datos comunes
   await cacheService.warmUpCache([...]);
 
-  runApp(OpenScan());
+  runApp(Lumara());
 }
 ```
 

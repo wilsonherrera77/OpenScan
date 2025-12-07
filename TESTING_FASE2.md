@@ -52,10 +52,10 @@
 
 ```bash
 # Verificar que Docker está corriendo
-docker ps | grep paperless
+docker ps | grep tejido
 
 # Si no está corriendo, iniciar:
-cd /home/smt/Escritorio/programacion_proyectos/paperless/paperless-ngx
+cd /home/smt/Escritorio/programacion_proyectos/tejido/tejido-ngx
 docker-compose up -d
 
 # Verificar que responde:
@@ -69,7 +69,7 @@ curl -s http://192.168.40.17:8001/api/ | jq '.'
 ### Paso 2: Testing Backend E2E (AUTOMÁTICO)
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Ejecutar script de testing automatizado
 ./test_fase2_e2e.sh
@@ -95,7 +95,7 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
 ### Paso 3: Instalación en Dispositivo
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Conectar dispositivo por USB y habilitar Depuración USB
 
@@ -313,7 +313,7 @@ adb logcat | grep --color=auto -E "(Lumara|Session|CSV|Review|✅|❌|⏱️)"
 adb logcat | grep --color=auto -E "(ERROR|FATAL|Exception)"
 
 # Terminal 3: Backend logs
-docker logs -f paperless-webserver-1 | grep --color=auto -E "(auth|Session|Review|CSV)"
+docker logs -f tejido-webserver-1 | grep --color=auto -E "(auth|Session|Review|CSV)"
 ```
 
 ### Keywords a buscar

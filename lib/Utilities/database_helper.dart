@@ -12,7 +12,7 @@ class DatabaseHelper {
   DatabaseHelper();
 
   static final instance = DatabaseHelper._privateConstructor();
-  static final _dbName = "OpenScan.db";
+  static final _dbName = "Lumara.db";
   static final _dbVersion = 1;
   static final _masterTableName = 'DirectoryDetails';
   static Database? _database;

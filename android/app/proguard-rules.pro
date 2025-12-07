@@ -58,7 +58,7 @@
 -dontwarn dio.**
 
 # Keep custom application class
--keep class com.ethereal.openscan.MainActivity { *; }
+-keep class com.ethereal.lumara.MainActivity { *; }
 
 # Keep enum classes for Flutter
 -keepclassmembers enum * { *; }

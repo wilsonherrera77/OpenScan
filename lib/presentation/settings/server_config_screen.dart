@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 import '../../services/logger_adapter.dart';
 import '../../core/constants/api_constants.dart';
 import '../../core/security/secure_config_manager.dart';
-import '../../data/datasources/paperless_api_client.dart';
+import '../../data/datasources/tejido_api_client.dart';
 
 /// Server Configuration Screen
-/// Allows users to configure and test Paperless server connection
+/// Allows users to configure and test Tejido server connection
 ///
 /// FASE 1: Solución crítica para problema de conectividad
 class ServerConfigScreen extends StatefulWidget {
@@ -72,7 +72,7 @@ class _ServerConfigScreenState extends State<ServerConfigScreen> {
       _logger.i('🔍 Testing connection to: $url');
 
       // Create temporary API client with test URL
-      final apiClient = PaperlessApiClient(baseUrl: url);
+      final apiClient = TejidoApiClient(baseUrl: url);
       final isReachable = await apiClient.testConnection();
 
       if (isReachable) {
@@ -119,7 +119,7 @@ class _ServerConfigScreenState extends State<ServerConfigScreen> {
       await _configManager.setBaseUrl(url);
 
       // Update API client with new URL
-      final apiClient = PaperlessApiClient(baseUrl: url);
+      final apiClient = TejidoApiClient(baseUrl: url);
       apiClient.setBaseUrl(url);
 
       _logger.i('✅ Server config saved successfully');
@@ -247,7 +247,7 @@ class _ServerConfigScreenState extends State<ServerConfigScreen> {
                             ),
                             const SizedBox(height: 8),
                             const Text(
-                              'Ingresa la URL del servidor Paperless-NGX. '
+                              'Ingresa la URL del servidor Tejido-NGX. '
                               'Debe estar en la misma red WiFi que este dispositivo.',
                               style: TextStyle(fontSize: 14),
                             ),

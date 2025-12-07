@@ -1,14 +1,14 @@
 ═══════════════════════════════════════════════════════════════
-  🚀 OPENSCAN - GENERAR APK FUNCIONAL
+  🚀 LUMARA - GENERAR APK FUNCIONAL
 ═══════════════════════════════════════════════════════════════
 
 📍 UBICACIÓN:
-/home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+/home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 
 🎯 COMANDO A EJECUTAR:
 
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan && ./build_apk.sh
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara && ./build_apk.sh
 
 
 ⏱️ TIEMPO: 10-15 minutos
@@ -52,7 +52,7 @@ Password: admin
 ✅ Background sync cada 15 minutos
 ✅ 3,997 personas del censo
 ✅ Smart retry logic (3 intentos)
-✅ Upload automático a Paperless
+✅ Upload automático a Tejido
 
 
 ═══════════════════════════════════════════════════════════════
@@ -62,7 +62,7 @@ Password: admin
 README_EJECUTAR_AHORA.md    - Instrucciones simples
 RESUMEN_FINAL.md            - Estado del proyecto
 INDICE_DOCUMENTACION.md     - Índice completo
-CONFIGURACION_PAPERLESS.md  - Setup de red
+CONFIGURACION_TEJIDO.md  - Setup de red
 TESTING_PLAN.md             - 20 test cases
 
 
@@ -70,7 +70,7 @@ TESTING_PLAN.md             - 20 test cases
   🚀 COMANDO RÁPIDO (COPIA Y PEGA)
 ═══════════════════════════════════════════════════════════════
 
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan && ./build_apk.sh
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara && ./build_apk.sh
 
 
 ═══════════════════════════════════════════════════════════════

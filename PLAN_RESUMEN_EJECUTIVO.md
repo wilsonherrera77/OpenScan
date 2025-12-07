@@ -19,7 +19,7 @@ Completar el sistema Lumara/Tejido al 100% y prepararlo para producción.
 
 **Tareas:**
 1. ✅ Rotar OpenAI API Key expuesta → 30 min
-2. ✅ Rotar Paperless Secret Key → 30 min
+2. ✅ Rotar Tejido Secret Key → 30 min
 3. ✅ Actualizar .gitignore → 20 min
 4. ✅ Auditoría de seguridad del repo → 40 min
 
@@ -188,7 +188,7 @@ Hoy (2-3h): Fase 1 solamente
 ## 🛠️ RECURSOS NECESARIOS
 
 ### Herramientas
-- ✅ Docker (Paperless backend)
+- ✅ Docker (Tejido backend)
 - ✅ Flutter SDK (compilación de app)
 - ⚠️ USB Debugging habilitado (para Fase 2-3)
 - ✅ adb (Android Debug Bridge)
@@ -196,7 +196,7 @@ Hoy (2-3h): Fase 1 solamente
 
 ### Accesos
 - ✅ OpenAI Dashboard (para rotar API key)
-- ✅ Servidor Paperless: http://192.168.40.17:8001
+- ✅ Servidor Tejido: http://192.168.40.17:8001
 - ✅ Token API: `e0282ce5e8fe0d64aee117cfba27b4082e32ce01`
 - ✅ Repositorio Git local
 
@@ -230,7 +230,7 @@ cat PLAN_ACCION_COMPLETO.md | less
 # Paso 3: Crear nueva key
 
 # Paso 4: Actualizar en servidor
-docker exec -it paperless-webserver-1 bash
+docker exec -it tejido-webserver-1 bash
 export OPENAI_API_KEY="sk-proj-NUEVA_KEY"
 exit
 
@@ -293,7 +293,7 @@ Lectura opcional:
 
 ### Fase 1 (Seguridad):
 - [ ] OpenAI API Key rotada
-- [ ] Paperless Secret Key rotada
+- [ ] Tejido Secret Key rotada
 - [ ] .gitignore actualizado
 - [ ] Auditoría de seguridad completada
 

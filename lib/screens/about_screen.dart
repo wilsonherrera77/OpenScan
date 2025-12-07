@@ -58,7 +58,7 @@ class AboutScreen extends StatelessWidget {
                         text: 'Scan', style: TextStyle(color: secondaryColor)),
                     TextSpan(
                       text:
-                          ' es una aplicación inteligente para digitalizar, organizar y gestionar documentos de comunidades. Integrada con Paperless-ngx para archivo comunitario sin publicidad y con privacidad primero.',
+                          ' es una aplicación inteligente para digitalizar, organizar y gestionar documentos de comunidades. Integrada con Tejido-ngx para archivo comunitario sin publicidad y con privacidad primero.',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.normal,
@@ -115,7 +115,7 @@ class AboutScreen extends StatelessWidget {
                     Icon(Icons.integration_instructions, color: secondaryColor),
                     SizedBox(width: 10),
                     Text(
-                      "Integrado con\nPaperless-ngx",
+                      "Integrado con\nTejido-ngx",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                     ),

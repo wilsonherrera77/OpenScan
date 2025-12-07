@@ -29,9 +29,9 @@ for i in {1..40}; do
         echo ""
 
         # Check if app is installed
-        APP_INSTALLED=$(adb shell pm list packages | grep "com.ethereal.openscan" || echo "")
+        APP_INSTALLED=$(adb shell pm list packages | grep "com.ethereal.lumara" || echo "")
         if [ -n "$APP_INSTALLED" ]; then
-            APP_VERSION=$(adb shell dumpsys package com.ethereal.openscan | grep versionName | head -1)
+            APP_VERSION=$(adb shell dumpsys package com.ethereal.lumara | grep versionName | head -1)
             echo "📦 Lumara instalada: $APP_VERSION"
         else
             echo "⚠️  Lumara NO está instalada"

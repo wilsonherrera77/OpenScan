@@ -1,6 +1,6 @@
 name: lumara_scan
 description: Lumara Scan - Smart document digitization and management system
-  system integrated with Paperless-ngx for community archives. No ads, privacy first.
+  system integrated with Tejido-ngx for community archives. No ads, privacy first.
 
 publish_to: "none"
 
@@ -34,7 +34,7 @@ dependencies:
   vector_math: ^2.1.4
 
   # New dependencies for Indigenous Communities integration
-  # HTTP Client for Paperless API
+  # HTTP Client for Tejido API
   dio: ^5.7.0
 
   # State management

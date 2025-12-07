@@ -1,4 +1,4 @@
-# 🧪 WORKFLOW 3: Testing de Sincronización Lumara ↔ Paperless
+# 🧪 WORKFLOW 3: Testing de Sincronización Lumara ↔ Tejido
 
 **Fecha**: 27 de octubre de 2025
 **Versión**: Lumara v4.5.2 - FASE 1+2+3 Optimizado
@@ -9,9 +9,9 @@
 
 ## 📋 Objetivo
 
-Verificar que los documentos subidos desde **Lumara** se **asocian correctamente** con las personas del censo en **Paperless**, creando las relaciones documento-persona necesarias para el sistema de seguimiento.
+Verificar que los documentos subidos desde **Lumara** se **asocian correctamente** con las personas del censo en **Tejido**, creando las relaciones documento-persona necesarias para el sistema de seguimiento.
 
-**Problema a resolver**: Actualmente hay **0 relaciones** documento-persona en Paperless, lo que indica que los uploads desde Lumara no están creando las asociaciones.
+**Problema a resolver**: Actualmente hay **0 relaciones** documento-persona en Tejido, lo que indica que los uploads desde Lumara no están creando las asociaciones.
 
 ---
 
@@ -21,10 +21,10 @@ Verificar que los documentos subidos desde **Lumara** se **asocian correctamente
 
 | ID | Criterio | Métrica Objetivo | Cómo Medir |
 |----|----------|------------------|------------|
-| **B1** | Documento se crea en Paperless | 100% success | Verificar ID de documento en respuesta |
+| **B1** | Documento se crea en Tejido | 100% success | Verificar ID de documento en respuesta |
 | **B2** | Relación documento-persona se crea | 100% success | Consultar `DocumentPersonRelation` |
 | **B3** | person_id correcto en relación | 100% match | Comparar person_id enviado vs. almacenado |
-| **B4** | document_type correcto | 100% match | Verificar tag en Paperless |
+| **B4** | document_type correcto | 100% match | Verificar tag en Tejido |
 | **B5** | NUIP correcto en metadata | 100% match | Verificar NUIP almacenado |
 
 ### Criterios DESEABLES (recomendados)
@@ -34,7 +34,7 @@ Verificar que los documentos subidos desde **Lumara** se **asocian correctamente
 | **D1** | Múltiples docs para misma persona | Funciona | Subir 2+ documentos, verificar relaciones |
 | **D2** | Endpoint correcto usado | Verificado | Logs muestran `upload_with_person` |
 | **D3** | Consulta de docs por persona | Funciona | API devuelve documentos asociados |
-| **D4** | Interfaz web muestra asociación | Visible | Ver documento en Paperless con person_id |
+| **D4** | Interfaz web muestra asociación | Visible | Ver documento en Tejido con person_id |
 | **D5** | Detección de duplicados | Funciona | check_exists devuelve true |
 
 ---
@@ -44,8 +44,8 @@ Verificar que los documentos subidos desde **Lumara** se **asocian correctamente
 ### 1. Verificar Estado Inicial
 
 ```bash
-# Verificar censo en Paperless
-docker exec paperless-webserver-1 python3 manage.py shell -c \
+# Verificar censo en Tejido
+docker exec tejido-webserver-1 python3 manage.py shell -c \
   "from documents.models import CensusPerson; \
    print(f'Personas en censo: {CensusPerson.objects.count()}')"
 
@@ -54,7 +54,7 @@ docker exec paperless-webserver-1 python3 manage.py shell -c \
 
 ```bash
 # Verificar relaciones existentes (debe ser 0 o muy pocas)
-docker exec paperless-webserver-1 python3 manage.py shell -c \
+docker exec tejido-webserver-1 python3 manage.py shell -c \
   "from documents.models import DocumentPersonRelation; \
    print(f'Relaciones actuales: {DocumentPersonRelation.objects.count()}')"
 ```
@@ -95,7 +95,7 @@ Abrir **3 terminales** para monitorear diferentes aspectos:
 
 ### FASE A: Verificación de Conectividad
 
-#### A1. Verificar Servidor Paperless Activo
+#### A1. Verificar Servidor Tejido Activo
 
 ```bash
 curl -s -X GET "http://172.20.10.3:8001/api/" \
@@ -103,7 +103,7 @@ curl -s -X GET "http://172.20.10.3:8001/api/" \
   | jq -r '.version'
 ```
 
-**Resultado Esperado**: Versión de Paperless (ej: "2.8.0")
+**Resultado Esperado**: Versión de Tejido (ej: "2.8.0")
 
 #### A2. Verificar Endpoint upload_with_person
 
@@ -159,11 +159,11 @@ curl -s -X OPTIONS "http://172.20.10.3:8001/api/documents/upload_with_person/" \
 ⚠️  person_id is null
 ```
 
-3. **Verificar en Paperless** (inmediatamente después):
+3. **Verificar en Tejido** (inmediatamente después):
 
 ```bash
 # Anotar cuántas relaciones había antes
-BEFORE_COUNT=$(docker exec paperless-webserver-1 python3 manage.py shell -c \
+BEFORE_COUNT=$(docker exec tejido-webserver-1 python3 manage.py shell -c \
   "from documents.models import DocumentPersonRelation; \
    print(DocumentPersonRelation.objects.count())" 2>/dev/null | tail -1)
 
@@ -172,7 +172,7 @@ echo "Relaciones ANTES del upload: $BEFORE_COUNT"
 
 **Después del upload**:
 ```bash
-AFTER_COUNT=$(docker exec paperless-webserver-1 python3 manage.py shell -c \
+AFTER_COUNT=$(docker exec tejido-webserver-1 python3 manage.py shell -c \
   "from documents.models import DocumentPersonRelation; \
    print(DocumentPersonRelation.objects.count())" 2>/dev/null | tail -1)
 
@@ -188,7 +188,7 @@ fi
 4. **Verificar datos de la relación**:
 
 ```bash
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import DocumentPersonRelation
 import json
 
@@ -235,14 +235,14 @@ else:
 
 ---
 
-#### TC-3-02: Verificar Documento en Paperless Web UI
+#### TC-3-02: Verificar Documento en Tejido Web UI
 
 **Objetivo**: Confirmar visualmente que el documento está asociado.
 
 **Pasos**:
 
 1. Abrir navegador en: `http://localhost:8001`
-2. Login con credenciales de Paperless
+2. Login con credenciales de Tejido
 3. Buscar el documento recién subido (por título o fecha)
 4. Abrir detalles del documento
 
@@ -274,7 +274,7 @@ else:
 2. **Verificar relaciones**:
 
 ```bash
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import DocumentPersonRelation
 
 # Contar relaciones para esta persona
@@ -324,7 +324,7 @@ Total de documentos para persona 3998: 2
 2. **Verificar relación**:
 
 ```bash
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import DocumentPersonRelation
 
 # Buscar relación para segunda persona
@@ -538,7 +538,7 @@ if (upload.personId != null) {
 
 ### Bloqueantes
 
-- [ ] **B1**: Documento se crea en Paperless
+- [ ] **B1**: Documento se crea en Tejido
 - [ ] **B2**: Relación documento-persona se crea
 - [ ] **B3**: person_id correcto en relación
 - [ ] **B4**: document_type correcto
@@ -678,8 +678,8 @@ if (upload.personId != null) {
 **Diagnóstico**:
 1. Verificar qué endpoint se llama:
    ```bash
-   # En logs de Paperless
-   docker logs paperless-webserver-1 | grep "POST /api/documents"
+   # En logs de Tejido
+   docker logs tejido-webserver-1 | grep "POST /api/documents"
    ```
 
 2. Si muestra `POST /api/documents/post_document/`:
@@ -698,7 +698,7 @@ if (upload.personId != null) {
 ```bash
 # Comparar person_id enviado vs. almacenado
 # Ver logs de Lumara para person_id enviado
-# Ver BD de Paperless para person_id almacenado
+# Ver BD de Tejido para person_id almacenado
 ```
 
 ### Issue: NUIP No Coincide

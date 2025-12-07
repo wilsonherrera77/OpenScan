@@ -6,7 +6,7 @@
 ## Quick Start
 ```bash
 # Backend
-cd paperless-ngx && docker-compose up -d
+cd tejido-ngx && docker-compose up -d
 
 # App
 flutter pub get

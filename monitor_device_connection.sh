@@ -48,9 +48,9 @@ while true; do
         echo ""
 
         # Check if Lumara is installed
-        LUMARA=$(adb shell pm list packages 2>/dev/null | grep "com.ethereal.openscan")
+        LUMARA=$(adb shell pm list packages 2>/dev/null | grep "com.ethereal.lumara")
         if [ -n "$LUMARA" ]; then
-            VERSION=$(adb shell dumpsys package com.ethereal.openscan 2>/dev/null | grep "versionName" | head -1 | awk '{print $1}')
+            VERSION=$(adb shell dumpsys package com.ethereal.lumara 2>/dev/null | grep "versionName" | head -1 | awk '{print $1}')
             echo "📦 Lumara instalada: $VERSION"
         else
             echo "⚠️  Lumara NO está instalada"

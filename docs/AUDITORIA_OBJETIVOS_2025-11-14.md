@@ -39,7 +39,7 @@
 **Impacto**: Impide evaluar con certeza qué funciona y qué no.
 
 **Evidencia** (de `docs/IMPLEMENTATION_ROADMAP.md`):
-- ❌ **NO existe repositorio Git** en `/openscan/OpenScan/`
+- ❌ **NO existe repositorio Git** en `/lumara/Lumara/`
 - ❌ **20+ APKs generados en 10 días** sin claridad de cuál funciona
 - ❌ **Features implementadas pero no visibles** en dispositivos finales
 - ❌ **Documentación desincronizada** (README dice v5.6.0, estamos en v6.3.9)
@@ -212,7 +212,7 @@
 - **Archivo**: `lib/services/connectivity_service.dart`
   - `retryWithBackoff<T>()` con exponential backoff
   - Circuit breaker pattern implementado
-  - `validatePaperlessConnection()` antes de operaciones
+  - `validateTejidoConnection()` antes de operaciones
   - `waitForConnection()` con timeout
 
 #### ✅ Logging No-Bloqueante (FIX v6.3.7)
@@ -220,7 +220,7 @@
   - **Problema anterior**: `await File.writeAsString()` bloqueaba isolate Dart
   - **Solución**: `IOSink.writeln()` no-bloqueante (líneas 298-339)
   - `unawaited(sink.close())` - fire and forget
-  - Logs en `/storage/emulated/0/Android/data/com.ethereal.openscan/files/logs/`
+  - Logs en `/storage/emulated/0/Android/data/com.ethereal.lumara/files/logs/`
 
 ### Evidencia de Funcionamiento
 
@@ -670,7 +670,7 @@
 #### Inmediatas (ANTES de producción)
 1. **Forzar HTTPS** (1 hora):
    ```dart
-   // lib/data/datasources/paperless_api_client.dart
+   // lib/data/datasources/tejido_api_client.dart
    if (!baseUrl.startsWith('https://')) {
      throw SecurityException('HTTPS obligatorio en producción');
    }
@@ -715,7 +715,7 @@
 
 4. **Auditoría de Accesos Backend** (6-8 horas):
    ```python
-   # Django: paperless_auth/models.py
+   # Django: tejido_auth/models.py
    class AuditLog(models.Model):
        user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
        action = models.CharField(max_length=50)  # CREATE, UPDATE, DELETE, VIEW
@@ -809,7 +809,7 @@ Este objetivo es de **LARGO PLAZO** y está fuera del alcance actual del proyect
 
 **Comando de inicio**:
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 git init
 git add .
 git commit -m "baseline: v6.3.9 post IOSink fix - sync functional"
@@ -988,7 +988,7 @@ Hacer sistema accesible y expandible a más comunidades.
 1. **EJECUTAR FASE 0-R** (Prioritario absoluto):
    ```bash
    # Paso 1: Inicializar Git
-   cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+   cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
    git init
    git config user.name "Equipo Lumara"
    git config user.email "equipo@lumara.local"
@@ -1020,7 +1020,7 @@ Hacer sistema accesible y expandible a más comunidades.
    # Captura 1 documento (ej: Cédula)
    # Verifica aparece en Tejido
    # Captura logs:
-   adb shell "tail -100 /storage/emulated/0/Android/data/com.ethereal.openscan/files/logs/app_*.log"
+   adb shell "tail -100 /storage/emulated/0/Android/data/com.ethereal.lumara/files/logs/app_*.log"
    ```
 
 ### Mediano Plazo (Próxima Semana)

@@ -85,7 +85,7 @@
 - ✅ Cuenta usuarios por rol (8 users, 4 roles)
 - ✅ Cuenta asignaciones por status (17 total)
 - ✅ Verifica sesiones activas/completadas
-- ✅ Cuenta documentos en Paperless
+- ✅ Cuenta documentos en Tejido
 - ✅ Verifica Redis funcionando
 - ✅ Lista APKs disponibles (26 APKs)
 - ✅ Detecta dispositivo Android conectado
@@ -268,7 +268,7 @@ bash verify_system_state.sh
 adb logcat | grep -E "(Lumara|Session|Upload|✅|❌)"
 
 # Terminal 2: Logs de backend
-docker logs -f paperless-webserver-1 | grep -E "(auth|assignment|session)"
+docker logs -f tejido-webserver-1 | grep -E "(auth|assignment|session)"
 
 # Terminal 3: Verificación periódica
 watch -n 30 "curl -s http://192.168.40.17:8001/api/auth/my-sessions/ -H 'Authorization: Token 112fb331a1d5b9361446adffa7c6d9c576b98096' | jq '.[] | {user, documents_count, active: (.ended_at == null)}'"
@@ -418,7 +418,7 @@ load_test_assignments.sh         (6.7 KB) - Cargar asignaciones
 ```bash
 # Solución:
 docker-compose restart
-docker logs -f paperless-webserver-1
+docker logs -f tejido-webserver-1
 ```
 
 ### Problema: Dispositivo no conecta

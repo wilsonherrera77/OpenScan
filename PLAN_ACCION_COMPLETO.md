@@ -24,7 +24,7 @@
 
 | Componente | Estado | Acción Requerida |
 |------------|--------|------------------|
-| Backend Paperless-NGX | ✅ 100% | Ninguna |
+| Backend Tejido-NGX | ✅ 100% | Ninguna |
 | Sistema de IA OpenAI | ✅ 90% | Rotar API Key |
 | App v5.5.0 | ⚠️ 80% | Usar como respaldo |
 | App v5.6.0 | ❌ 0% | Diagnóstico completo |
@@ -59,7 +59,7 @@
 
 Actualmente hay **2 API keys expuestas** en el repositorio Git:
 1. OpenAI API Key (acceso a cuenta, costos financieros)
-2. Paperless Secret Key (acceso a datos sensibles)
+2. Tejido Secret Key (acceso a datos sensibles)
 
 **Riesgo:** 🔴 CRÍTICO - Uso no autorizado, costos inesperados, acceso a datos
 
@@ -77,11 +77,11 @@ Actualmente hay **2 API keys expuestas** en el repositorio Git:
 # Key expuesta: sk-proj-...
 
 # 3. Crear nueva API key
-# Nombre sugerido: "Paperless-NGX-Prod-2025-10"
+# Nombre sugerido: "Tejido-NGX-Prod-2025-10"
 # Copiar la nueva key (se muestra UNA SOLA VEZ)
 
-# 4. Actualizar en servidor Paperless
-docker exec -it paperless-webserver-1 bash
+# 4. Actualizar en servidor Tejido
+docker exec -it tejido-webserver-1 bash
 
 # Dentro del contenedor:
 export OPENAI_API_KEY="sk-proj-NUEVA_KEY_AQUI"
@@ -96,7 +96,7 @@ exit
 docker-compose restart webserver
 
 # 5. Verificar que funciona
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 import openai
 openai.api_key = 'sk-proj-NUEVA_KEY_AQUI'
 print('API Key válida')
@@ -111,7 +111,7 @@ print('API Key válida')
 
 ---
 
-#### 1.2 Rotar Paperless Secret Key ⏱️ 30 min
+#### 1.2 Rotar Tejido Secret Key ⏱️ 30 min
 
 **Pasos:**
 
@@ -121,13 +121,13 @@ python3 -c "import secrets; print(secrets.token_urlsafe(50))"
 # Ejemplo output: kQW7xZ8r-9pL2mN4vB6hT3jC5dF8wE1sA7yU9oI0qK3rG6tH2pL4mN8v
 
 # 2. Actualizar en docker-compose.yml
-cd /ruta/a/paperless-ngx
+cd /ruta/a/tejido-ngx
 nano docker-compose.yml
 
 # Buscar línea:
-#   PAPERLESS_SECRET_KEY: "old-secret-key"
+#   TEJIDO_SECRET_KEY: "old-secret-key"
 # Reemplazar con:
-#   PAPERLESS_SECRET_KEY: "kQW7xZ8r-9pL2mN4vB6hT3jC5dF8wE1sA7yU9oI0qK3rG6tH2pL4mN8v"
+#   TEJIDO_SECRET_KEY: "kQW7xZ8r-9pL2mN4vB6hT3jC5dF8wE1sA7yU9oI0qK3rG6tH2pL4mN8v"
 
 # 3. Reiniciar servicios
 docker-compose down
@@ -138,7 +138,7 @@ curl -H "Authorization: Token e0282ce5e8fe0d64aee117cfba27b4082e32ce01" \
   http://192.168.40.17:8001/api/documents/ | jq
 
 # 5. Verificar sesiones de usuario
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from django.contrib.sessions.models import Session
 print(f'Sesiones activas: {Session.objects.count()}')
 "
@@ -163,7 +163,7 @@ print(f'Sesiones activas: {Session.objects.count()}')
 **Objetivo:** Prevenir futuras exposiciones de secrets
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless
+cd /home/smt/Escritorio/programacion_proyectos/tejido
 
 # Crear/actualizar .gitignore
 cat >> .gitignore << 'EOF'
@@ -187,18 +187,18 @@ config/secrets/
 **/*_token.txt
 **/*_key.txt
 
-# === Archivos de Paperless ===
-paperless-ngx/.env
-paperless-ngx/docker-compose.override.yml
-paperless-ngx/data/
-paperless-ngx/media/
-paperless-ngx/export/
+# === Archivos de Tejido ===
+tejido-ngx/.env
+tejido-ngx/docker-compose.override.yml
+tejido-ngx/data/
+tejido-ngx/media/
+tejido-ngx/export/
 
 # === Archivos de App Flutter ===
-openscan/OpenScan/.env
-openscan/OpenScan/android/key.properties
-openscan/OpenScan/android/app/upload-keystore.jks
-openscan/OpenScan/ios/Runner/GoogleService-Info.plist
+lumara/Lumara/.env
+lumara/Lumara/android/key.properties
+lumara/Lumara/android/app/upload-keystore.jks
+lumara/Lumara/ios/Runner/GoogleService-Info.plist
 
 # === APKs compilados (son binarios grandes) ===
 *.apk
@@ -237,7 +237,7 @@ git commit -m "security: update .gitignore to prevent secret exposure"
 **Buscar secrets en historial de Git:**
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless
+cd /home/smt/Escritorio/programacion_proyectos/tejido
 
 # Buscar posibles API keys de OpenAI
 git log -p | grep -E "sk-proj-|sk-[a-zA-Z0-9]{48}"
@@ -283,7 +283,7 @@ git reflog expire --expire=now --all && git gc --prune=now --aggressive
 ✅ **FASE 1 COMPLETADA cuando:**
 
 - [ ] OpenAI API Key rotada y funcionando
-- [ ] Paperless Secret Key rotada y funcionando
+- [ ] Tejido Secret Key rotada y funcionando
 - [ ] .gitignore actualizado y commiteado
 - [ ] Auditoría de seguridad completada
 - [ ] No hay secrets en `git status`
@@ -450,7 +450,7 @@ Permission denied
 **Solución:**
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # 1. Verificar pubspec.yaml
 cat pubspec.yaml | grep -A 5 "assets:"
@@ -558,22 +558,22 @@ Future<void> loadCensus() async {
 
 ```bash
 # 1. Desinstalar completamente la app
-adb uninstall com.openscan.app
+adb uninstall com.lumara.app
 
 # 2. Limpiar datos de la app
-adb shell pm clear com.openscan.app
+adb shell pm clear com.lumara.app
 
 # 3. Limpiar caché de Android
 adb shell
 # Dentro del shell:
-rm -rf /data/data/com.openscan.app
+rm -rf /data/data/com.lumara.app
 exit
 
 # 4. Reinstalar app
 adb install -r build/app/outputs/flutter-apk/app-release.apk
 
 # 5. Verificar versión instalada
-adb shell dumpsys package com.openscan.app | grep versionName
+adb shell dumpsys package com.lumara.app | grep versionName
 # Debe mostrar: versionName=5.6.0
 
 # 6. Capturar logs durante inicio
@@ -600,7 +600,7 @@ grep -i "census\|provider" /tmp/fresh_install_logs.txt
 **Aplicar el fix identificado:**
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # EJEMPLO - Ajustar según fix específico:
 
@@ -657,14 +657,14 @@ ls -lh /home/smt/Descargas/Lumara_v5.7.0_*.apk
 
 ```bash
 # 1. Desinstalar versión anterior completamente
-adb uninstall com.openscan.app
-adb shell pm clear com.openscan.app
+adb uninstall com.lumara.app
+adb shell pm clear com.lumara.app
 
 # 2. Instalar nueva versión
 adb install /home/smt/Descargas/Lumara_v5.7.0_*.apk
 
 # 3. Verificar versión instalada
-adb shell dumpsys package com.openscan.app | grep versionName
+adb shell dumpsys package com.lumara.app | grep versionName
 # Debe mostrar: versionName=5.7.0
 
 # 4. Capturar logs desde el inicio
@@ -673,7 +673,7 @@ adb logcat | tee /tmp/v5.7.0_install_test.log &
 LOGCAT_PID=$!
 
 # 5. Abrir app en dispositivo
-adb shell monkey -p com.openscan.app 1
+adb shell monkey -p com.lumara.app 1
 
 # 6. Esperar 15 segundos para que cargue
 sleep 15
@@ -714,7 +714,7 @@ TEST DE CAPTURA (MANUAL):
 bash /tmp/diagnose_sync.sh
 
 # O manualmente:
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import Document, DocumentPersonRelation
 ultimo = Document.objects.latest('created')
 print(f'Último documento:')
@@ -741,7 +741,7 @@ except DocumentPersonRelation.DoesNotExist:
 - [ ] Captura de documento exitosa
 - [ ] Upload a backend exitoso
 - [ ] DocumentPersonRelation creada automáticamente
-- [ ] Documento visible en interfaz web de Paperless
+- [ ] Documento visible en interfaz web de Tejido
 
 **SI TODOS LOS TESTS PASAN:**
 - ✅ APK v5.7.0 está listo para distribución
@@ -797,7 +797,7 @@ curl -H "Authorization: Token e0282ce5e8fe0d64aee117cfba27b4082e32ce01" \
   http://192.168.40.17:8001/api/ | jq
 
 # 2. Limpiar documentos de prueba anteriores (OPCIONAL)
-docker exec -it paperless-webserver-1 python3 manage.py shell -c "
+docker exec -it tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import Document
 # CUIDADO: Esto borra TODOS los documentos
 # Document.objects.filter(title__icontains='test').delete()
@@ -808,7 +808,7 @@ mkdir -p /tmp/documentos_prueba
 # Tener listos 3-5 documentos físicos para fotografiar
 
 # 4. Crear lista de personas de prueba
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from census.models import Person
 personas = Person.objects.all()[:5]
 for p in personas:
@@ -818,7 +818,7 @@ for p in personas:
 cat /tmp/personas_prueba.txt
 
 # 5. Verificar app está instalada y en versión correcta
-adb shell dumpsys package com.openscan.app | grep versionName
+adb shell dumpsys package com.lumara.app | grep versionName
 ```
 
 **Verificación:**
@@ -867,7 +867,7 @@ sleep 30
 kill $LOGCAT_PID
 
 # Verificar en backend
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import Document, DocumentPersonRelation
 from census.models import Person
 
@@ -954,7 +954,7 @@ adb shell svc wifi enable
 sleep 20
 
 # Verificar en backend que llegó
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import Document
 ultimo = Document.objects.latest('created')
 print(f'✅ TEST 4 PASÓ - Documento sincronizado desde cola')
@@ -979,7 +979,7 @@ echo "=== TEST 5: Alta Concurrencia ==="
 sleep 60
 
 # Verificar que los 3 llegaron
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import Document
 from datetime import datetime, timedelta
 
@@ -1059,7 +1059,7 @@ time (
 )
 
 # Análisis de base de datos
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from django.db import connection
 from django.test.utils import CaptureQueriesContext
 from documents.models import Document, DocumentPersonRelation
@@ -1126,7 +1126,7 @@ Mejorar performance del sistema para soportar alto volumen de documentos.
 **Beneficio:** 2x mejora en escrituras concurrentes
 
 ```dart
-// Archivo: openscan/OpenScan/lib/data/local/database/app_database.dart
+// Archivo: lumara/Lumara/lib/data/local/database/app_database.dart
 
 // ANTES:
 @DriftDatabase(/* ... */)
@@ -1188,7 +1188,7 @@ flutter build apk --release
 adb install -r build/app/outputs/flutter-apk/app-release.apk
 
 # Verificar WAL mode activo
-adb shell run-as com.openscan.app ls -la databases/
+adb shell run-as com.lumara.app ls -la databases/
 # Debe mostrar archivos: lumara.db, lumara.db-wal, lumara.db-shm
 
 # Test de performance
@@ -1208,10 +1208,10 @@ adb shell run-as com.openscan.app ls -la databases/
 **Beneficio:** 80% menos tráfico de red, UI 100-300ms más rápida
 
 ```dart
-// Archivo: openscan/OpenScan/lib/data/repositories/document_repository.dart
+// Archivo: lumara/Lumara/lib/data/repositories/document_repository.dart
 
 class DocumentRepository {
-  final PaperlessApiClient _apiClient;
+  final TejidoApiClient _apiClient;
   final AppDatabase _db;
 
   // 🆕 Caché en memoria
@@ -1271,7 +1271,7 @@ class DocumentRepository {
 **Agregar tabla de caché en BD:**
 
 ```dart
-// Archivo: openscan/OpenScan/lib/data/local/database/app_database.dart
+// Archivo: lumara/Lumara/lib/data/local/database/app_database.dart
 
 @DriftDatabase(
   tables: [
@@ -1343,7 +1343,7 @@ MigrationStrategy get migration => MigrationStrategy(
 **Beneficio:** 60-80% reducción tamaño, 5x más rápido
 
 ```dart
-// Archivo nuevo: openscan/OpenScan/lib/services/image_optimizer.dart
+// Archivo nuevo: lumara/Lumara/lib/services/image_optimizer.dart
 
 import 'dart:io';
 import 'dart:typed_data';
@@ -1455,7 +1455,7 @@ class OptimizationMetrics {
 **Integrar en flujo de upload:**
 
 ```dart
-// Archivo: openscan/OpenScan/lib/data/repositories/document_repository.dart
+// Archivo: lumara/Lumara/lib/data/repositories/document_repository.dart
 
 Future<Document> uploadDocument({
   required File imageFile,
@@ -1511,7 +1511,7 @@ dependencies:
 **Beneficio:** 5-10% mejora en performance, menos uso de storage
 
 ```dart
-// Archivo: openscan/OpenScan/lib/core/config/production_config.dart
+// Archivo: lumara/Lumara/lib/core/config/production_config.dart
 
 import 'package:logger/logger.dart';
 import 'package:flutter/foundation.dart';
@@ -1574,7 +1574,7 @@ AppLogger.e('[Upload] Failed to upload document', error, stackTrace);
 
 ```bash
 # Reemplazar prints por logger en todos los archivos
-cd openscan/OpenScan
+cd lumara/Lumara
 
 find lib -name "*.dart" -exec sed -i \
   "s/print('\[ERROR\]/AppLogger.e('/g; \
@@ -1632,7 +1632,7 @@ Agregar funcionalidades que mejoren la experiencia de usuario y productividad.
 **Funcionalidad:** Mostrar qué documentos faltan por persona/familia
 
 ```dart
-// Archivo nuevo: openscan/OpenScan/lib/presentation/completeness/completeness_screen.dart
+// Archivo nuevo: lumara/Lumara/lib/presentation/completeness/completeness_screen.dart
 
 class CompletenessScreen extends StatelessWidget {
   @override
@@ -1828,7 +1828,7 @@ class CompletenessCard extends StatelessWidget {
 **Provider para lógica de negocio:**
 
 ```dart
-// Archivo: openscan/OpenScan/lib/presentation/providers/completeness_provider.dart
+// Archivo: lumara/Lumara/lib/presentation/providers/completeness_provider.dart
 
 class CompletenessProvider extends ChangeNotifier {
   final DocumentRepository _repository;
@@ -1962,11 +1962,11 @@ IconButton(
 
 ```bash
 # Script para procesamiento masivo
-cd /home/smt/Escritorio/programacion_proyectos/paperless
+cd /home/smt/Escritorio/programacion_proyectos/tejido
 
-cat > scripts/paperless/process_all_documents.py << 'PYTHON'
+cat > scripts/tejido/process_all_documents.py << 'PYTHON'
 """
-Procesa todos los documentos en Paperless con sistema de IA
+Procesa todos los documentos en Tejido con sistema de IA
 para extraer metadatos estructurados
 """
 
@@ -2107,18 +2107,18 @@ if __name__ == '__main__':
 PYTHON
 
 # Ejecutar procesamiento masivo
-cat scripts/paperless/process_all_documents.py | \
-  docker exec -i paperless-webserver-1 python3 manage.py shell
+cat scripts/tejido/process_all_documents.py | \
+  docker exec -i tejido-webserver-1 python3 manage.py shell
 ```
 
 **Monitorear progreso:**
 
 ```bash
 # Ver progreso en tiempo real
-docker logs -f paperless-webserver-1 | grep -i "procesando\|extraído"
+docker logs -f tejido-webserver-1 | grep -i "procesando\|extraído"
 
 # Ver estadísticas después
-docker exec paperless-webserver-1 python3 manage.py shell -c "
+docker exec tejido-webserver-1 python3 manage.py shell -c "
 from documents.models import Document
 total = Document.objects.count()
 # con_metadata = Document.objects.filter(custom_fields__isnull=False).count()
@@ -2140,7 +2140,7 @@ print(f'Total documentos: {total}')
 **Pantalla con métricas y gráficos del sistema**
 
 ```dart
-// Archivo nuevo: openscan/OpenScan/lib/presentation/dashboard/dashboard_screen.dart
+// Archivo nuevo: lumara/Lumara/lib/presentation/dashboard/dashboard_screen.dart
 
 import 'package:fl_chart/fl_chart.dart';
 
@@ -2344,22 +2344,22 @@ dependencies:
 ### Documentación Existente
 
 ```
-/home/smt/Escritorio/programacion_proyectos/paperless/
+/home/smt/Escritorio/programacion_proyectos/tejido/
 ├── README.md                              # Visión general del proyecto
 ├── FASE1_COMPLETADA_REPORTE.md           # Fase 1 de conectividad
 ├── SECURITY_API_KEY_ROTATION.md          # Guía de rotación de keys
-├── openscan/OpenScan/
+├── lumara/Lumara/
 │   ├── README.md                         # Documentación de app
 │   ├── ESTADO_SISTEMA.md                 # Estado actual detallado
 │   ├── RESUMEN_FINAL_v5.6.0.md          # Análisis de v5.6.0
 │   └── BUGFIX_CENSUS_LOADING.md         # Fix de censo v5.5.0
 └── docs/
     ├── 00-INICIO/                        # Documentación de planificación
-    ├── 01-PAPERLESS/                     # Documentación de backend
+    ├── 01-TEJIDO/                     # Documentación de backend
     ├── 02-SISTEMA-IA/                    # Sistema de IA y extracción
     ├── 03-BUSQUEDA-API/                  # API REST y búsqueda
     ├── 04-ASOCIACION-PERSONAS/           # Sistema de asociación
-    └── 05-OPENSCAN-APP/                  # Documentación de app móvil
+    └── 05-LUMARA-APP/                  # Documentación de app móvil
 ```
 
 ### Scripts Útiles
@@ -2368,14 +2368,14 @@ dependencies:
 # Verificar estado de backend
 curl http://192.168.40.17:8001/api/
 
-# Ver logs de Paperless
-docker logs -f paperless-webserver-1
+# Ver logs de Tejido
+docker logs -f tejido-webserver-1
 
 # Reiniciar servicios
 docker-compose restart
 
 # Compilar APK
-cd openscan/OpenScan
+cd lumara/Lumara
 /home/smt/flutter/bin/flutter build apk --release
 
 # Instalar APK en dispositivo
@@ -2395,7 +2395,7 @@ bash /tmp/diagnose_sync.sh
 
 ```bash
 # Acceder a shell de Django
-docker exec -it paperless-webserver-1 python3 manage.py shell
+docker exec -it tejido-webserver-1 python3 manage.py shell
 
 # Contar documentos
 from documents.models import Document
@@ -2415,7 +2415,7 @@ Person.objects.count()
 
 ### Enlaces Externos
 
-- **Paperless-NGX:** https://docs.paperless-ngx.com/
+- **Tejido-NGX:** https://docs.tejido-ngx.com/
 - **Flutter:** https://docs.flutter.dev/
 - **OpenAI API:** https://platform.openai.com/docs/
 - **Drift (BD Local):** https://drift.simonbinder.eu/docs/

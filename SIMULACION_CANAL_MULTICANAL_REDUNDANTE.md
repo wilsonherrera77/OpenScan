@@ -46,7 +46,7 @@
 │  3. Valida persona existe en censo                              │
 │  4. Guarda archivo en disco                                     │
 │  5. Procesa OCR (15-45 segundos)                                │
-│  6. Crea documento en Paperless                                 │
+│  6. Crea documento en Tejido                                 │
 │  7. Crea DocumentPersonRelation                                 │
 │  8. Retorna HTTP 201 + metadata                                 │
 │                                                                 │
@@ -215,7 +215,7 @@ VENTAJA:
 ✅ Sincronización entre servidores después
 
 DESVENTAJA:
-❌ Requiere 2 servidores Paperless
+❌ Requiere 2 servidores Tejido
 ❌ Sincronización compleja
 ❌ Conflictos si ambos procesan mismo documento
 ```
@@ -226,15 +226,15 @@ DESVENTAJA:
 # docker-compose.yml - Servidor secundario
 services:
   webserver_secondary:
-    image: paperless-ngx-custom:latest
+    image: tejido-ngx-custom:latest
     ports:
       - "8002:8000"  # Puerto diferente
     environment:
-      - PAPERLESS_URL=http://192.168.40.17:8002
-      - PAPERLESS_OCR_MODE=skip_noarchive  # OCR diferido
+      - TEJIDO_URL=http://192.168.40.17:8002
+      - TEJIDO_OCR_MODE=skip_noarchive  # OCR diferido
     volumes:
-      - backup_data:/usr/src/paperless/data
-      - backup_media:/usr/src/paperless/media
+      - backup_data:/usr/src/tejido/data
+      - backup_media:/usr/src/tejido/media
 ```
 
 ---

@@ -1,4 +1,4 @@
-# ✅ OPENSCAN - LISTO PARA BUILD
+# ✅ LUMARA - LISTO PARA BUILD
 
 **Fecha:** 2025-10-07 07:45
 **Estado:** Todo preparado - Solo ejecutar script
@@ -18,14 +18,14 @@ El script `build_apk.sh` ya hace esto automáticamente.
 ### En tu terminal, copia y pega:
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./build_apk.sh
 ```
 
 ### O si prefieres ver el progreso paso a paso:
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # 1. Instalar Java (2-3 minutos)
 sudo apt-get update
@@ -110,7 +110,7 @@ Documentos clave:
 - RESUMEN_FINAL.md
 - INDICE_DOCUMENTACION.md
 - build_apk.sh
-- CONFIGURACION_PAPERLESS.md
+- CONFIGURACION_TEJIDO.md
 - TESTING_PLAN.md (20 test cases)
 - Y 13 más...
 ```
@@ -151,7 +151,7 @@ Documentos clave:
 ✅ Validación de datos
 ```
 
-### Paperless API Integration
+### Tejido API Integration
 ```dart
 ✅ Upload completo de documentos
 ✅ Token authentication
@@ -161,7 +161,7 @@ Documentos clave:
 
 ---
 
-## 🔌 CONFIGURACIÓN PAPERLESS
+## 🔌 CONFIGURACIÓN TEJIDO
 
 Ya verificada y lista:
 
@@ -224,7 +224,7 @@ Líneas escritas: 2,800+
 Una vez instalado el APK, tendrás:
 
 ### 1. Login y Autenticación
-- Conexión a Paperless
+- Conexión a Tejido
 - Token storage seguro
 - Validación de credenciales
 
@@ -241,7 +241,7 @@ Una vez instalado el APK, tendrás:
 ### 4. Upload Online
 - Upload inmediato si hay red
 - Feedback visual
-- Verificación en Paperless
+- Verificación en Tejido
 
 ### 5. Offline Queue
 - Almacenamiento local
@@ -287,7 +287,7 @@ Archivo: `TESTING_PLAN.md`
 ## 📁 ESTRUCTURA DEL PROYECTO
 
 ```
-OpenScan/
+Lumara/
 ├── lib/
 │   ├── main.dart
 │   ├── core/
@@ -363,7 +363,7 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 
 ### 3. Configurar App
 ```
-1. Abrir OpenScan
+1. Abrir Lumara
 2. URL: http://172.20.10.13:8001
 3. Usuario: admin
 4. Password: admin
@@ -401,7 +401,7 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 ### Ejecutar Build Completo:
 
 ```bash
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./build_apk.sh
 ```
 
@@ -419,7 +419,7 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
 | **build_apk.sh** | Script automático |
 | **RESUMEN_FINAL.md** | Estado completo |
 | **INDICE_DOCUMENTACION.md** | Índice de docs |
-| CONFIGURACION_PAPERLESS.md | Setup de red |
+| CONFIGURACION_TEJIDO.md | Setup de red |
 | TESTING_PLAN.md | Plan de pruebas |
 | DIAGNOSTICO_BUILD.md | Análisis técnico |
 
@@ -458,7 +458,7 @@ APK con:
 - Background sync
 - 3,997 personas
 - Smart retry
-- Upload a Paperless
+- Upload a Tejido
 ```
 
 ---

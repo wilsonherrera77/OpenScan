@@ -10,7 +10,7 @@ import '../services/logger_adapter.dart';
 /// This service uses MediaStore API via MethodChannel to properly delete files
 /// on Android 10+ while maintaining backwards compatibility.
 class FileDeletionService {
-  static const MethodChannel _channel = MethodChannel('com.ethereal.openscan/file_deletion');
+  static const MethodChannel _channel = MethodChannel('com.ethereal.lumara/file_deletion');
   final LoggerAdapter _logger = LoggerAdapter();
 
   /// Delete a file from storage

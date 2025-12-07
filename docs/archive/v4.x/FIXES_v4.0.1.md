@@ -3,7 +3,7 @@
 ## 📱 **APK CORREGIDO**
 
 ```
-/home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/LumaraScan_v4.0.1_FIXED.apk
+/home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara/LumaraScan_v4.0.1_FIXED.apk
 ```
 
 **MD5:** `9dba422802ad7be10062d8a144823edc`
@@ -29,7 +29,7 @@
 ### 2. ❌ **Sincronización fallando**
 **Error mostrado:** "Error de sincronización - No se pudo sincronizar. Verifica tu conexión."
 
-**DIAGNÓSTICO:** El servidor Paperless está OK desde el PC, pero el celular no lo alcanza.
+**DIAGNÓSTICO:** El servidor Tejido está OK desde el PC, pero el celular no lo alcanza.
 
 **CAUSAS PROBABLES:**
 - Celular en red WiFi diferente al PC
@@ -124,12 +124,12 @@ Future<void> _showNetworkDiagnostic() async {
   // 1. Verificar internet
   final hasInternet = await ConnectivityService.hasInternetConnection();
 
-  // 2. Verificar servidor Paperless
-  final serverCheck = await ConnectivityService.validatePaperlessConnection(baseUrl);
+  // 2. Verificar servidor Tejido
+  final serverCheck = await ConnectivityService.validateTejidoConnection(baseUrl);
 
   // 3. Mostrar resultados detallados
   - Estado de internet (Conectado / Sin conexión)
-  - URL del servidor Paperless
+  - URL del servidor Tejido
   - Servidor alcanzable (Sí / No)
   - Latencia (ms)
   - Error detallado si aplica
@@ -222,10 +222,10 @@ Future<void> _showNetworkDiagnostic() async {
 
 ```bash
 # Desinstalar versión anterior
-adb uninstall com.ethereal.openscan
+adb uninstall com.ethereal.lumara
 
 # Instalar v4.0.1 FIXED
-adb install -r /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan/LumaraScan_v4.0.1_FIXED.apk
+adb install -r /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara/LumaraScan_v4.0.1_FIXED.apk
 ```
 
 ---

@@ -7,7 +7,7 @@ set -e  # Exit on error
 
 APK_PATH="/home/smt/Descargas/Lumara_v5.6.0_UPLOAD_WITH_PERSON_FIX_20251012_174106.apk"
 EXPECTED_MD5="b12908e86be06d79bf6b4d50416c9da1"
-PACKAGE_NAME="com.openscan.app"
+PACKAGE_NAME="com.lumara.app"
 
 echo "════════════════════════════════════════════════════════════════"
 echo "INSTALADOR LUMARA v5.6.0 - Fix Sincronización con Tejido"

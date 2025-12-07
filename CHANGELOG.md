@@ -7,11 +7,11 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ---
 
-## [3.0.0] - 2025-10-07 - OpenScan Indígenas (Lanzamiento Mayor)
+## [3.0.0] - 2025-10-07 - Lumara Indígenas (Lanzamiento Mayor)
 
 ### 🎉 Resumen
 
-Versión completa de **OpenScan Indígenas** - adaptación integral de OpenScan para digitalización de documentos en comunidades indígenas de Colombia, con integración completa a Paperless-ngx.
+Versión completa de **Lumara Indígenas** - adaptación integral de Lumara para digitalización de documentos en comunidades indígenas de Colombia, con integración completa a Tejido-ngx.
 
 **Estado:** ✅ Desarrollo 100% completo | ⏳ Bloqueadores de producción pendientes
 
@@ -77,9 +77,9 @@ Versión completa de **OpenScan Indígenas** - adaptación integral de OpenScan 
   - Problemas comunes y soluciones
   - Checklist diario
 
-### Added - Sprint 3: Integración Paperless
+### Added - Sprint 3: Integración Tejido
 
-- Cliente API completo para Paperless-ngx (PaperlessApiClient)
+- Cliente API completo para Tejido-ngx (TejidoApiClient)
 - Autenticación con tokens Bearer
 - Subida de documentos con indicador de progreso en tiempo real
 - Sistema de cola offline con persistencia en Drift
@@ -92,7 +92,7 @@ Versión completa de **OpenScan Indígenas** - adaptación integral de OpenScan 
 
 ### Added - Sprint 2: Funcionalidades Core
 
-- Sistema de autenticación completo con Paperless-ngx
+- Sistema de autenticación completo con Tejido-ngx
 - Captura de documentos con cámara nativa
 - Validación automática de calidad de imagen
 - Clasificación de documentos con tipos predefinidos
@@ -161,7 +161,7 @@ Versión completa de **OpenScan Indígenas** - adaptación integral de OpenScan 
 #### Reportes de Progreso
 - `SPRINT_1_REPORT.md` - Infraestructura base (800 líneas)
 - `SPRINT_2_REPORT.md` - Funcionalidades core (900 líneas)
-- `SPRINT_3_REPORT.md` - Integración Paperless (1,000 líneas)
+- `SPRINT_3_REPORT.md` - Integración Tejido (1,000 líneas)
 - `SPRINT_4_REPORT.md` - Características avanzadas (1,300 líneas)
 
 #### Referencias
@@ -301,7 +301,7 @@ Ver `pubspec.yaml` para lista completa.
 - Crear y configurar email real de soporte
 - Responsable: Admin
 - Tiempo: 2-4 horas
-- Email: soporte@openscan-indigenas.org
+- Email: soporte@lumara-indigenas.org
 
 **#4 Penetration Testing**
 - Contratar y ejecutar pentesting profesional
@@ -341,7 +341,7 @@ Ver `pubspec.yaml` para lista completa.
 ### Changed
 
 - Reduce margins during PDF export
-- Export location by default is Documents/OpenScan/PDF
+- Export location by default is Documents/Lumara/PDF
 - Multi image picker UI
 - Change default export quality
 
@@ -380,7 +380,7 @@ Ver `pubspec.yaml` para lista completa.
 
 - New Cropper with more advanced functions
 - Demo images
-- Export of files no longer has the 'OpenScan' appended to it
+- Export of files no longer has the 'Lumara' appended to it
 
 ### Added
 

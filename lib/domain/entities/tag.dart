@@ -1,4 +1,4 @@
-/// Tag entity from Paperless-ngx
+/// Tag entity from Tejido-ngx
 class Tag {
   final int id;
   final String name;

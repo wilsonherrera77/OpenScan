@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart'; // debugPrint
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import '../services/logger_adapter.dart';
 import 'package:lumara_scan/data/local/database/app_database.dart';
-import 'package:lumara_scan/data/datasources/paperless_api_client.dart';
+import 'package:lumara_scan/data/datasources/tejido_api_client.dart';
 import 'package:lumara_scan/data/repositories/document_repository.dart';
 import 'package:lumara_scan/services/upload_service.dart';
 import 'package:lumara_scan/services/connectivity_service.dart';
@@ -144,13 +144,13 @@ class BackgroundSyncService {
       }
     }
 
-    // Step 2: Verify Paperless server
-    final apiClient = PaperlessApiClient();
+    // Step 2: Verify Tejido server
+    final apiClient = TejidoApiClient();
     final baseUrl = apiClient.baseUrl;
 
-    final serverCheck = await ConnectivityService.validatePaperlessConnection(baseUrl);
+    final serverCheck = await ConnectivityService.validateTejidoConnection(baseUrl);
     if (serverCheck['error'] != null) {
-      _logger.e('❌ Paperless server validation failed: ${serverCheck['error']}');
+      _logger.e('❌ Tejido server validation failed: ${serverCheck['error']}');
       return false;
     }
 
@@ -284,7 +284,7 @@ class _BackgroundSyncHandler extends TaskHandler {
 
       // Execute sync
       final database = AppDatabase();
-      final apiClient = PaperlessApiClient();
+      final apiClient = TejidoApiClient();
       final documentRepository = DocumentRepository(apiClient, database); // ⚡ FASE 2: Added database
       final uploadService = UploadService(database, documentRepository);
 

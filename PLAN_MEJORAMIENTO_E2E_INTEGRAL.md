@@ -33,14 +33,14 @@ Usuario no puede conectar la app móvil (Lumara) al backend (Tejido).
 
 ## 🔍 AUDITORÍA DETALLADA
 
-### BACKEND (Tejido) - Sistema Paperless-ngx + Django
+### BACKEND (Tejido) - Sistema Tejido-ngx + Django
 
 #### ✅ Estado General: SALUDABLE
 
 **Docker Containers:**
 ```
-paperless-webserver-1   UP (2 days, healthy)
-paperless-broker-1      UP (2 days)
+tejido-webserver-1   UP (2 days, healthy)
+tejido-broker-1      UP (2 days)
 ```
 
 **Network Configuration:**
@@ -83,7 +83,7 @@ static const String defaultBaseUrl = 'http://192.168.40.17:8001';
 | # | Problema | Severidad | Archivo | Impacto |
 |---|----------|-----------|---------|---------|
 | 1 | IP hardcodeada obsoleta | 🔴 CRÍTICO | api_constants.dart:7 | 100% usuarios |
-| 2 | Múltiples instancias ApiClient | 🟠 ALTO | paperless_api_client.dart | Confusión de config |
+| 2 | Múltiples instancias ApiClient | 🟠 ALTO | tejido_api_client.dart | Confusión de config |
 | 3 | URL en 3 lugares diferentes | 🟠 ALTO | Multiple files | Data inconsistency |
 | 4 | Network diagnostic usa IP incorrecta | 🟡 MEDIO | home_screen.dart:359 | UX confusa |
 | 5 | "LAN Actual" muestra IP vieja | 🟡 MEDIO | server_config_screen.dart:298 | Misleading |
@@ -133,19 +133,19 @@ Status: ⏳ Testing pendiente
 
 **Solución:**
 ```dart
-// File: lib/data/datasources/paperless_api_client.dart
+// File: lib/data/datasources/tejido_api_client.dart
 
 // ANTES:
-class PaperlessApiClient {
-  PaperlessApiClient({String? baseUrl}) { ... }
+class TejidoApiClient {
+  TejidoApiClient({String? baseUrl}) { ... }
 }
 
 // DESPUÉS:
-class PaperlessApiClient {
-  static final PaperlessApiClient _instance = PaperlessApiClient._internal();
-  factory PaperlessApiClient() => _instance;
+class TejidoApiClient {
+  static final TejidoApiClient _instance = TejidoApiClient._internal();
+  factory TejidoApiClient() => _instance;
 
-  PaperlessApiClient._internal() {
+  TejidoApiClient._internal() {
     _loadConfigAndInitialize();
   }
 
@@ -172,7 +172,7 @@ class PaperlessApiClient {
 
 **Archivos a modificar:**
 - `login_screen.dart:437-441` - Remove duplicate storage
-- `paperless_api_client.dart:16` - Make nullable until loaded
+- `tejido_api_client.dart:16` - Make nullable until loaded
 - `server_config_screen.dart` - Ensure uses SecureConfigManager
 
 ---
@@ -186,7 +186,7 @@ class PaperlessApiClient {
 **Cambio:**
 ```dart
 // ANTES:
-final apiClient = PaperlessApiClient(); // Nueva instancia = IP default
+final apiClient = TejidoApiClient(); // Nueva instancia = IP default
 final baseUrl = apiClient.baseUrl;
 
 // DESPUÉS:
@@ -255,7 +255,7 @@ if (savedUrl == null || savedUrl == 'http://172.20.10.3:8001') {
 **Agregar ANTES de loadUserProfile():**
 ```dart
 // Test connection BEFORE loading profile
-final apiClient = PaperlessApiClient();
+final apiClient = TejidoApiClient();
 final isConnected = await apiClient.testConnection();
 
 if (!isConnected) {
@@ -338,7 +338,7 @@ adb install -r ~/Descargas/Lumara_v6.0.2_NETWORK_FIX_CorrectServerIP_20251109_21
 # Test 1: Connectivity
 - Abrir app
 - Ver si muestra "Diagnóstico de Red"
-- Debería mostrar: "Servidor Paperless: http://192.168.40.17:8001"
+- Debería mostrar: "Servidor Tejido: http://192.168.40.17:8001"
 - Probar conexión → "✅ Servidor alcanzable"
 
 # Test 2: Login

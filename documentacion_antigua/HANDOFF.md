@@ -1,6 +1,6 @@
 # 🤝 Entrega de Proyecto - Handoff
 
-**Proyecto:** OpenScan Indígenas v3.0.0
+**Proyecto:** Lumara Indígenas v3.0.0
 **Fecha de Entrega:** 2025-10-07
 **Estado:** ✅ Desarrollo Completo - Listo para Resolución de Bloqueadores
 
@@ -86,7 +86,7 @@
 - **Quién:** Equipo DevOps + Legal
 - **Cuándo:** Día 5
 - **Qué hacer:**
-  - Desplegar servidor Paperless
+  - Desplegar servidor Tejido
   - Crear Privacy Policy y Terms
   - Actualizar 4 URLs en código
 - **Dónde actualizar:** `lib/core/config/production_config.dart:42,50,254,262`
@@ -97,7 +97,7 @@
 - **Quién:** Admin/Soporte
 - **Cuándo:** HOY (Día 1)
 - **Qué hacer:**
-  - Crear cuenta: soporte@openscan-indigenas.org
+  - Crear cuenta: soporte@lumara-indigenas.org
   - Asignar persona responsable
   - Actualizar código
 - **Dónde actualizar:** `lib/core/config/production_config.dart:245`
@@ -134,7 +134,7 @@
 - Asignar responsables
 
 # 3. Crear email de soporte (2 horas)
-- Crear: soporte@openscan-indigenas.org
+- Crear: soporte@lumara-indigenas.org
 - Ver: NEXT_STEPS.md → "Email de Soporte"
 
 # 4. Solicitar cotizaciones pentesting (2 horas)
@@ -147,7 +147,7 @@
 ```bash
 # 5. Evaluar cotizaciones pentesting
 # 6. Iniciar configuración de infraestructura
-#    - Desplegar servidor Paperless
+#    - Desplegar servidor Tejido
 #    - Configurar DNS
 ```
 
@@ -163,7 +163,7 @@ Ver timeline completo en: **[NEXT_STEPS.md](NEXT_STEPS.md)**
 
 ```bash
 # Ejecutar script de validación
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 ./scripts/validate_production.sh
 
 # Resultado esperado AHORA (antes de resolver bloqueadores):
@@ -222,7 +222,7 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
 - **Email:** ___________________
 - **Tareas:**
   - Bloqueador #3: Email de Soporte
-  - Configurar soporte@openscan-indigenas.org
+  - Configurar soporte@lumara-indigenas.org
   - Capacitar equipo de soporte
 
 **Desarrollo:**
@@ -313,9 +313,9 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
 - Docs: https://flutter.dev/docs
 - Packages: https://pub.dev
 
-**Paperless-ngx:**
-- Docs: https://docs.paperless-ngx.com
-- API: https://docs.paperless-ngx.com/api
+**Tejido-ngx:**
+- Docs: https://docs.tejido-ngx.com
+- API: https://docs.tejido-ngx.com/api
 
 **Seguridad:**
 - OWASP Mobile: https://owasp.org/www-project-mobile-top-10
@@ -324,14 +324,14 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
 ### Comunidad y Soporte
 
 **GitHub:**
-- Repo: https://github.com/yourusername/openscan-indigenas
-- Issues: https://github.com/yourusername/openscan-indigenas/issues
-- Discussions: https://github.com/yourusername/openscan-indigenas/discussions
+- Repo: https://github.com/yourusername/lumara-indigenas
+- Issues: https://github.com/yourusername/lumara-indigenas/issues
+- Discussions: https://github.com/yourusername/lumara-indigenas/discussions
 
 **Email:**
-- Técnico: dev@openscan-indigenas.org
-- Soporte: soporte@openscan-indigenas.org
-- Seguridad: security@openscan-indigenas.org
+- Técnico: dev@lumara-indigenas.org
+- Soporte: soporte@lumara-indigenas.org
+- Seguridad: security@lumara-indigenas.org
 
 ---
 
@@ -433,7 +433,7 @@ cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
 
 **Entregado por:**
 
-Equipo de Desarrollo OpenScan Indígenas
+Equipo de Desarrollo Lumara Indígenas
 Fecha: 2025-10-07
 
 ---

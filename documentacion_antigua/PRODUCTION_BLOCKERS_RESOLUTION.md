@@ -1,6 +1,6 @@
 # 🚧 Resolución de Bloqueadores de Producción
 
-**OpenScan Indígenas v3.0.0**
+**Lumara Indígenas v3.0.0**
 **Fecha:** 2025-10-07
 
 ---
@@ -48,9 +48,9 @@ sudo apt-get update
 sudo apt-get install certbot
 
 # Generar certificado
-sudo certbot certonly --standalone -d paperless.openscan-indigenas.org
+sudo certbot certonly --standalone -d tejido.lumara-indigenas.org
 
-# Certificado se guarda en: /etc/letsencrypt/live/paperless.openscan-indigenas.org/
+# Certificado se guarda en: /etc/letsencrypt/live/tejido.lumara-indigenas.org/
 ```
 
 **Opción B: Certificado Comercial**
@@ -61,11 +61,11 @@ sudo certbot certonly --standalone -d paperless.openscan-indigenas.org
 
 ```bash
 # Verificar que el servidor responde con SSL
-curl -I https://paperless.openscan-indigenas.org
+curl -I https://tejido.lumara-indigenas.org
 
 # Verificar detalles del certificado
-echo | openssl s_client -servername paperless.openscan-indigenas.org \
-  -connect paperless.openscan-indigenas.org:443 2>/dev/null | \
+echo | openssl s_client -servername tejido.lumara-indigenas.org \
+  -connect tejido.lumara-indigenas.org:443 2>/dev/null | \
   openssl x509 -noout -dates -subject
 ```
 
@@ -73,13 +73,13 @@ echo | openssl s_client -servername paperless.openscan-indigenas.org \
 
 ```bash
 # En tu máquina de desarrollo
-cd /home/smt/Escritorio/programacion_proyectos/paperless/openscan/OpenScan
+cd /home/smt/Escritorio/programacion_proyectos/tejido/lumara/Lumara
 
 # Hacer ejecutable el script
 chmod +x scripts/generate_cert_fingerprint.sh
 
 # Generar fingerprint
-./scripts/generate_cert_fingerprint.sh paperless.openscan-indigenas.org
+./scripts/generate_cert_fingerprint.sh tejido.lumara-indigenas.org
 
 # El script mostrará algo como:
 # ========================================
@@ -133,26 +133,26 @@ adb install build/app/outputs/flutter-apk/app-release.apk
 // lib/core/config/production_config.dart
 
 // Línea 42 - ⚠️ USA DOMINIO PLACEHOLDER
-static const String paperlessProductionUrl = 'https://paperless.example.com';
+static const String tejidoProductionUrl = 'https://tejido.example.com';
 
 // Línea 50 - ⚠️ USA DOMINIO PLACEHOLDER
-static const String paperlessStagingUrl = 'https://paperless-staging.example.com';
+static const String tejidoStagingUrl = 'https://tejido-staging.example.com';
 
 // Línea 254 - ⚠️ USA URL PLACEHOLDER
-static const String privacyPolicyUrl = 'https://openscan-indigenas.org/privacy';
+static const String privacyPolicyUrl = 'https://lumara-indigenas.org/privacy';
 
 // Línea 262 - ⚠️ USA URL PLACEHOLDER
-static const String termsOfServiceUrl = 'https://openscan-indigenas.org/terms';
+static const String termsOfServiceUrl = 'https://lumara-indigenas.org/terms';
 ```
 
 **Impacto:** La app no puede conectarse al servidor real.
 
 ### ✅ Solución Paso a Paso
 
-#### Paso 1: Verificar Servidor Paperless
+#### Paso 1: Verificar Servidor Tejido
 
 ```bash
-# Verificar que Paperless-ngx está corriendo
+# Verificar que Tejido-ngx está corriendo
 curl https://tu-dominio-real.org/api/
 
 # Respuesta esperada:
@@ -171,12 +171,12 @@ curl -X POST https://tu-dominio-real.org/api/token/ \
 
 ```bash
 # Verificar resolución DNS
-nslookup paperless.openscan-indigenas.org
-nslookup staging.openscan-indigenas.org
+nslookup tejido.lumara-indigenas.org
+nslookup staging.lumara-indigenas.org
 
 # Verificar acceso web
-curl -I https://paperless.openscan-indigenas.org
-curl -I https://staging.openscan-indigenas.org
+curl -I https://tejido.lumara-indigenas.org
+curl -I https://staging.lumara-indigenas.org
 ```
 
 #### Paso 3: Actualizar URLs en Código
@@ -185,16 +185,16 @@ curl -I https://staging.openscan-indigenas.org
 // Editar: lib/core/config/production_config.dart
 
 // Línea 42: URL de producción
-static const String paperlessProductionUrl = 'https://paperless.openscan-indigenas.org';
+static const String tejidoProductionUrl = 'https://tejido.lumara-indigenas.org';
 
 // Línea 50: URL de staging
-static const String paperlessStagingUrl = 'https://staging.openscan-indigenas.org';
+static const String tejidoStagingUrl = 'https://staging.lumara-indigenas.org';
 
 // Línea 254: Privacy policy (crear página web primero)
-static const String privacyPolicyUrl = 'https://openscan-indigenas.org/politica-privacidad';
+static const String privacyPolicyUrl = 'https://lumara-indigenas.org/politica-privacidad';
 
 // Línea 262: Terms of service (crear página web primero)
-static const String termsOfServiceUrl = 'https://openscan-indigenas.org/terminos-servicio';
+static const String termsOfServiceUrl = 'https://lumara-indigenas.org/terminos-servicio';
 ```
 
 #### Paso 4: Crear Páginas Legales
@@ -202,13 +202,13 @@ static const String termsOfServiceUrl = 'https://openscan-indigenas.org/terminos
 **Privacy Policy (Política de Privacidad):**
 - Usar plantilla de: https://www.privacypolicies.com/
 - Incluir: Qué datos se recopilan, cómo se usan, cómo se protegen
-- Publicar en: `https://openscan-indigenas.org/politica-privacidad`
+- Publicar en: `https://lumara-indigenas.org/politica-privacidad`
 
 **Terms of Service (Términos de Servicio):**
 - Definir términos de uso de la app
 - Limitaciones de responsabilidad
 - Derechos de propiedad intelectual
-- Publicar en: `https://openscan-indigenas.org/terminos-servicio`
+- Publicar en: `https://lumara-indigenas.org/terminos-servicio`
 
 #### Paso 5: Validar Configuración
 
@@ -226,10 +226,10 @@ flutter run --release
 
 ### 📝 Criterio de Aceptación
 
-- [ ] Servidor Paperless-ngx desplegado y accesible
+- [ ] Servidor Tejido-ngx desplegado y accesible
 - [ ] DNS configurado correctamente
-- [ ] `paperlessProductionUrl` actualizado con dominio real
-- [ ] `paperlessStagingUrl` actualizado (si aplica)
+- [ ] `tejidoProductionUrl` actualizado con dominio real
+- [ ] `tejidoStagingUrl` actualizado (si aplica)
 - [ ] Página de Privacy Policy publicada
 - [ ] Página de Terms of Service publicada
 - [ ] URLs actualizadas en código
@@ -244,7 +244,7 @@ flutter run --release
 
 ```dart
 // lib/core/config/production_config.dart (línea 245)
-static const String supportEmail = 'support@openscan-indigenas.org';
+static const String supportEmail = 'support@lumara-indigenas.org';
 // ⚠️ EMAIL PLACEHOLDER - NO MONITOREADO
 ```
 
@@ -257,8 +257,8 @@ static const String supportEmail = 'support@openscan-indigenas.org';
 **Opción A: Google Workspace (Recomendado)**
 ```
 1. Ir a: https://workspace.google.com/
-2. Crear cuenta para dominio openscan-indigenas.org
-3. Crear buzón: soporte@openscan-indigenas.org
+2. Crear cuenta para dominio lumara-indigenas.org
+3. Crear buzón: soporte@lumara-indigenas.org
 4. Costo: ~$6 USD/usuario/mes
 ```
 
@@ -296,7 +296,7 @@ sudo apt-get install postfix dovecot-imapd dovecot-pop3d
 
 ```bash
 # Enviar email de prueba
-echo "Test de soporte" | mail -s "Prueba" soporte@openscan-indigenas.org
+echo "Test de soporte" | mail -s "Prueba" soporte@lumara-indigenas.org
 
 # Verificar recepción
 # Revisar buzón de entrada
@@ -306,7 +306,7 @@ echo "Test de soporte" | mail -s "Prueba" soporte@openscan-indigenas.org
 
 ```dart
 // Editar: lib/core/config/production_config.dart (línea 245)
-static const String supportEmail = 'soporte@openscan-indigenas.org';
+static const String supportEmail = 'soporte@lumara-indigenas.org';
 ```
 
 #### Paso 5: Preparar Equipo de Soporte
@@ -410,7 +410,7 @@ Opcional:
 3. Documentación técnica
    - PENETRATION_TESTING.md (scope)
    - SECURITY.md (controles implementados)
-   - API documentation (Paperless-ngx API)
+   - API documentation (Tejido-ngx API)
 
 4. Timeline y presupuesto
    - Duración: 10 días laborales
@@ -487,12 +487,12 @@ Día 8-10: Reporting
 
 ```bash
 # 1. Email de Soporte (2-4 horas)
-□ Crear cuenta soporte@openscan-indigenas.org
+□ Crear cuenta soporte@lumara-indigenas.org
 □ Asignar responsable
 □ Actualizar código
 
 # 2. Infraestructura (1-2 días)
-□ Desplegar servidor Paperless-ngx
+□ Desplegar servidor Tejido-ngx
 □ Configurar DNS
 □ Instalar certificado SSL
 
@@ -546,7 +546,7 @@ Antes de desplegar a producción, verificar:
 
 ### Configuración
 - [ ] `certificateFingerprints` contiene al menos 2 fingerprints válidos
-- [ ] `paperlessProductionUrl` apunta a servidor real funcionando
+- [ ] `tejidoProductionUrl` apunta a servidor real funcionando
 - [ ] `supportEmail` es una cuenta real monitoreada
 - [ ] `privacyPolicyUrl` apunta a página publicada
 - [ ] `termsOfServiceUrl` apunta a página publicada
@@ -579,7 +579,7 @@ Antes de desplegar a producción, verificar:
 **Responsable:** _______________
 **Email:** _______________
 **Tareas:**
-- Configurar servidor Paperless
+- Configurar servidor Tejido
 - Instalar certificado SSL
 - Configurar DNS
 
@@ -644,9 +644,9 @@ Semana 5 (29-35 días):
 ## 🎯 Próximos Pasos Inmediatos
 
 ### HOY (Prioridad Máxima):
-1. ✅ Crear cuenta de email: `soporte@openscan-indigenas.org`
+1. ✅ Crear cuenta de email: `soporte@lumara-indigenas.org`
 2. ✅ Solicitar cotizaciones a 3 firmas de pentesting
-3. ✅ Verificar servidor Paperless-ngx funcionando
+3. ✅ Verificar servidor Tejido-ngx funcionando
 
 ### MAÑANA:
 1. ✅ Contratar firma de pentesting

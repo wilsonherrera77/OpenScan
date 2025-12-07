@@ -1,6 +1,6 @@
 # 🚀 SPRINT 3 - TESTING & PRODUCTION READY - REPORTE FINAL
 
-**Proyecto:** OpenScan Indígenas - Sistema de Digitalización Documental
+**Proyecto:** Lumara Indígenas - Sistema de Digitalización Documental
 **Sprint:** 3 de 4 (Testing & Production Ready)
 **Duración:** 6 horas
 **Fecha:** 2025-10-07
@@ -296,12 +296,12 @@ String get environmentName => 'Production' | 'Staging' | 'Development';
 #### API Configuration
 ```dart
 // Environment-specific URLs
-paperlessProductionUrl: 'https://paperless.example.com'
-paperlessStagingUrl: 'https://paperless-staging.example.com'
-paperlessDevelopmentUrl: 'http://10.0.2.2:8001'
+tejidoProductionUrl: 'https://tejido.example.com'
+tejidoStagingUrl: 'https://tejido-staging.example.com'
+tejidoDevelopmentUrl: 'http://10.0.2.2:8001'
 
 // Auto-select based on environment
-String get paperlessBaseUrl => ...
+String get tejidoBaseUrl => ...
 ```
 
 #### Security Configuration
@@ -584,7 +584,7 @@ brew install sqlite3
 **Resolution Steps:**
 ```bash
 # 1. Get certificate from production server
-echo | openssl s_client -connect paperless.example.com:443 2>&1 | \
+echo | openssl s_client -connect tejido.example.com:443 2>&1 | \
   openssl x509 -outform PEM > cert.pem
 
 # 2. Extract fingerprint
@@ -691,7 +691,7 @@ if (ProductionConfig.isProduction) {
 }
 
 // Get environment-specific URL
-final apiUrl = ProductionConfig.paperlessBaseUrl;
+final apiUrl = ProductionConfig.tejidoBaseUrl;
 ```
 
 **Validate Config:**
@@ -716,7 +716,7 @@ try {
   - Test in staging environment
 
 - [ ] **Update Production URLs**
-  - Replace `paperless.example.com` with actual URL
+  - Replace `tejido.example.com` with actual URL
   - Update support email
   - Update privacy policy URL
 

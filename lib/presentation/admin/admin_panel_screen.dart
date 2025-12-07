@@ -61,7 +61,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
             const SizedBox(height: 16),
             _buildStatusItem('Versión', ProductionConfig.appVersion),
             _buildStatusItem('Entorno', ProductionConfig.environmentName),
-            _buildStatusItem('API', ProductionConfig.paperlessBaseUrl),
+            _buildStatusItem('API', ProductionConfig.tejidoBaseUrl),
             _buildStatusItem('Modo Offline', ProductionConfig.enableOfflineMode ? 'Activo' : 'Inactivo'),
             _buildStatusItem('Encriptación', 'AES-256-GCM'),
           ],
